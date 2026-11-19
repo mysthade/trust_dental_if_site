@@ -58,6 +58,7 @@
       title: 'Терапія та канали',
       description: 'Лікування карієсу з кофердамом, реставрація та лікування кореневих каналів.',
       icon: 'td-icon-therapy',
+      iconImg: 'therapy',
       category: 'therapy'
     }),
     Object.freeze({
@@ -65,6 +66,7 @@
       title: 'Професійна гігієна',
       description: 'Професійна гігієна (40 хв). [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-hygiene',
+      iconImg: 'hygiene',
       category: 'hygiene'
     }),
     Object.freeze({
@@ -72,6 +74,7 @@
       title: 'Атравматична хірургія',
       description: 'Ультразвукове (п\'єзохірургічне) видалення зубів із мінімальною травматизацією.',
       icon: 'td-icon-surgery',
+      iconImg: 'surgery',
       category: 'surgery'
     }),
     Object.freeze({
@@ -79,6 +82,7 @@
       title: 'Брекет-системи',
       description: 'Сучасні брекет-системи та ортодонтія. [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-braces',
+      iconImg: 'braces',
       category: 'braces'
     }),
     Object.freeze({
@@ -86,6 +90,7 @@
       title: 'Імплантація',
       description: 'Імплантація зубів (хірургічний етап). [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-implantation',
+      iconImg: 'implant',
       category: null
     }),
     Object.freeze({
@@ -93,6 +98,7 @@
       title: 'Ортопедія',
       description: 'Цирконієві коронки та вініри. [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-orthopedics',
+      iconImg: 'orthopedics',
       category: 'orthopedics'
     }),
     Object.freeze({
@@ -100,6 +106,7 @@
       title: 'Дитяча стоматологія',
       description: '[ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-pediatric',
+      iconImg: 'pediatric',
       category: null
     }),
     Object.freeze({
@@ -107,6 +114,7 @@
       title: 'Діагностика',
       description: 'Консультація та діагностика на візіографі.',
       icon: 'td-icon-diagnostics',
+      iconImg: 'diagnostics',
       category: null
     })
   ]);

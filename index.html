@@ -33,10 +33,10 @@
     })();
   </script>
 
-  <!-- Preload critical self-hosted Inter Variable subsets & LCP hero image -->
+  <!-- Preload critical self-hosted Inter Variable subsets & LCP monochrome hero image -->
   <link rel="preload" href="fonts/inter-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" as="image" type="image/webp" imagesrcset="img/hero-800.webp 800w, img/hero-1200.webp 1200w, img/hero-1600.webp 1600w" imagesizes="(max-width: 979px) 100vw, 50vw" fetchpriority="high">
+  <link rel="preload" as="image" type="image/webp" imagesrcset="img/hero-mono-800.webp 800w, img/hero-mono-1200.webp 1200w, img/hero-mono-1600.webp 1600w" imagesizes="(max-width: 979px) 100vw, 50vw" fetchpriority="high">
 
   <!-- Inline Critical CSS (light & dark variables + above-the-fold layout for CLS < 0.05) -->
   <style>
@@ -44,8 +44,8 @@
     @font-face{font-family:'Inter Variable';font-style:normal;font-weight:100 900;font-display:swap;src:url('fonts/inter-cyrillic-ext-wght-normal.woff2') format('woff2');unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F}
     @font-face{font-family:'Inter Variable';font-style:normal;font-weight:100 900;font-display:swap;src:url('fonts/inter-cyrillic-wght-normal.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
     @font-face{font-family:'Inter Variable';font-style:normal;font-weight:100 900;font-display:swap;src:url('fonts/inter-latin-wght-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-    :root{color-scheme:light;--font-sans:'Inter Variable','Inter Fallback',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--bg:#EEF0F2;--bg-top:#F8F9FA;--bg-bottom:#E4E8EE;--surface:rgba(255,255,255,.72);--surface-strong:rgba(255,255,255,.92);--surface-card:rgba(255,255,255,.86);--surface-scrolled:rgba(244,246,248,.88);--border:rgba(255,255,255,.85);--border-subtle:rgba(27,31,39,.08);--text:#1B1F27;--muted:#5B6370;--primary:#1E222B;--primary-hover:#2E3442;--on-primary:#FFFFFF;--accent:#7A818C;--line:#C9CED6;--divider:rgba(27,31,39,.1);--arc-line:rgba(122,129,140,.45);--header-scrim:rgba(240,242,245,.92);--header-scrim-mid:rgba(240,242,245,.52);--media-placeholder-start:#DDE2E8;--media-placeholder-end:#C3CAD4;--backdrop:rgba(15,18,23,.42);--focus-ring:#1E222B;--star-color:#EAB308;--tooth-stop-1:rgba(160,168,180,.36);--tooth-stop-2:rgba(255,255,255,.08);--wave-fill-1:rgba(255,255,255,.58);--wave-fill-2:rgba(248,249,250,.96);--radius-card:26px;--radius-pill:999px;--shadow-sm:0 4px 16px rgba(27,31,39,.05);--shadow-md:0 12px 32px rgba(27,31,39,.07),0 2px 6px rgba(27,31,39,.04);--shadow-lg:0 22px 54px rgba(27,31,39,.08),0 4px 14px rgba(27,31,39,.04);--container:1280px;--header-h:72px}
-    [data-theme='dark']{color-scheme:dark;--bg:#0F1217;--bg-top:#151921;--bg-bottom:#0B0D11;--surface:rgba(24,28,35,.8);--surface-strong:rgba(24,28,35,.94);--surface-card:rgba(24,28,35,.9);--surface-scrolled:rgba(15,18,23,.88);--border:rgba(255,255,255,.09);--border-subtle:rgba(255,255,255,.1);--text:#ECEFF3;--muted:#9BA3AF;--primary:#ECEFF3;--primary-hover:#FFFFFF;--on-primary:#12151A;--accent:#9AA2AE;--line:#2A303A;--divider:rgba(255,255,255,.09);--arc-line:rgba(154,162,174,.34);--header-scrim:rgba(15,18,23,.9);--header-scrim-mid:rgba(15,18,23,.5);--media-placeholder-start:#1E242E;--media-placeholder-end:#141820;--backdrop:rgba(0,0,0,.65);--focus-ring:#ECEFF3;--star-color:#FACC15;--tooth-stop-1:rgba(154,162,174,.11);--tooth-stop-2:rgba(255,255,255,.02);--wave-fill-1:rgba(24,28,35,.65);--wave-fill-2:rgba(15,18,23,.98);--shadow-sm:0 4px 16px rgba(0,0,0,.28);--shadow-md:0 14px 36px rgba(0,0,0,.38),0 2px 8px rgba(0,0,0,.22);--shadow-lg:0 24px 58px rgba(0,0,0,.45),0 4px 16px rgba(0,0,0,.25)}
+    :root{color-scheme:light;--font-sans:'Inter Variable','Inter Fallback',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--bg:#EEF0F2;--bg-top:#F8F9FA;--bg-bottom:#E4E8EE;--surface:rgba(255,255,255,.72);--surface-strong:rgba(255,255,255,.94);--surface-card:rgba(255,255,255,.86);--surface-scrolled:rgba(244,246,248,.88);--card-grad:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(242,245,248,.74) 100%);--card-border:rgba(255,255,255,.85);--card-shadow:0 10px 30px rgba(20,24,31,.08),inset 0 1px 0 rgba(255,255,255,.9);--brand-pill-bg:rgba(255,255,255,.72);--brand-pill-border:rgba(255,255,255,.92);--toggle-bg:#FFFFFF;--toggle-border:rgba(255,255,255,.95);--toggle-shadow:0 6px 18px rgba(20,24,31,.1),inset 0 1px 0 #FFFFFF;--border:rgba(255,255,255,.85);--border-subtle:rgba(27,31,39,.08);--text:#1B1F27;--muted:#5B6370;--primary:#1E222B;--primary-hover:#2E3442;--on-primary:#FFFFFF;--accent:#7A818C;--line:#C9CED6;--divider:rgba(27,31,39,.1);--arc-line:rgba(122,129,140,.46);--header-scrim:rgba(240,242,245,.9);--header-scrim-mid:rgba(240,242,245,.48);--media-placeholder-start:#DDE2E8;--media-placeholder-end:#C3CAD4;--backdrop:rgba(15,18,23,.42);--focus-ring:#1E222B;--star-color:#EAB308;--tooth-hi:#FFFFFF;--tooth-mid:#DCE1E8;--tooth-lo:#B9BEC6;--tooth-spec:rgba(255,255,255,.88);--ribbon-hi:#FFFFFF;--ribbon-mid:#E3E7EE;--ribbon-lo:#B9BEC6;--ribbon-edge:rgba(255,255,255,.85);--wave-fill-2:rgba(248,249,250,.96);--radius-card:28px;--radius-pill:999px;--shadow-sm:0 4px 16px rgba(27,31,39,.05);--shadow-md:0 10px 30px rgba(20,24,31,.08),inset 0 1px 0 rgba(255,255,255,.9);--shadow-lg:0 18px 46px rgba(20,24,31,.09),inset 0 1px 0 rgba(255,255,255,.9);--container:1280px;--header-h:72px}
+    [data-theme='dark']{color-scheme:dark;--bg:#0F1217;--bg-top:#151921;--bg-bottom:#0B0D11;--surface:rgba(24,28,35,.8);--surface-strong:rgba(24,28,35,.94);--surface-card:rgba(24,28,35,.9);--surface-scrolled:rgba(15,18,23,.88);--card-grad:linear-gradient(180deg,rgba(32,37,46,.92) 0%,rgba(20,24,31,.82) 100%);--card-border:rgba(255,255,255,.12);--card-shadow:0 12px 32px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.1);--brand-pill-bg:rgba(24,28,35,.78);--brand-pill-border:rgba(255,255,255,.12);--toggle-bg:#222731;--toggle-border:rgba(255,255,255,.14);--toggle-shadow:0 6px 18px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08);--border:rgba(255,255,255,.12);--border-subtle:rgba(255,255,255,.1);--text:#ECEFF3;--muted:#9BA3AF;--primary:#ECEFF3;--primary-hover:#FFFFFF;--on-primary:#12151A;--accent:#9AA2AE;--line:#2A303A;--divider:rgba(255,255,255,.09);--arc-line:rgba(154,162,174,.34);--header-scrim:rgba(15,18,23,.9);--header-scrim-mid:rgba(15,18,23,.5);--media-placeholder-start:#1E242E;--media-placeholder-end:#141820;--backdrop:rgba(0,0,0,.65);--focus-ring:#ECEFF3;--star-color:#FACC15;--tooth-hi:#2A2E35;--tooth-mid:#1C2026;--tooth-lo:#0F1114;--tooth-spec:rgba(255,255,255,.12);--ribbon-hi:#2A2E35;--ribbon-mid:#1A1E24;--ribbon-lo:#0F1114;--ribbon-edge:rgba(255,255,255,.09);--wave-fill-2:rgba(15,18,23,.98);--shadow-sm:0 4px 16px rgba(0,0,0,.28);--shadow-md:0 12px 32px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.1);--shadow-lg:0 22px 54px rgba(0,0,0,.46),inset 0 1px 0 rgba(255,255,255,.1)}
     *,*::before,*::after{box-sizing:border-box}
     html{font-size:16px;background-color:var(--bg);-webkit-text-size-adjust:100%}
     body{margin:0;min-height:100vh;font-family:var(--font-sans);font-size:1rem;line-height:1.55;color:var(--text);background:linear-gradient(180deg,var(--bg-top) 0%,var(--bg) 42%,var(--bg) 100%);overflow-x:clip;-webkit-font-smoothing:antialiased}
@@ -60,14 +60,14 @@
     .container{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:clamp(16px,3vw,32px)}
     .header-sentinel{position:absolute;top:0;left:0;width:1px;height:16px;pointer-events:none}
     .header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);background:transparent;border-bottom:1px solid transparent}
-    .header__inner{display:flex;align-items:center;justify-content:space-between;gap:16px;height:100%}
-    .brand{display:inline-flex;align-items:center;flex-shrink:0;min-height:44px}
+    .header__inner{display:flex;align-items:center;justify-content:space-between;gap:14px;height:100%}
+    .brand{display:inline-flex;align-items:center;flex-shrink:0;min-height:46px;padding:6px 16px 6px 12px;border-radius:var(--radius-pill);background:var(--brand-pill-bg);border:1px solid var(--brand-pill-border);box-shadow:var(--shadow-sm)}
     .brand__picture--dark{display:none}
     [data-theme='dark'] .brand__picture--light{display:none}
     [data-theme='dark'] .brand__picture--dark{display:block}
-    .brand__img{height:40px;width:auto;object-fit:contain}
+    .brand__img{height:34px;width:auto;object-fit:contain}
     .nav{display:flex;align-items:center}
-    .nav__list{display:flex;align-items:center;gap:clamp(14px,1.8vw,26px)}
+    .nav__list{display:flex;align-items:center;gap:clamp(14px,1.8vw,24px)}
     .nav__link{position:relative;display:inline-flex;align-items:center;min-height:44px;padding-inline:2px;font-size:.9rem;font-weight:500;color:var(--muted)}
     .header__actions{display:flex;align-items:center;gap:12px;flex-shrink:0}
     .header__phone{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding-inline:6px;font-size:.9rem;font-weight:600;color:var(--text);white-space:nowrap}
@@ -78,17 +78,17 @@
     .btn--primary{background:var(--primary);color:var(--on-primary);border:1px solid var(--primary);box-shadow:var(--shadow-sm)}
     .btn--outline{background:var(--surface);color:var(--text);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
     .btn__arrow{width:16px;height:16px;flex-shrink:0}
-    .theme-toggle{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--surface);border:1px solid var(--line);color:var(--text);box-shadow:var(--shadow-sm)}
+    .theme-toggle{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--toggle-bg);border:1px solid var(--toggle-border);color:var(--text);box-shadow:var(--toggle-shadow)}
     .theme-toggle__icon{position:absolute;width:19px;height:19px}
     .theme-toggle__icon--sun{opacity:0}
     [data-theme='dark'] .theme-toggle__icon--moon{opacity:0}
     [data-theme='dark'] .theme-toggle__icon--sun{opacity:1}
-    .burger{display:none;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--surface);border:1px solid var(--line);color:var(--text);box-shadow:var(--shadow-sm)}
+    .burger{display:none;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--toggle-bg);border:1px solid var(--toggle-border);color:var(--text);box-shadow:var(--toggle-shadow)}
     .burger__lines{display:flex;flex-direction:column;gap:5px;width:18px}
     .burger__line{display:block;height:1.75px;width:100%;border-radius:2px;background:currentColor}
     .hero{position:relative;overflow:clip;padding-top:calc(var(--header-h) + 34px);padding-bottom:108px;min-height:clamp(610px,74vh,720px);display:flex;align-items:center;background:linear-gradient(148deg,var(--bg-top) 0%,var(--bg) 52%,var(--bg-bottom) 100%)}
-    .hero__bg-tooth{position:absolute;top:56px;left:-62px;width:230px;height:310px;pointer-events:none;z-index:0}
-    .hero__bg-waves{position:absolute;inset:auto 0 0 0;width:100%;height:220px;pointer-events:none;z-index:1}
+    .hero__bg-tooth{position:absolute;top:24px;left:-88px;width:300px;height:410px;pointer-events:none;z-index:0}
+    .hero__bg-waves{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
     .hero__container{position:relative;z-index:3}
     .hero__content{max-width:590px}
     .hero__badge{display:inline-flex;align-items:center;gap:9px;max-width:100%;padding:8px 16px;margin-bottom:22px;border-radius:var(--radius-pill);background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-sm);font-size:.84375rem;font-weight:500;line-height:1.35;color:var(--text)}
@@ -97,13 +97,14 @@
     .hero__accent{color:var(--accent)}
     .hero__subtitle{max-width:500px;font-size:clamp(.95rem,1.15vw,1.03125rem);line-height:1.58;color:var(--muted);margin-bottom:30px}
     .hero__cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
-    .hero__media-wrap{position:absolute;top:0;right:0;bottom:0;width:48.5%;z-index:2}
-    .hero__media-wrap::before{content:'';position:absolute;top:-18px;bottom:-18px;left:-20px;right:0;border:1px solid var(--arc-line);border-right:0;border-radius:340px 0 0 260px/54% 0 0 46%;pointer-events:none;z-index:1}
-    .hero__media{position:relative;width:100%;height:100%;overflow:hidden;border-radius:320px 0 0 245px/54% 0 0 46%;background:linear-gradient(135deg,var(--media-placeholder-start) 0%,var(--media-placeholder-end) 100%);box-shadow:var(--shadow-md)}
+    .hero__media-wrap{position:absolute;top:0;right:0;bottom:0;width:50%;z-index:2}
+    .hero__wave-outline{position:absolute;top:0;bottom:0;left:-20px;width:100%;height:100%;pointer-events:none;z-index:3}
+    .hero__wave-path--mobile{display:none}
+    .hero__media{position:relative;width:100%;height:100%;overflow:hidden;clip-path:url(#td-hero-clip);background:linear-gradient(135deg,var(--media-placeholder-start) 0%,var(--media-placeholder-end) 100%)}
     .hero__media::after{content:'';position:absolute;top:0;left:0;right:0;height:104px;background:linear-gradient(180deg,var(--header-scrim) 0%,var(--header-scrim-mid) 58%,rgba(0,0,0,0) 100%);pointer-events:none;z-index:2}
     .hero__picture{width:100%;height:100%}
-    .hero__img{width:100%;height:100%;object-fit:cover;object-position:40% center}
-    .google-badge{position:absolute;right:clamp(20px,3.2vw,48px);bottom:84px;z-index:4;display:inline-flex;align-items:center;gap:14px;padding:12px 14px 12px 18px;border-radius:var(--radius-pill);background:var(--surface-strong);border:1px solid var(--border);box-shadow:var(--shadow-lg)}
+    .hero__img{width:100%;height:100%;object-fit:cover;object-position:42% center}
+    .google-badge{position:absolute;right:clamp(20px,3.2vw,48px);bottom:86px;z-index:4;display:inline-flex;align-items:center;gap:14px;padding:12px 14px 12px 18px;border-radius:var(--radius-pill);background:var(--surface-strong);border:1px solid var(--card-border);box-shadow:var(--card-shadow)}
     .google-badge__logo{width:28px;height:28px;flex-shrink:0}
     .google-badge__info{display:flex;flex-direction:column;gap:2px}
     .google-badge__top{display:flex;align-items:center;gap:7px;line-height:1.1}
@@ -112,8 +113,8 @@
     .google-badge__star{width:14px;height:14px}
     .google-badge__count{font-size:.78125rem;font-weight:500;color:var(--muted);white-space:nowrap}
     .google-badge__btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--surface);border:1px solid var(--line);color:var(--text)}
-    .stats-section{position:relative;z-index:6;margin-top:-52px;padding-bottom:36px}
-    .stats-card{border-radius:var(--radius-card);background:var(--surface-card);border:1px solid var(--border);box-shadow:var(--shadow-lg);padding:26px 12px}
+    .stats-section{position:relative;z-index:6;margin-top:-54px;padding-bottom:36px}
+    .stats-card{border-radius:32px;background:var(--card-grad);border:1px solid var(--card-border);box-shadow:var(--card-shadow);padding:26px 12px}
     .stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
     .stat-item{display:flex;align-items:center;gap:16px;padding:6px 24px;border-right:1px solid var(--divider)}
     .stat-item:last-child{border-right:0}
@@ -121,9 +122,9 @@
     .stat-item__body{display:flex;flex-direction:column;gap:4px;min-width:0}
     .stat-item__value{font-size:clamp(1.35rem,1.9vw,1.7rem);font-weight:800;line-height:1.08;letter-spacing:-.03em;color:var(--text);font-variant-numeric:tabular-nums}
     .stat-item__label{font-size:.8125rem;line-height:1.35;color:var(--muted)}
-    @media (max-width:1220px) and (min-width:980px){.header__inner{gap:10px;padding-inline:20px}.brand__img{height:30px}.nav__list{gap:10px}.nav__link{font-size:.8125rem}.header__actions{gap:8px}.header__phone{font-size:.8125rem;gap:5px;padding-inline:2px}.header__cta{padding:9px 13px;font-size:.8125rem;gap:6px}.hero__content{max-width:500px}.hero__cta .btn--lg{padding:12px 20px;font-size:.875rem}.hero__media-wrap{width:46%}.hero__media{border-radius:250px 0 0 200px/54% 0 0 46%}.hero__media-wrap::before{border-radius:270px 0 0 220px/54% 0 0 46%}.stat-item{padding:6px 16px;gap:12px}}
-    @media (max-width:979px){.nav,.header__phone,.header__cta{display:none}.burger{display:inline-flex}.brand__img{height:36px}.hero{display:block;min-height:auto;padding-top:calc(var(--header-h) + 24px);padding-bottom:44px}.hero__content{max-width:640px;margin-bottom:32px}.hero__bg-tooth{width:170px;height:230px;left:-56px;top:44px}.hero__media-wrap{position:relative;top:auto;right:auto;bottom:auto;width:calc(100% - clamp(16px,3vw,32px));margin-left:auto;aspect-ratio:16/10;max-height:440px}.hero__media-wrap::before{top:0;bottom:0;left:-12px;right:0;border:0;border-left:1.5px solid var(--arc-line);border-radius:130px 0 0 110px/52% 0 0 48%}.hero__media{border-radius:120px 0 0 100px/52% 0 0 48%}.hero__media::after{display:none}.google-badge{right:16px;bottom:16px;padding:10px 10px 10px 14px;gap:10px}.stats-section{margin-top:-18px}.stats-card{padding:18px 8px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stat-item{padding:16px 18px;border-right:1px solid var(--divider);border-bottom:1px solid var(--divider)}.stat-item:nth-child(2n){border-right:0}.stat-item:nth-last-child(-n+2){border-bottom:0}}
-    @media (max-width:540px){.brand__img{height:32px}.hero{padding-top:calc(var(--header-h) + 18px);padding-bottom:36px}.hero__badge{font-size:.78125rem;padding:7px 13px;margin-bottom:18px}.hero__title{margin-bottom:16px}.hero__subtitle{margin-bottom:24px}.hero__cta{flex-direction:column;align-items:stretch}.hero__cta .btn{width:100%}.hero__media-wrap{aspect-ratio:4/3}.hero__media-wrap::before{border-radius:86px 0 0 74px/50% 0 0 50%}.hero__media{border-radius:78px 0 0 66px/50% 0 0 50%}.google-badge{right:12px;bottom:12px;padding:8px 8px 8px 12px;gap:9px}.google-badge__logo{width:24px;height:24px}.google-badge__score{font-size:.9375rem}.google-badge__star{width:12px;height:12px}.google-badge__count{font-size:.72rem}.stats-section{margin-top:-12px}.stats-card{padding:12px 6px;border-radius:24px}.stat-item{flex-direction:column;align-items:flex-start;gap:10px;padding:14px 12px}.stat-item__icon{width:28px;height:28px}.stat-item__value{font-size:1.25rem}.stat-item__label{font-size:.75rem}}
+    @media (max-width:1220px) and (min-width:980px){.header__inner{gap:8px;padding-inline:16px}.brand{padding:5px 12px 5px 10px}.brand__img{height:28px}.nav__list{gap:9px}.nav__link{font-size:.8125rem}.header__actions{gap:7px}.header__phone{font-size:.8125rem;gap:5px;padding-inline:2px}.header__cta{padding:9px 12px;font-size:.8125rem;gap:6px}.hero__content{max-width:495px}.hero__cta .btn--lg{padding:12px 20px;font-size:.875rem}.hero__media-wrap{width:47.5%}.stat-item{padding:6px 16px;gap:12px}}
+    @media (max-width:979px){.nav,.header__phone,.header__cta{display:none}.burger{display:inline-flex}.brand{padding:5px 14px 5px 10px}.brand__img{height:30px}.hero{display:block;min-height:auto;padding-top:calc(var(--header-h) + 24px);padding-bottom:44px}.hero__content{max-width:640px;margin-bottom:32px}.hero__bg-tooth{width:200px;height:270px;left:-68px;top:36px}.hero__media-wrap{position:relative;top:auto;right:auto;bottom:auto;width:calc(100% - clamp(16px,3vw,32px));margin-left:auto;aspect-ratio:16/10;max-height:440px}.hero__wave-outline{left:-12px}.hero__wave-path--desktop{display:none}.hero__wave-path--mobile{display:block}.hero__media{clip-path:url(#td-hero-clip-mobile)}.hero__media::after{display:none}.google-badge{right:16px;bottom:16px;padding:10px 10px 10px 14px;gap:10px}.stats-section{margin-top:-18px}.stats-card{padding:18px 8px;border-radius:28px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stat-item{padding:16px 18px;border-right:1px solid var(--divider);border-bottom:1px solid var(--divider)}.stat-item:nth-child(2n){border-right:0}.stat-item:nth-last-child(-n+2){border-bottom:0}}
+    @media (max-width:540px){.brand__img{height:28px}.hero{padding-top:calc(var(--header-h) + 18px);padding-bottom:36px}.hero__badge{font-size:.78125rem;padding:7px 13px;margin-bottom:18px}.hero__title{margin-bottom:16px}.hero__subtitle{margin-bottom:24px}.hero__cta{flex-direction:column;align-items:stretch}.hero__cta .btn{width:100%}.hero__media-wrap{aspect-ratio:4/3}.google-badge{right:12px;bottom:12px;padding:8px 8px 8px 12px;gap:9px}.google-badge__logo{width:24px;height:24px}.google-badge__score{font-size:.9375rem}.google-badge__star{width:12px;height:12px}.google-badge__count{font-size:.72rem}.stats-section{margin-top:-12px}.stats-card{padding:12px 6px;border-radius:26px}.stat-item{flex-direction:column;align-items:flex-start;gap:10px;padding:14px 12px}.stat-item__icon{width:28px;height:28px}.stat-item__value{font-size:1.25rem}.stat-item__label{font-size:.75rem}}
   </style>
 
   <!-- Non-blocking full stylesheet -->
@@ -143,9 +144,16 @@
   <a class="skip-link" href="#main-content">Перейти до основного вмісту</a>
   <div id="header-sentinel" class="header-sentinel" aria-hidden="true"></div>
 
-  <!-- Inline SVG icon sprite for Stage 2 services (stroke, currentColor) -->
+  <!-- Inline SVG icon sprite & static hero clip-paths -->
   <svg class="svg-sprite" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
     <defs>
+      <!-- Static wavy left-edge clip-paths for hero media (no mask-image) -->
+      <clipPath id="td-hero-clip" clipPathUnits="objectBoundingBox">
+        <path d="M 0.25,0 C 0.10,0.16 0.01,0.36 0.03,0.56 C 0.05,0.74 0.12,0.88 0.21,1 L 1,1 L 1,0 Z"/>
+      </clipPath>
+      <clipPath id="td-hero-clip-mobile" clipPathUnits="objectBoundingBox">
+        <path d="M 0.16,0 C 0.05,0.20 0.00,0.46 0.04,0.70 C 0.07,0.84 0.11,0.93 0.16,1 L 1,1 L 1,0 Z"/>
+      </clipPath>
       <!-- 1. Терапія та канали -->
       <symbol id="td-icon-therapy" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M10.5 5.5c-3.1 0-5 2.4-4.8 5.8.2 4.4 2 9.8 3.7 13.7.5 1.1 1.9 1 2.3-.2l1.6-5c.5-1.4 2.9-1.4 3.4 0l1.6 5c.4 1.2 1.8 1.3 2.3.2 1.7-3.9 3.5-9.3 3.7-13.7.2-3.4-1.7-5.8-4.8-5.8-1.7 0-2.9.8-4.5 1.6-1.6-.8-2.8-1.6-4.5-1.6Z"/>
@@ -304,21 +312,57 @@
   <main id="main-content">
     <!-- ======================== HERO ======================== -->
     <section id="top" class="hero" aria-labelledby="hero-heading">
-      <!-- Static left-edge tooth silhouette (gradient fill, zero blur/animation) -->
-      <svg class="hero__bg-tooth" viewBox="0 0 240 320" fill="none" aria-hidden="true" focusable="false">
+      <!-- BG SVG #1: Dimensional silver tooth ring silhouette on left edge (static, multi-stop gradient, zero blur) -->
+      <svg class="hero__bg-tooth" viewBox="0 0 280 380" fill="none" aria-hidden="true" focusable="false">
         <defs>
-          <linearGradient id="td-tooth-hero-grad" x1="15" y1="20" x2="215" y2="295" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="var(--tooth-stop-1)"/>
-            <stop offset="100%" stop-color="var(--tooth-stop-2)"/>
+          <linearGradient id="td-tooth-ring-outer" x1="20" y1="20" x2="255" y2="355" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="var(--tooth-hi)" stop-opacity="0.85"/>
+            <stop offset="32%" stop-color="var(--tooth-mid)" stop-opacity="0.58"/>
+            <stop offset="68%" stop-color="var(--tooth-lo)" stop-opacity="0.46"/>
+            <stop offset="100%" stop-color="var(--tooth-hi)" stop-opacity="0.12"/>
+          </linearGradient>
+          <linearGradient id="td-tooth-ring-core" x1="35" y1="30" x2="245" y2="340" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="var(--tooth-hi)" stop-opacity="0.96"/>
+            <stop offset="28%" stop-color="var(--tooth-mid)" stop-opacity="0.72"/>
+            <stop offset="62%" stop-color="var(--tooth-lo)" stop-opacity="0.58"/>
+            <stop offset="86%" stop-color="var(--tooth-mid)" stop-opacity="0.42"/>
+            <stop offset="100%" stop-color="var(--tooth-hi)" stop-opacity="0.22"/>
+          </linearGradient>
+          <linearGradient id="td-tooth-ring-spec" x1="25" y1="25" x2="205" y2="215" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="var(--tooth-spec)" stop-opacity="0.9"/>
+            <stop offset="45%" stop-color="var(--tooth-spec)" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="var(--tooth-spec)" stop-opacity="0"/>
           </linearGradient>
         </defs>
-        <path d="M62 28C22 28 2 62 4 110c3 55 24 121 44 167 7 16 25 14 31-2l21-60c6-16 28-16 34 0l21 60c6 16 24 18 31 2 20-46 41-112 44-167 2-48-18-82-58-82-22 0-37 11-55 22C99 39 84 28 62 28Z" stroke="url(#td-tooth-hero-grad)" stroke-width="26" stroke-linejoin="round"/>
+        <path d="M74 34C26 34 4 74 7 132c4 66 28 144 52 198 8 19 30 16 37-3l24-71c7-19 33-19 40 0l24 71c7 19 29 22 37 3 24-54 48-132 52-198 3-58-19-98-67-98-26 0-44 13-66 26-22-13-40-26-66-26Z" stroke="url(#td-tooth-ring-outer)" stroke-width="40" stroke-linejoin="round"/>
+        <path d="M74 34C26 34 4 74 7 132c4 66 28 144 52 198 8 19 30 16 37-3l24-71c7-19 33-19 40 0l24 71c7 19 29 22 37 3 24-54 48-132 52-198 3-58-19-98-67-98-26 0-44 13-66 26-22-13-40-26-66-26Z" stroke="url(#td-tooth-ring-core)" stroke-width="26" stroke-linejoin="round"/>
+        <path d="M74 34C26 34 4 74 7 132c4 66 28 144 52 198 8 19 30 16 37-3l24-71c7-19 33-19 40 0l24 71c7 19 29 22 37 3 24-54 48-132 52-198 3-58-19-98-67-98-26 0-44 13-66 26-22-13-40-26-66-26Z" stroke="url(#td-tooth-ring-spec)" stroke-width="6" stroke-linejoin="round"/>
       </svg>
 
-      <!-- Static smooth wave curves behind photo & along bottom horizon -->
-      <svg class="hero__bg-waves" viewBox="0 0 1440 220" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
-        <path d="M0 105C260 150 560 175 880 128C1130 92 1310 112 1440 142V220H0V105Z" fill="var(--wave-fill-1)"/>
-        <path d="M0 132C320 185 680 188 1060 144C1220 125 1350 148 1440 176V220H0V132Z" fill="var(--wave-fill-2)"/>
+      <!-- BG SVG #2: Pearlescent silver ribbon waves across hero bottom & right edge (static, zero blur) -->
+      <svg class="hero__bg-waves" viewBox="0 0 1440 720" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="td-hero-ribbon-1" x1="220" y1="420" x2="1380" y2="680" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="var(--ribbon-hi)" stop-opacity="0.72"/>
+            <stop offset="38%" stop-color="var(--ribbon-mid)" stop-opacity="0.5"/>
+            <stop offset="76%" stop-color="var(--ribbon-lo)" stop-opacity="0.34"/>
+            <stop offset="100%" stop-color="var(--ribbon-hi)" stop-opacity="0.55"/>
+          </linearGradient>
+          <linearGradient id="td-hero-ribbon-2" x1="0" y1="530" x2="1440" y2="720" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="var(--ribbon-hi)" stop-opacity="0.88"/>
+            <stop offset="48%" stop-color="var(--ribbon-mid)" stop-opacity="0.68"/>
+            <stop offset="100%" stop-color="var(--wave-fill-2)" stop-opacity="0.96"/>
+          </linearGradient>
+          <linearGradient id="td-hero-ribbon-top" x1="720" y1="0" x2="1040" y2="340" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="var(--ribbon-hi)" stop-opacity="0.62"/>
+            <stop offset="55%" stop-color="var(--ribbon-mid)" stop-opacity="0.32"/>
+            <stop offset="100%" stop-color="var(--ribbon-lo)" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M620 0C555 155 565 340 650 505L860 505C765 340 755 150 830 0Z" fill="url(#td-hero-ribbon-top)"/>
+        <path d="M0 575C290 638 615 655 960 582C1180 536 1335 560 1440 598V720H0V575Z" fill="url(#td-hero-ribbon-1)"/>
+        <path d="M0 618C340 682 700 686 1080 622C1235 596 1358 624 1440 658V720H0V618Z" fill="url(#td-hero-ribbon-2)"/>
+        <path d="M0 575C290 638 615 655 960 582C1180 536 1335 560 1440 598" stroke="var(--ribbon-edge)" stroke-width="1.5"/>
       </svg>
 
       <div class="container hero__container">
@@ -348,17 +392,22 @@
         </div>
       </div>
 
-      <!-- Right-bleed photo with elliptical left boundary & 1px offset contour arc -->
+      <!-- Right-bleed monochrome-silver photo with static wavy clip-path & thin parallel contour -->
       <div class="hero__media-wrap">
+        <svg class="hero__wave-outline" viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+          <path class="hero__wave-path hero__wave-path--desktop" d="M 25,0 C 10,16 1,36 3,56 C 5,74 12,88 21,100" stroke="var(--arc-line)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <path class="hero__wave-path hero__wave-path--mobile" d="M 16,0 C 5,20 0,46 4,70 C 7,84 11,93 16,100" stroke="var(--arc-line)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        </svg>
+
         <div class="hero__media">
           <picture class="hero__picture">
             <source
               type="image/webp"
-              srcset="img/hero-800.webp 800w, img/hero-1200.webp 1200w, img/hero-1600.webp 1600w"
+              srcset="img/hero-mono-800.webp 800w, img/hero-mono-1200.webp 1200w, img/hero-mono-1600.webp 1600w"
               sizes="(max-width: 979px) 100vw, 50vw">
             <img
               class="hero__img"
-              src="img/hero.jpg"
+              src="img/hero-mono.jpg"
               alt="Сучасний стоматологічний кабінет клініки TRUST DENTAL в Івано-Франківську"
               width="960"
               height="454"
@@ -450,21 +499,31 @@
       </div>
     </section>
 
-    <!-- ======================== BELOW-THE-FOLD STUB SECTIONS ======================== -->
+    <!-- ======================== BELOW-THE-FOLD SECTIONS ======================== -->
     <div class="lower-canvas">
-      <!-- Static lower-left tooth silhouette (gradient fill, zero blur/animation) -->
-      <svg class="lower-canvas__tooth" viewBox="0 0 240 320" fill="none" aria-hidden="true" focusable="false">
-        <defs>
-          <linearGradient id="td-tooth-lower-grad" x1="20" y1="30" x2="210" y2="290" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="var(--tooth-stop-1)"/>
-            <stop offset="100%" stop-color="var(--tooth-stop-2)"/>
-          </linearGradient>
-        </defs>
-        <path d="M62 28C22 28 2 62 4 110c3 55 24 121 44 167 7 16 25 14 31-2l21-60c6-16 28-16 34 0l21 60c6 16 24 18 31 2 20-46 41-112 44-167 2-48-18-82-58-82-22 0-37 11-55 22C99 39 84 28 62 28Z" fill="url(#td-tooth-lower-grad)"/>
-      </svg>
-
       <section id="services" class="section section--services" aria-labelledby="heading-services">
-        <div class="container">
+        <!-- BG SVG #3: Pearlescent silver ribbons along right & bottom of Services section (static, zero blur) -->
+        <svg class="services__bg-waves" viewBox="0 0 1440 820" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="td-svc-ribbon-1" x1="1080" y1="0" x2="1380" y2="620" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="var(--ribbon-hi)" stop-opacity="0"/>
+              <stop offset="30%" stop-color="var(--ribbon-hi)" stop-opacity="0.52"/>
+              <stop offset="68%" stop-color="var(--ribbon-mid)" stop-opacity="0.32"/>
+              <stop offset="100%" stop-color="var(--ribbon-lo)" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="td-svc-ribbon-2" x1="0" y1="620" x2="1440" y2="820" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="var(--ribbon-hi)" stop-opacity="0.58"/>
+              <stop offset="35%" stop-color="var(--ribbon-mid)" stop-opacity="0.44"/>
+              <stop offset="72%" stop-color="var(--ribbon-lo)" stop-opacity="0.32"/>
+              <stop offset="100%" stop-color="var(--ribbon-hi)" stop-opacity="0.62"/>
+            </linearGradient>
+          </defs>
+          <path d="M1080 0C1185 140 1245 310 1165 495C1110 620 1240 710 1440 740V0H1080Z" fill="url(#td-svc-ribbon-1)"/>
+          <path d="M0 705C280 635 595 758 950 692C1165 652 1320 690 1440 742V820H0V705Z" fill="url(#td-svc-ribbon-2)"/>
+          <path d="M0 705C280 635 595 758 950 692C1165 652 1320 690 1440 742" stroke="var(--ribbon-edge)" stroke-width="1.2"/>
+        </svg>
+
+        <div class="container services__container">
           <div class="section__head">
             <span class="section__eyebrow">Послуги</span>
             <h2 id="heading-services" class="section__title">Що ми лікуємо</h2>

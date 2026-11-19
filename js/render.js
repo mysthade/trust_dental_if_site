@@ -52,6 +52,55 @@
   /* ------------------------------------------------------------------------
      1. Services Cards (#services-grid)
      ------------------------------------------------------------------------ */
+  function createServiceMedia(svc) {
+    var wrap = document.createElement('div');
+    wrap.className = 'service-card__media';
+
+    var fallback = document.createElement('div');
+    fallback.className = 'service-card__fallback';
+    fallback.setAttribute('aria-hidden', 'true');
+    fallback.appendChild(createSvgUse(svc.icon, 'service-card__icon'));
+    wrap.appendChild(fallback);
+
+    if (svc.iconImg) {
+      var pic = document.createElement('picture');
+      pic.className = 'service-card__picture';
+
+      var source = document.createElement('source');
+      source.type = 'image/webp';
+      source.srcset = 'img/services/' + svc.iconImg + '.webp';
+
+      var img = document.createElement('img');
+      img.className = 'service-card__img';
+      img.src = 'img/services/' + svc.iconImg + '.png';
+      img.width = 160;
+      img.height = 160;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.alt = '';
+
+      img.addEventListener('load', function () {
+        if (img.naturalWidth > 0) {
+          wrap.classList.add('is-loaded');
+          wrap.classList.remove('is-fallback');
+        }
+      });
+
+      img.addEventListener('error', function () {
+        wrap.classList.add('is-fallback');
+        wrap.classList.remove('is-loaded');
+      });
+
+      pic.appendChild(source);
+      pic.appendChild(img);
+      wrap.appendChild(pic);
+    } else {
+      wrap.classList.add('is-fallback');
+    }
+
+    return wrap;
+  }
+
   function renderServices() {
     var container = document.getElementById('services-grid');
     if (!container || !Array.isArray(TD.SERVICES)) return;
@@ -63,10 +112,6 @@
       var card = document.createElement('article');
       card.className = 'service-card';
 
-      var iconWrap = document.createElement('div');
-      iconWrap.className = 'service-card__icon-wrap';
-      iconWrap.appendChild(createSvgUse(svc.icon, 'service-card__icon'));
-
       var title = document.createElement('h3');
       title.className = 'service-card__title';
       title.textContent = svc.title;
@@ -76,7 +121,7 @@
       desc.textContent = svc.description;
 
       var cta = document.createElement('a');
-      cta.className = 'btn btn--primary btn--sm service-card__cta';
+      cta.className = 'btn btn--primary service-card__cta';
       cta.setAttribute('href', '#prices');
       cta.setAttribute('data-price-jump', svc.category || 'all');
 
@@ -85,7 +130,7 @@
       cta.appendChild(ctaLabel);
       cta.appendChild(createArrowSvg('btn__arrow'));
 
-      card.appendChild(iconWrap);
+      card.appendChild(createServiceMedia(svc));
       card.appendChild(title);
       card.appendChild(desc);
       card.appendChild(cta);
