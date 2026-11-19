@@ -58,7 +58,7 @@
       title: 'Терапія та канали',
       description: 'Лікування карієсу з кофердамом, реставрація та лікування кореневих каналів.',
       icon: 'td-icon-therapy',
-      iconImg: 'therapy',
+      iconImg: 'img/services/therapy',
       category: 'therapy'
     }),
     Object.freeze({
@@ -66,7 +66,7 @@
       title: 'Професійна гігієна',
       description: 'Професійна гігієна (40 хв). [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-hygiene',
-      iconImg: 'hygiene',
+      iconImg: 'img/services/hygiene',
       category: 'hygiene'
     }),
     Object.freeze({
@@ -74,7 +74,7 @@
       title: 'Атравматична хірургія',
       description: 'Ультразвукове (п\'єзохірургічне) видалення зубів із мінімальною травматизацією.',
       icon: 'td-icon-surgery',
-      iconImg: 'surgery',
+      iconImg: 'img/services/surgery',
       category: 'surgery'
     }),
     Object.freeze({
@@ -82,7 +82,7 @@
       title: 'Брекет-системи',
       description: 'Сучасні брекет-системи та ортодонтія. [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-braces',
-      iconImg: 'braces',
+      iconImg: 'img/services/braces',
       category: 'braces'
     }),
     Object.freeze({
@@ -90,7 +90,7 @@
       title: 'Імплантація',
       description: 'Імплантація зубів (хірургічний етап). [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-implantation',
-      iconImg: 'implant',
+      iconImg: 'img/services/implant',
       category: null
     }),
     Object.freeze({
@@ -98,7 +98,7 @@
       title: 'Ортопедія',
       description: 'Цирконієві коронки та вініри. [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-orthopedics',
-      iconImg: 'orthopedics',
+      iconImg: 'img/services/orthopedics',
       category: 'orthopedics'
     }),
     Object.freeze({
@@ -106,7 +106,7 @@
       title: 'Дитяча стоматологія',
       description: '[ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-pediatric',
-      iconImg: 'pediatric',
+      iconImg: 'img/services/pediatric',
       category: null
     }),
     Object.freeze({
@@ -114,7 +114,7 @@
       title: 'Діагностика',
       description: 'Консультація та діагностика на візіографі.',
       icon: 'td-icon-diagnostics',
-      iconImg: 'diagnostics',
+      iconImg: 'img/services/diagnostics',
       category: null
     })
   ]);

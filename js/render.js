@@ -63,28 +63,33 @@
     wrap.appendChild(fallback);
 
     if (svc.iconImg) {
+      var basePath = svc.iconImg.indexOf('/') === -1
+        ? 'img/services/' + svc.iconImg
+        : svc.iconImg;
       var pic = document.createElement('picture');
       pic.className = 'service-card__picture';
 
       var source = document.createElement('source');
       source.type = 'image/webp';
-      source.srcset = 'img/services/' + svc.iconImg + '.webp';
+      source.srcset = basePath + '.webp';
 
       var img = document.createElement('img');
       img.className = 'service-card__img';
-      img.src = 'img/services/' + svc.iconImg + '.png';
+      img.src = basePath + '.png';
       img.width = 160;
       img.height = 160;
       img.loading = 'lazy';
       img.decoding = 'async';
       img.alt = '';
 
-      img.addEventListener('load', function () {
+      function markLoaded() {
         if (img.naturalWidth > 0) {
           wrap.classList.add('is-loaded');
           wrap.classList.remove('is-fallback');
         }
-      });
+      }
+
+      img.addEventListener('load', markLoaded);
 
       img.addEventListener('error', function () {
         wrap.classList.add('is-fallback');
@@ -94,6 +99,10 @@
       pic.appendChild(source);
       pic.appendChild(img);
       wrap.appendChild(pic);
+
+      if (img.complete && img.naturalWidth > 0) {
+        markLoaded();
+      }
     } else {
       wrap.classList.add('is-fallback');
     }
