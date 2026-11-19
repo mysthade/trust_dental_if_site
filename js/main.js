@@ -14,8 +14,18 @@
     }
   }
 
+  function initStage2Modules() {
+    if (TD.render && typeof TD.render.init === 'function') {
+      TD.render.init();
+    }
+    if (TD.calculator && typeof TD.calculator.init === 'function') {
+      TD.calculator.init();
+    }
+  }
+
   function initNonCritical() {
     scheduleIdle(function () {
+      initStage2Modules();
       if (TD.header && typeof TD.header.initScrollSpy === 'function') {
         TD.header.initScrollSpy();
       }
@@ -34,6 +44,11 @@
     }
     if (TD.header && typeof TD.header.initCritical === 'function') {
       TD.header.initCritical();
+    }
+
+    var hash = window.location.hash;
+    if (hash === '#services' || hash === '#prices' || hash === '#calculator') {
+      initStage2Modules();
     }
 
     if (document.readyState === 'complete') {
