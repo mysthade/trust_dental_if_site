@@ -780,9 +780,10 @@ p {
 .hero__bg-tooth {
   position: absolute;
   top: 24px;
-  left: -88px;
-  width: 300px;
+  left: -114px;
+  width: 352px;
   height: 410px;
+  overflow: visible;
   pointer-events: none;
   z-index: 0;
 }
@@ -1339,9 +1340,9 @@ p {
   }
 
   .hero__bg-tooth {
-    width: 200px;
+    width: 234px;
     height: 270px;
-    left: -68px;
+    left: -85px;
     top: 36px;
   }
 
