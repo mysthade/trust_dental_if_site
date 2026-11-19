@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRUST DENTAL — Приватна стоматологічна клініка в Івано-Франківську</title>
+  <meta name="description" content="Атравматична стоматологія, ультразвукове видалення зубів без набряків, імплантація, сучасні брекети та терапія у TRUST DENTAL (Івано-Франківськ, вул. Галицька, 51а).">
+  <meta name="theme-color" content="#EEF0F2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0F1217" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%231E222B' d='M10.2 4C6.5 4 4 7.1 4 11.4c0 4.8 2.3 10.6 4.4 14.8.7 1.3 2.5 1.1 2.9-.3l1.7-5.9c.5-1.7 2.5-1.7 3 0l1.7 5.9c.4 1.4 2.2 1.6 2.9.3C22.7 22 25 16.2 25 11.4 25 7.1 22.5 4 18.8 4c-1.8 0-3.1.9-4.3 1.7C13.3 4.9 12 4 10.2 4Z'/%3E%3C/svg%3E">
+
+  <!-- Anti-FOUC theme bootstrap: runs before first paint -->
+  <script>
+    (function () {
+      var theme = 'light';
+      try {
+        var saved = window.localStorage.getItem('td-theme');
+        if (saved === 'dark' || saved === 'light') {
+          theme = saved;
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          theme = 'dark';
+        }
+      } catch (e) {
+        try {
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            theme = 'dark';
+          }
+        } catch (err) {}
+      }
+      var root = document.documentElement;
+      root.setAttribute('data-theme', theme);
+      root.style.colorScheme = theme;
+    })();
+  </script>
+
+  <!-- Preload critical self-hosted Inter Variable subsets & LCP hero image -->
+  <link rel="preload" href="fonts/inter-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" as="image" type="image/webp" imagesrcset="img/hero-800.webp 800w, img/hero-1200.webp 1200w, img/hero-1600.webp 1600w" imagesizes="(max-width: 979px) 100vw, 50vw" fetchpriority="high">
+
+  <!-- Inline Critical CSS (light & dark variables + above-the-fold layout for CLS < 0.05) -->
+  <style>
+    @font-face{font-family:'Inter Fallback';src:local('Arial'),local('Helvetica Neue'),local('Segoe UI');ascent-override:90.2%;descent-override:22.48%;line-gap-override:0%;size-adjust:107.4%}
+    @font-face{font-family:'Inter Variable';font-style:normal;font-weight:100 900;font-display:swap;src:url('fonts/inter-cyrillic-ext-wght-normal.woff2') format('woff2');unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F}
+    @font-face{font-family:'Inter Variable';font-style:normal;font-weight:100 900;font-display:swap;src:url('fonts/inter-cyrillic-wght-normal.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+    @font-face{font-family:'Inter Variable';font-style:normal;font-weight:100 900;font-display:swap;src:url('fonts/inter-latin-wght-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+    :root{color-scheme:light;--font-sans:'Inter Variable','Inter Fallback',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--bg:#EEF0F2;--bg-top:#F8F9FA;--bg-bottom:#E4E8EE;--surface:rgba(255,255,255,.72);--surface-strong:rgba(255,255,255,.92);--surface-card:rgba(255,255,255,.86);--surface-scrolled:rgba(244,246,248,.88);--border:rgba(255,255,255,.85);--border-subtle:rgba(27,31,39,.08);--text:#1B1F27;--muted:#5B6370;--primary:#1E222B;--primary-hover:#2E3442;--on-primary:#FFFFFF;--accent:#7A818C;--line:#C9CED6;--divider:rgba(27,31,39,.1);--arc-line:rgba(122,129,140,.45);--header-scrim:rgba(240,242,245,.92);--header-scrim-mid:rgba(240,242,245,.52);--media-placeholder-start:#DDE2E8;--media-placeholder-end:#C3CAD4;--backdrop:rgba(15,18,23,.42);--focus-ring:#1E222B;--star-color:#EAB308;--tooth-stop-1:rgba(160,168,180,.36);--tooth-stop-2:rgba(255,255,255,.08);--wave-fill-1:rgba(255,255,255,.58);--wave-fill-2:rgba(248,249,250,.96);--radius-card:26px;--radius-pill:999px;--shadow-sm:0 4px 16px rgba(27,31,39,.05);--shadow-md:0 12px 32px rgba(27,31,39,.07),0 2px 6px rgba(27,31,39,.04);--shadow-lg:0 22px 54px rgba(27,31,39,.08),0 4px 14px rgba(27,31,39,.04);--container:1280px;--header-h:72px}
+    [data-theme='dark']{color-scheme:dark;--bg:#0F1217;--bg-top:#151921;--bg-bottom:#0B0D11;--surface:rgba(24,28,35,.8);--surface-strong:rgba(24,28,35,.94);--surface-card:rgba(24,28,35,.9);--surface-scrolled:rgba(15,18,23,.88);--border:rgba(255,255,255,.09);--border-subtle:rgba(255,255,255,.1);--text:#ECEFF3;--muted:#9BA3AF;--primary:#ECEFF3;--primary-hover:#FFFFFF;--on-primary:#12151A;--accent:#9AA2AE;--line:#2A303A;--divider:rgba(255,255,255,.09);--arc-line:rgba(154,162,174,.34);--header-scrim:rgba(15,18,23,.9);--header-scrim-mid:rgba(15,18,23,.5);--media-placeholder-start:#1E242E;--media-placeholder-end:#141820;--backdrop:rgba(0,0,0,.65);--focus-ring:#ECEFF3;--star-color:#FACC15;--tooth-stop-1:rgba(154,162,174,.11);--tooth-stop-2:rgba(255,255,255,.02);--wave-fill-1:rgba(24,28,35,.65);--wave-fill-2:rgba(15,18,23,.98);--shadow-sm:0 4px 16px rgba(0,0,0,.28);--shadow-md:0 14px 36px rgba(0,0,0,.38),0 2px 8px rgba(0,0,0,.22);--shadow-lg:0 24px 58px rgba(0,0,0,.45),0 4px 16px rgba(0,0,0,.25)}
+    *,*::before,*::after{box-sizing:border-box}
+    html{font-size:16px;background-color:var(--bg);-webkit-text-size-adjust:100%}
+    body{margin:0;min-height:100vh;font-family:var(--font-sans);font-size:1rem;line-height:1.55;color:var(--text);background:linear-gradient(180deg,var(--bg-top) 0%,var(--bg) 42%,var(--bg) 100%);overflow-x:clip;-webkit-font-smoothing:antialiased}
+    img,picture,svg{display:block;max-width:100%}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+    ul{margin:0;padding:0;list-style:none}
+    h1,h2,h3,p{margin:0}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .skip-link{position:fixed;top:12px;left:12px;z-index:300;padding:12px 20px;border-radius:var(--radius-pill);background:var(--primary);color:var(--on-primary);font-weight:600;transform:translateY(-140%)}
+    .skip-link:focus-visible{transform:translateY(0)}
+    .container{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:clamp(16px,3vw,32px)}
+    .header-sentinel{position:absolute;top:0;left:0;width:1px;height:16px;pointer-events:none}
+    .header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);background:transparent;border-bottom:1px solid transparent}
+    .header__inner{display:flex;align-items:center;justify-content:space-between;gap:16px;height:100%}
+    .brand{display:inline-flex;align-items:center;flex-shrink:0;min-height:44px}
+    .brand__picture--dark{display:none}
+    [data-theme='dark'] .brand__picture--light{display:none}
+    [data-theme='dark'] .brand__picture--dark{display:block}
+    .brand__img{height:40px;width:auto;object-fit:contain}
+    .nav{display:flex;align-items:center}
+    .nav__list{display:flex;align-items:center;gap:clamp(14px,1.8vw,26px)}
+    .nav__link{position:relative;display:inline-flex;align-items:center;min-height:44px;padding-inline:2px;font-size:.9rem;font-weight:500;color:var(--muted)}
+    .header__actions{display:flex;align-items:center;gap:12px;flex-shrink:0}
+    .header__phone{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding-inline:6px;font-size:.9rem;font-weight:600;color:var(--text);white-space:nowrap}
+    .header__phone-icon{width:16px;height:16px;flex-shrink:0;color:var(--muted)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;border-radius:var(--radius-pill);font-weight:600;line-height:1.2;white-space:nowrap}
+    .btn--sm{padding:10px 20px;font-size:.875rem}
+    .btn--lg{min-height:52px;padding:13px 26px;font-size:.9375rem}
+    .btn--primary{background:var(--primary);color:var(--on-primary);border:1px solid var(--primary);box-shadow:var(--shadow-sm)}
+    .btn--outline{background:var(--surface);color:var(--text);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+    .btn__arrow{width:16px;height:16px;flex-shrink:0}
+    .theme-toggle{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--surface);border:1px solid var(--line);color:var(--text);box-shadow:var(--shadow-sm)}
+    .theme-toggle__icon{position:absolute;width:19px;height:19px}
+    .theme-toggle__icon--sun{opacity:0}
+    [data-theme='dark'] .theme-toggle__icon--moon{opacity:0}
+    [data-theme='dark'] .theme-toggle__icon--sun{opacity:1}
+    .burger{display:none;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--surface);border:1px solid var(--line);color:var(--text);box-shadow:var(--shadow-sm)}
+    .burger__lines{display:flex;flex-direction:column;gap:5px;width:18px}
+    .burger__line{display:block;height:1.75px;width:100%;border-radius:2px;background:currentColor}
+    .hero{position:relative;overflow:clip;padding-top:calc(var(--header-h) + 34px);padding-bottom:108px;min-height:clamp(610px,74vh,720px);display:flex;align-items:center;background:linear-gradient(148deg,var(--bg-top) 0%,var(--bg) 52%,var(--bg-bottom) 100%)}
+    .hero__bg-tooth{position:absolute;top:56px;left:-62px;width:230px;height:310px;pointer-events:none;z-index:0}
+    .hero__bg-waves{position:absolute;inset:auto 0 0 0;width:100%;height:220px;pointer-events:none;z-index:1}
+    .hero__container{position:relative;z-index:3}
+    .hero__content{max-width:590px}
+    .hero__badge{display:inline-flex;align-items:center;gap:9px;max-width:100%;padding:8px 16px;margin-bottom:22px;border-radius:var(--radius-pill);background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-sm);font-size:.84375rem;font-weight:500;line-height:1.35;color:var(--text)}
+    .hero__badge-dot{width:7px;height:7px;border-radius:50%;background:var(--text);flex-shrink:0}
+    .hero__title{font-size:clamp(2.4rem,5vw,4.2rem);font-weight:800;line-height:1.05;letter-spacing:-.03em;color:var(--text);margin-bottom:22px}
+    .hero__accent{color:var(--accent)}
+    .hero__subtitle{max-width:500px;font-size:clamp(.95rem,1.15vw,1.03125rem);line-height:1.58;color:var(--muted);margin-bottom:30px}
+    .hero__cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+    .hero__media-wrap{position:absolute;top:0;right:0;bottom:0;width:48.5%;z-index:2}
+    .hero__media-wrap::before{content:'';position:absolute;top:-18px;bottom:-18px;left:-20px;right:0;border:1px solid var(--arc-line);border-right:0;border-radius:340px 0 0 260px/54% 0 0 46%;pointer-events:none;z-index:1}
+    .hero__media{position:relative;width:100%;height:100%;overflow:hidden;border-radius:320px 0 0 245px/54% 0 0 46%;background:linear-gradient(135deg,var(--media-placeholder-start) 0%,var(--media-placeholder-end) 100%);box-shadow:var(--shadow-md)}
+    .hero__media::after{content:'';position:absolute;top:0;left:0;right:0;height:104px;background:linear-gradient(180deg,var(--header-scrim) 0%,var(--header-scrim-mid) 58%,rgba(0,0,0,0) 100%);pointer-events:none;z-index:2}
+    .hero__picture{width:100%;height:100%}
+    .hero__img{width:100%;height:100%;object-fit:cover;object-position:40% center}
+    .google-badge{position:absolute;right:clamp(20px,3.2vw,48px);bottom:84px;z-index:4;display:inline-flex;align-items:center;gap:14px;padding:12px 14px 12px 18px;border-radius:var(--radius-pill);background:var(--surface-strong);border:1px solid var(--border);box-shadow:var(--shadow-lg)}
+    .google-badge__logo{width:28px;height:28px;flex-shrink:0}
+    .google-badge__info{display:flex;flex-direction:column;gap:2px}
+    .google-badge__top{display:flex;align-items:center;gap:7px;line-height:1.1}
+    .google-badge__score{font-size:1.0625rem;font-weight:800;letter-spacing:-.02em;color:var(--text)}
+    .google-badge__stars{display:inline-flex;align-items:center;gap:2px;color:var(--star-color)}
+    .google-badge__star{width:14px;height:14px}
+    .google-badge__count{font-size:.78125rem;font-weight:500;color:var(--muted);white-space:nowrap}
+    .google-badge__btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--surface);border:1px solid var(--line);color:var(--text)}
+    .stats-section{position:relative;z-index:6;margin-top:-52px;padding-bottom:36px}
+    .stats-card{border-radius:var(--radius-card);background:var(--surface-card);border:1px solid var(--border);box-shadow:var(--shadow-lg);padding:26px 12px}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+    .stat-item{display:flex;align-items:center;gap:16px;padding:6px 24px;border-right:1px solid var(--divider)}
+    .stat-item:last-child{border-right:0}
+    .stat-item__icon{width:34px;height:34px;flex-shrink:0;color:var(--text);opacity:.82}
+    .stat-item__body{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .stat-item__value{font-size:clamp(1.35rem,1.9vw,1.7rem);font-weight:800;line-height:1.08;letter-spacing:-.03em;color:var(--text);font-variant-numeric:tabular-nums}
+    .stat-item__label{font-size:.8125rem;line-height:1.35;color:var(--muted)}
+    @media (max-width:1220px) and (min-width:980px){.header__inner{gap:10px;padding-inline:20px}.brand__img{height:30px}.nav__list{gap:10px}.nav__link{font-size:.8125rem}.header__actions{gap:8px}.header__phone{font-size:.8125rem;gap:5px;padding-inline:2px}.header__cta{padding:9px 13px;font-size:.8125rem;gap:6px}.hero__content{max-width:500px}.hero__cta .btn--lg{padding:12px 20px;font-size:.875rem}.hero__media-wrap{width:46%}.hero__media{border-radius:250px 0 0 200px/54% 0 0 46%}.hero__media-wrap::before{border-radius:270px 0 0 220px/54% 0 0 46%}.stat-item{padding:6px 16px;gap:12px}}
+    @media (max-width:979px){.nav,.header__phone,.header__cta{display:none}.burger{display:inline-flex}.brand__img{height:36px}.hero{display:block;min-height:auto;padding-top:calc(var(--header-h) + 24px);padding-bottom:44px}.hero__content{max-width:640px;margin-bottom:32px}.hero__bg-tooth{width:170px;height:230px;left:-56px;top:44px}.hero__media-wrap{position:relative;top:auto;right:auto;bottom:auto;width:calc(100% - clamp(16px,3vw,32px));margin-left:auto;aspect-ratio:16/10;max-height:440px}.hero__media-wrap::before{top:0;bottom:0;left:-12px;right:0;border:0;border-left:1.5px solid var(--arc-line);border-radius:130px 0 0 110px/52% 0 0 48%}.hero__media{border-radius:120px 0 0 100px/52% 0 0 48%}.hero__media::after{display:none}.google-badge{right:16px;bottom:16px;padding:10px 10px 10px 14px;gap:10px}.stats-section{margin-top:-18px}.stats-card{padding:18px 8px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stat-item{padding:16px 18px;border-right:1px solid var(--divider);border-bottom:1px solid var(--divider)}.stat-item:nth-child(2n){border-right:0}.stat-item:nth-last-child(-n+2){border-bottom:0}}
+    @media (max-width:540px){.brand__img{height:32px}.hero{padding-top:calc(var(--header-h) + 18px);padding-bottom:36px}.hero__badge{font-size:.78125rem;padding:7px 13px;margin-bottom:18px}.hero__title{margin-bottom:16px}.hero__subtitle{margin-bottom:24px}.hero__cta{flex-direction:column;align-items:stretch}.hero__cta .btn{width:100%}.hero__media-wrap{aspect-ratio:4/3}.hero__media-wrap::before{border-radius:86px 0 0 74px/50% 0 0 50%}.hero__media{border-radius:78px 0 0 66px/50% 0 0 50%}.google-badge{right:12px;bottom:12px;padding:8px 8px 8px 12px;gap:9px}.google-badge__logo{width:24px;height:24px}.google-badge__score{font-size:.9375rem}.google-badge__star{width:12px;height:12px}.google-badge__count{font-size:.72rem}.stats-section{margin-top:-12px}.stats-card{padding:12px 6px;border-radius:24px}.stat-item{flex-direction:column;align-items:flex-start;gap:10px;padding:14px 12px}.stat-item__icon{width:28px;height:28px}.stat-item__value{font-size:1.25rem}.stat-item__label{font-size:.75rem}}
+  </style>
+
+  <!-- Non-blocking full stylesheet -->
+  <link rel="stylesheet" href="css/style.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="css/style.css"></noscript>
+
+  <!-- Deferred JS modules in window.TD namespace (strict order) -->
+  <script src="js/data.js" defer></script>
+  <script src="js/theme.js" defer></script>
+  <script src="js/header.js" defer></script>
+  <script src="js/effects.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Перейти до основного вмісту</a>
+  <div id="header-sentinel" class="header-sentinel" aria-hidden="true"></div>
+
+  <!-- ======================== HEADER ======================== -->
+  <header id="site-header" class="header">
+    <div class="container header__inner">
+      <a class="brand" href="#top" aria-label="TRUST DENTAL — турбота про вашу усмішку, на початок сторінки">
+        <picture class="brand__picture brand__picture--light">
+          <img class="brand__img" src="img/logo.png" alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" decoding="async">
+        </picture>
+        <picture class="brand__picture brand__picture--dark">
+          <img class="brand__img" src="img/logo-white.png" alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" decoding="async">
+        </picture>
+      </a>
+
+      <nav class="nav" aria-label="Основна навігація">
+        <ul class="nav__list">
+          <li><a class="nav__link" href="#services" data-nav-target="services">Послуги</a></li>
+          <li><a class="nav__link" href="#advantages" data-nav-target="advantages">Переваги</a></li>
+          <li><a class="nav__link" href="#prices" data-nav-target="prices">Прайс</a></li>
+          <li><a class="nav__link" href="#doctors" data-nav-target="doctors">Лікарі</a></li>
+          <li><a class="nav__link" href="#works" data-nav-target="works">Роботи</a></li>
+          <li><a class="nav__link" href="#reviews" data-nav-target="reviews">Відгуки</a></li>
+          <li><a class="nav__link" href="#contacts" data-nav-target="contacts">Контакти</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <a class="header__phone" href="tel:+380500500821" data-clinic="phone-link">
+          <svg class="header__phone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/>
+          </svg>
+          <span data-clinic="phone-display">+38 (050) 050-08-21</span>
+        </a>
+
+        <a class="btn btn--primary btn--sm header__cta" href="#contacts">
+          <span>Записатися</span>
+          <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+          </svg>
+        </a>
+
+        <button type="button" class="theme-toggle" id="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Увімкнути темну тему">
+          <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/>
+          </svg>
+          <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+        </button>
+
+        <button type="button" class="burger" id="burger-btn" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Відкрити меню навігації">
+          <span class="burger__lines" aria-hidden="true">
+            <span class="burger__line"></span>
+            <span class="burger__line"></span>
+            <span class="burger__line"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================== MOBILE DRAWER ======================== -->
+  <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+  <aside id="mobile-drawer" class="drawer" role="dialog" aria-modal="true" aria-label="Мобільна навігація" hidden>
+    <div class="drawer__head">
+      <span class="drawer__title" data-clinic="name">TRUST DENTAL</span>
+      <button type="button" class="drawer__close" id="drawer-close" aria-label="Закрити меню">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="drawer__nav" aria-label="Мобільне меню">
+      <ul class="drawer__list">
+        <li><a class="drawer__link" href="#services" data-nav-target="services">Послуги</a></li>
+        <li><a class="drawer__link" href="#advantages" data-nav-target="advantages">Переваги</a></li>
+        <li><a class="drawer__link" href="#prices" data-nav-target="prices">Прайс</a></li>
+        <li><a class="drawer__link" href="#doctors" data-nav-target="doctors">Лікарі</a></li>
+        <li><a class="drawer__link" href="#works" data-nav-target="works">Роботи</a></li>
+        <li><a class="drawer__link" href="#reviews" data-nav-target="reviews">Відгуки</a></li>
+        <li><a class="drawer__link" href="#contacts" data-nav-target="contacts">Контакти</a></li>
+      </ul>
+    </nav>
+
+    <div class="drawer__foot">
+      <p class="drawer__meta">
+        <span data-clinic="address">м. Івано-Франківськ, вул. Галицька, 51а</span><br>
+        Графік: <span data-clinic="hours">Пн–Сб 09:00–22:00, Нд 09:00–20:00</span>
+      </p>
+      <a class="drawer__phone" href="tel:+380500500821" data-clinic="phone-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/>
+        </svg>
+        <span data-clinic="phone-display">+38 (050) 050-08-21</span>
+      </a>
+      <a class="btn btn--primary btn--lg drawer__cta" href="#contacts">
+        <span>Записатися на консультацію</span>
+        <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+        </svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ======================== MAIN ======================== -->
+  <main id="main-content">
+    <!-- ======================== HERO ======================== -->
+    <section id="top" class="hero" aria-labelledby="hero-heading">
+      <!-- Static left-edge tooth silhouette (gradient fill, zero blur/animation) -->
+      <svg class="hero__bg-tooth" viewBox="0 0 240 320" fill="none" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="td-tooth-hero-grad" x1="15" y1="20" x2="215" y2="295" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="var(--tooth-stop-1)"/>
+            <stop offset="100%" stop-color="var(--tooth-stop-2)"/>
+          </linearGradient>
+        </defs>
+        <path d="M62 28C22 28 2 62 4 110c3 55 24 121 44 167 7 16 25 14 31-2l21-60c6-16 28-16 34 0l21 60c6 16 24 18 31 2 20-46 41-112 44-167 2-48-18-82-58-82-22 0-37 11-55 22C99 39 84 28 62 28Z" stroke="url(#td-tooth-hero-grad)" stroke-width="26" stroke-linejoin="round"/>
+      </svg>
+
+      <!-- Static smooth wave curves behind photo & along bottom horizon -->
+      <svg class="hero__bg-waves" viewBox="0 0 1440 220" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+        <path d="M0 105C260 150 560 175 880 128C1130 92 1310 112 1440 142V220H0V105Z" fill="var(--wave-fill-1)"/>
+        <path d="M0 132C320 185 680 188 1060 144C1220 125 1350 148 1440 176V220H0V132Z" fill="var(--wave-fill-2)"/>
+      </svg>
+
+      <div class="container hero__container">
+        <div class="hero__content">
+          <div class="hero__badge">
+            <span class="hero__badge-dot" aria-hidden="true"></span>
+            <span>Графік: <span data-clinic="hours">Пн–Сб 09:00–22:00, Нд 09:00–20:00</span></span>
+          </div>
+
+          <h1 id="hero-heading" class="hero__title">
+            Атравматична стоматологія та <span class="hero__accent">сучасні брекети</span> у&nbsp;TRUST&nbsp;DENTAL
+          </h1>
+
+          <p class="hero__subtitle">
+            Ультразвукове видалення зубів без набряків, імплантація, ортодонтія та терапія в Івано-Франківську — з прозорим прайсом і прийомом точно за записом.
+          </p>
+
+          <div id="hero-cta" class="hero__cta">
+            <a class="btn btn--primary btn--lg" href="#contacts">
+              <span>Записатися на консультацію</span>
+              <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+              </svg>
+            </a>
+            <a class="btn btn--outline btn--lg" href="#prices">Дізнатися прайс</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right-bleed photo with elliptical left boundary & 1px offset contour arc -->
+      <div class="hero__media-wrap">
+        <div class="hero__media">
+          <picture class="hero__picture">
+            <source
+              type="image/webp"
+              srcset="img/hero-800.webp 800w, img/hero-1200.webp 1200w, img/hero-1600.webp 1600w"
+              sizes="(max-width: 979px) 100vw, 50vw">
+            <img
+              class="hero__img"
+              src="img/hero.jpg"
+              alt="Сучасний стоматологічний кабінет клініки TRUST DENTAL в Івано-Франківську"
+              width="960"
+              height="454"
+              fetchpriority="high"
+              decoding="async">
+          </picture>
+        </div>
+
+        <!-- Floating Google Reviews Badge -->
+        <div class="google-badge">
+          <svg class="google-badge__logo" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.01 24.01 0 0 0 0 21.56l7.98-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+
+          <div class="google-badge__info">
+            <div class="google-badge__top">
+              <span class="google-badge__score" data-clinic="rating">5.0</span>
+              <span class="google-badge__stars" role="img" aria-label="5 із 5 зірок">
+                <svg class="google-badge__star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 1.5l2.62 5.3 5.85.85-4.23 4.13 1 5.82L10 14.85 4.76 17.6l1-5.82L1.53 7.65l5.85-.85L10 1.5z"/></svg>
+                <svg class="google-badge__star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 1.5l2.62 5.3 5.85.85-4.23 4.13 1 5.82L10 14.85 4.76 17.6l1-5.82L1.53 7.65l5.85-.85L10 1.5z"/></svg>
+                <svg class="google-badge__star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 1.5l2.62 5.3 5.85.85-4.23 4.13 1 5.82L10 14.85 4.76 17.6l1-5.82L1.53 7.65l5.85-.85L10 1.5z"/></svg>
+                <svg class="google-badge__star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 1.5l2.62 5.3 5.85.85-4.23 4.13 1 5.82L10 14.85 4.76 17.6l1-5.82L1.53 7.65l5.85-.85L10 1.5z"/></svg>
+                <svg class="google-badge__star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 1.5l2.62 5.3 5.85.85-4.23 4.13 1 5.82L10 14.85 4.76 17.6l1-5.82L1.53 7.65l5.85-.85L10 1.5z"/></svg>
+              </span>
+            </div>
+            <span class="google-badge__count" data-clinic="reviews-text">73 відгуки на Google</span>
+          </div>
+
+          <a class="google-badge__btn" data-clinic="maps-link" href="https://www.google.com/maps/search/?api=1&query=TRUST+DENTAL+%D0%B2%D1%83%D0%BB.+%D0%93%D0%B0%D0%BB%D0%B8%D1%86%D1%8C%D0%BA%D0%B0+51%D0%B0+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA" target="_blank" rel="noopener noreferrer" aria-label="Відкрити відгуки TRUST DENTAL у Google Картах">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== STATS GLASS BAR ======================== -->
+    <section class="stats-section" aria-label="Ключові показники клініки">
+      <div class="container">
+        <div id="stats-card" class="stats-card">
+          <ul class="stats-grid">
+            <li class="stat-item">
+              <svg class="stat-item__icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M16 4.5l3.35 6.8 7.5 1.09-5.42 5.29 1.28 7.47L16 21.62l-6.71 3.53 1.28-7.47-5.42-5.29 7.5-1.09L16 4.5Z"/>
+              </svg>
+              <div class="stat-item__body">
+                <span class="stat-item__value" data-clinic="rating" data-count="5.0" data-decimals="1">5.0</span>
+                <span class="stat-item__label">рейтинг у Google (на підставі відгуків)</span>
+              </div>
+            </li>
+
+            <li class="stat-item">
+              <svg class="stat-item__icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M10.5 5.5c-3.2 0-5 2.5-4.8 6 .2 4.5 2 10 3.7 13.8.5 1.2 2 1 2.4-.2l1.6-5.2c.5-1.5 2.7-1.5 3.2 0l1.6 5.2c.4 1.2 1.9 1.4 2.4.2 1.7-3.8 3.5-9.3 3.7-13.8.2-3.5-1.6-6-4.8-6-1.7 0-2.9.8-4.5 1.7-1.6-.9-2.8-1.7-4.5-1.7Z"/>
+              </svg>
+              <div class="stat-item__body">
+                <span class="stat-item__value" data-clinic="experience" data-count="[X]" data-decimals="0" data-suffix="+ років">[X]+ років</span>
+                <span class="stat-item__label">клінічного досвіду лікаря</span>
+              </div>
+            </li>
+
+            <li class="stat-item">
+              <svg class="stat-item__icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M8.5 6h15l4.5 6.5L16 26.5 4 12.5 8.5 6Z"/>
+                <path d="M4 12.5h24M11.5 6l-1.5 6.5L16 26.5l6-14L20.5 6"/>
+              </svg>
+              <div class="stat-item__body">
+                <span class="stat-item__value" data-clinic="directions" data-count="9" data-decimals="0">9</span>
+                <span class="stat-item__label">напрямків з прозорим прайсом</span>
+              </div>
+            </li>
+
+            <li class="stat-item">
+              <svg class="stat-item__icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M16 4.5 26 8.5v7.2c0 6.1-4.1 10.6-10 12.3-5.9-1.7-10-6.2-10-12.3V8.5l10-4Z"/>
+                <path d="m11.5 16.2 3 3 6-6.2"/>
+              </svg>
+              <div class="stat-item__body">
+                <span class="stat-item__value" data-count="0" data-decimals="0">0</span>
+                <span class="stat-item__label">черг — прийом за записом</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== BELOW-THE-FOLD STUB SECTIONS ======================== -->
+    <div class="lower-canvas">
+      <!-- Static lower-left tooth silhouette (gradient fill, zero blur/animation) -->
+      <svg class="lower-canvas__tooth" viewBox="0 0 240 320" fill="none" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="td-tooth-lower-grad" x1="20" y1="30" x2="210" y2="290" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="var(--tooth-stop-1)"/>
+            <stop offset="100%" stop-color="var(--tooth-stop-2)"/>
+          </linearGradient>
+        </defs>
+        <path d="M62 28C22 28 2 62 4 110c3 55 24 121 44 167 7 16 25 14 31-2l21-60c6-16 28-16 34 0l21 60c6 16 24 18 31 2 20-46 41-112 44-167 2-48-18-82-58-82-22 0-37 11-55 22C99 39 84 28 62 28Z" fill="url(#td-tooth-lower-grad)"/>
+      </svg>
+
+      <section id="services" class="stub-section" aria-labelledby="heading-services">
+        <div class="container">
+          <div class="stub-card">
+            <span class="stub-section__eyebrow">Послуги</span>
+            <h2 id="heading-services" class="stub-section__title">Що ми лікуємо</h2>
+            <p class="stub-section__note">[Секція «Послуги» буде наповнена на наступному етапі.]</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="advantages" class="stub-section" aria-labelledby="heading-advantages">
+        <div class="container">
+          <div class="stub-card">
+            <span class="stub-section__eyebrow">Переваги</span>
+            <h2 id="heading-advantages" class="stub-section__title">Чому обирають TRUST DENTAL</h2>
+            <p class="stub-section__note">[Секція «Переваги» буде наповнена на наступному етапі.]</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="prices" class="stub-section" aria-labelledby="heading-prices">
+        <div class="container">
+          <div class="stub-card">
+            <span class="stub-section__eyebrow">Прайс</span>
+            <h2 id="heading-prices" class="stub-section__title">Прозорі ціни на лікування</h2>
+            <p class="stub-section__note">[Секція «Прайс» буде наповнена на наступному етапі.]</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="doctors" class="stub-section" aria-labelledby="heading-doctors">
+        <div class="container">
+          <div class="stub-card">
+            <span class="stub-section__eyebrow">Лікарі</span>
+            <h2 id="heading-doctors" class="stub-section__title">Команда фахівців</h2>
+            <p class="stub-section__note">[Секція «Лікарі» буде наповнена на наступному етапі.]</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="works" class="stub-section" aria-labelledby="heading-works">
+        <div class="container">
+          <div class="stub-card">
+            <span class="stub-section__eyebrow">Роботи</span>
+            <h2 id="heading-works" class="stub-section__title">Приклади лікування</h2>
+            <p class="stub-section__note">[Секція «Роботи» буде наповнена на наступному етапі.]</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="reviews" class="stub-section" aria-labelledby="heading-reviews">
+        <div class="container">
+          <div class="stub-card">
+            <span class="stub-section__eyebrow">Відгуки</span>
+            <h2 id="heading-reviews" class="stub-section__title">Відгуки пацієнтів</h2>
+            <p class="stub-section__note">[Секція «Відгуки» буде наповнена на наступному етапі.]</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contacts" class="stub-section" aria-labelledby="heading-contacts">
+        <div class="container">
+          <div class="stub-card">
+            <span class="stub-section__eyebrow">Контакти</span>
+            <h2 id="heading-contacts" class="stub-section__title">Запис та контакти клініки</h2>
+            <p class="stub-section__note">[Секція «Контакти» та форма запису будуть наповнені на наступному етапі.]</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ======================== FOOTER STUB ======================== -->
+  <footer id="site-footer" class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <span class="footer__name" data-clinic="name">TRUST DENTAL</span>
+        <span class="footer__meta">
+          <span data-clinic="address">м. Івано-Франківськ, вул. Галицька, 51а</span> · Графік: <span data-clinic="hours">Пн–Сб 09:00–22:00, Нд 09:00–20:00</span>
+        </span>
+      </div>
+
+      <div class="footer__links">
+        <a class="footer__link" href="tel:+380500500821" data-clinic="phone-link">
+          <span data-clinic="phone-display">+38 (050) 050-08-21</span>
+        </a>
+        <a class="footer__link" data-clinic="instagram-link" href="https://www.instagram.com/trust_dental_ua/" target="_blank" rel="noopener noreferrer">@trust_dental_ua</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

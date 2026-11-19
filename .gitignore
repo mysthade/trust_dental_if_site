@@ -1,0 +1,6 @@
+# Local backup of unresized original service icons
+img/services/_orig/
+
+# OS / Editor artifacts
+.DS_Store
+Thumbs.db
