@@ -2078,6 +2078,33 @@ html.is-theme-switching .calc-summary {
   }
 }
 
+/* High Contrast / Windows Forced Colors support for custom calculator checkboxes */
+@media (forced-colors: active) {
+  .calc-item__checkbox {
+    forced-color-adjust: none;
+    background-color: Canvas;
+    border: 2px solid CanvasText;
+  }
+
+  .calc-item__checkbox:checked {
+    background-color: Highlight;
+    border-color: Highlight;
+  }
+
+  .calc-item__checkbox::after {
+    border-color: HighlightText;
+  }
+
+  .calc-item__checkbox:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 3px;
+  }
+
+  .calc-item.is-selected {
+    border-color: Highlight;
+  }
+}
+
 /* --------------------------------------------------------------------------
    13. Reduced Motion
    -------------------------------------------------------------------------- */

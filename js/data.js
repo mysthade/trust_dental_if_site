@@ -24,10 +24,10 @@
     RATING: 5.0,
     RATING_DISPLAY: '5.0',
     REVIEWS_COUNT: 73,
-    /* [плейсхолдер] — вписати точну кількість років клінічного досвіду після підтвердження */
+    /* TODO: підтвердити у власника точну кількість років клінічного досвіду лікаря та замінити '[X]' на число (наприклад, 10) */
     EXPERIENCE_YEARS: '[X]',
     DIRECTIONS_COUNT: 9,
-    /* Замініть на пряме посилання профілю клініки у Google Maps (maps.app.goo.gl/...) */
+    /* TODO: підтвердити у власника та замінити пошуковий URL на пряме посилання профілю клініки у Google Maps (maps.app.goo.gl/...) */
     GOOGLE_MAPS_URL:
       'https://www.google.com/maps/search/?api=1&query=TRUST+DENTAL+%D0%B2%D1%83%D0%BB.+%D0%93%D0%B0%D0%BB%D0%B8%D1%86%D1%8C%D0%BA%D0%B0+51%D0%B0+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA',
     INSTAGRAM_HANDLE: '@trust_dental_ua',
@@ -70,7 +70,7 @@
     Object.freeze({
       id: 'surgery',
       title: 'Атравматична хірургія',
-      description: 'Ультразвукове видалення зубів без набряків.',
+      description: 'Ультразвукове (п\'єзохірургічне) видалення зубів із мінімальною травматизацією.',
       icon: 'td-icon-surgery',
       category: 'surgery'
     }),
