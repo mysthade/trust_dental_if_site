@@ -323,6 +323,14 @@
             behavior: prefersReducedMotion() ? 'auto' : 'smooth',
             block: 'start'
           });
+
+          var contactsHeading = document.getElementById('heading-contacts');
+          if (contactsHeading && typeof contactsHeading.focus === 'function') {
+            contactsHeading.setAttribute('tabindex', '-1');
+            contactsHeading.focus({ preventScroll: true });
+          } else if (typeof contacts.focus === 'function') {
+            contacts.focus({ preventScroll: true });
+          }
         }
       });
     }

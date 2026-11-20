@@ -86,6 +86,12 @@
 
     root.setAttribute('data-theme', normalized);
     root.style.colorScheme = normalized;
+
+    var themeColor = document.querySelector('meta[data-theme-color]');
+    if (themeColor) {
+      themeColor.setAttribute('content', normalized === 'dark'? '#0F1217': '#EEF0F2');
+    }
+
     syncToggleButtons(normalized);
   }
 
