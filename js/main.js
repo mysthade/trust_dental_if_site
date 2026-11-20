@@ -25,7 +25,6 @@
 
   function initNonCritical() {
     scheduleIdle(function () {
-      initStage2Modules();
       if (TD.header && typeof TD.header.initScrollSpy === 'function') {
         TD.header.initScrollSpy();
       }
@@ -46,10 +45,10 @@
       TD.header.initCritical();
     }
 
-    var hash = window.location.hash;
-    if (hash === '#services' || hash === '#prices' || hash === '#calculator') {
-      initStage2Modules();
-    }
+    /* Render stage-2 content (services, price filters/list, calculator)
+       synchronously, before first paint. This keeps the page height stable on
+       load/refresh and prevents the lower sections from "popping in" (CLS). */
+    initStage2Modules();
 
     if (document.readyState === 'complete') {
       initNonCritical();
