@@ -1114,21 +1114,11 @@ p {
 }
 
 /* --------------------------------------------------------------------------
-   9. Below-the-Fold Placeholder Sections & Lower Silhouette
+   9. Below-the-Fold Placeholder Sections
    -------------------------------------------------------------------------- */
 .lower-canvas {
   position: relative;
   overflow: clip;
-}
-
-.lower-canvas__tooth {
-  position: absolute;
-  top: 24px;
-  left: -82px;
-  width: 220px;
-  height: 280px;
-  pointer-events: none;
-  z-index: 0;
 }
 
 .stub-section {
