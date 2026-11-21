@@ -105,6 +105,82 @@
     return wrap;
   }
 
+  var lastAddedServiceTitle = '';
+
+  function syncServiceCardsWithCalculator(addedTitle) {
+    if (typeof addedTitle === 'string') {
+      lastAddedServiceTitle = addedTitle;
+    }
+
+    var cards = document.querySelectorAll('#services-grid .service-card');
+    var isCalcReady = Boolean(
+      TD.calculator && typeof TD.calculator.isItemSelected === 'function'
+    );
+
+    for (var i = 0; i < cards.length; i++) {
+      var card = cards[i];
+      var calcItemId = card.getAttribute('data-calc-item-id');
+      if (!calcItemId) continue;
+
+      var serviceId = card.getAttribute('data-service-id');
+      var svc =
+        typeof TD.findServiceById === 'function'
+          ? TD.findServiceById(serviceId)
+          : null;
+      var svcTitle = svc && svc.title ? svc.title : '';
+      var isSelected = isCalcReady && TD.calculator.isItemSelected(calcItemId);
+
+      card.classList.toggle('is-selected', isSelected);
+
+      var btn = card.querySelector('.service-card__add-to-calc[data-calc-item-id]');
+      if (btn) {
+        btn.classList.toggle('is-selected', isSelected);
+        btn.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+        btn.setAttribute(
+          'aria-label',
+          isSelected
+            ? 'Послугу «' + svcTitle + '» вже додано до попереднього розрахунку'
+            : 'Додати послугу «' + svcTitle + '» до попереднього розрахунку'
+        );
+
+        var iconEl = btn.querySelector('.service-card__add-icon');
+        var labelEl = btn.querySelector('.service-card__add-label');
+        if (iconEl) iconEl.textContent = isSelected ? '✓' : '+';
+        if (labelEl) labelEl.textContent = isSelected ? 'Вибрано' : 'Додати до розрахунку';
+      }
+    }
+
+    var bar = document.getElementById('services-calc-bar');
+    var statusEl = document.getElementById('services-calc-status');
+    if (!bar || !statusEl) return;
+
+    var selection =
+      TD.calculator && typeof TD.calculator.getSelection === 'function'
+        ? TD.calculator.getSelection()
+        : TD.state && TD.state.calcSelection
+          ? TD.state.calcSelection
+          : null;
+
+    var count = selection && Array.isArray(selection.items) ? selection.items.length : 0;
+    if (count > 0) {
+      bar.classList.add('is-active');
+      var word =
+        typeof TD.pluralizeUk === 'function'
+          ? TD.pluralizeUk(count, 'послуга', 'послуги', 'послуг')
+          : 'послуг';
+      var prefixText = lastAddedServiceTitle
+        ? 'Послугу «' + lastAddedServiceTitle + '» додано до розрахунку · '
+        : 'У попередньому розрахунку: ';
+      statusEl.textContent =
+        prefixText + count + '\u00A0' + word + ' на суму ' + selection.formattedTotal;
+    } else {
+      lastAddedServiceTitle = '';
+      bar.classList.remove('is-active');
+      statusEl.textContent =
+        'Оберіть потрібні послуги на картках вище, щоб додати їх до попереднього розрахунку вартості.';
+    }
+  }
+
   function renderServices() {
     var container = document.getElementById('services-grid');
     if (!container || !Array.isArray(TD.SERVICES)) return;
@@ -113,8 +189,17 @@
 
     for (var i = 0; i < TD.SERVICES.length; i++) {
       var svc = TD.SERVICES[i];
+      var calcItem =
+        svc.calcItemId && typeof TD.findCalcItemById === 'function'
+          ? TD.findCalcItemById(svc.calcItemId)
+          : null;
+
       var card = document.createElement('article');
       card.className = 'service-card';
+      card.setAttribute('data-service-id', svc.id);
+      if (calcItem) {
+        card.setAttribute('data-calc-item-id', calcItem.id);
+      }
 
       var title = document.createElement('h3');
       title.className = 'service-card__title';
@@ -124,33 +209,145 @@
       desc.className = 'service-card__desc';
       desc.textContent = svc.description;
 
-      var cta = document.createElement('a');
-      cta.className = 'btn btn--primary service-card__cta';
-      cta.setAttribute('href', '#prices');
-      cta.setAttribute('data-price-jump', svc.category || 'all');
+      var footer = document.createElement('div');
+      footer.className = 'service-card__footer';
 
-      var ctaLabel = document.createElement('span');
-      ctaLabel.textContent = 'Дізнатися ціну';
-      cta.appendChild(ctaLabel);
-      cta.appendChild(createArrowSvg('btn__arrow'));
+      var priceWrap = document.createElement('div');
+      priceWrap.className = 'service-card__price-wrap';
+
+      if (calcItem) {
+        var priceVal = document.createElement('span');
+        priceVal.className = 'service-card__price';
+        priceVal.textContent = TD.formatPrice(calcItem.price, calcItem.prefix, 'грн');
+        priceWrap.appendChild(priceVal);
+
+        if (calcItem.note) {
+          var priceMeta = document.createElement('span');
+          priceMeta.className = 'service-card__price-meta';
+          priceMeta.textContent = calcItem.note;
+          priceWrap.appendChild(priceMeta);
+        }
+      } else {
+        var priceNote = document.createElement('span');
+        priceNote.className = 'service-card__price-note';
+        priceNote.textContent = 'Ця послуга потребує індивідуального розрахунку';
+        priceWrap.appendChild(priceNote);
+      }
+
+      var actionBtn = document.createElement('button');
+      actionBtn.type = 'button';
+      actionBtn.className = 'service-card__add-to-calc';
+      actionBtn.setAttribute('data-service-id', svc.id);
+
+      var iconSpan = document.createElement('span');
+      iconSpan.className = 'service-card__add-icon';
+      iconSpan.setAttribute('aria-hidden', 'true');
+
+      var labelSpan = document.createElement('span');
+      labelSpan.className = 'service-card__add-label';
+
+      if (calcItem) {
+        actionBtn.setAttribute('data-calc-item-id', calcItem.id);
+        actionBtn.setAttribute('aria-pressed', 'false');
+        actionBtn.setAttribute(
+          'aria-label',
+          'Додати послугу «' + svc.title + '» до попереднього розрахунку'
+        );
+        iconSpan.textContent = '+';
+        labelSpan.textContent = 'Додати до розрахунку';
+      } else {
+        actionBtn.classList.add('service-card__add-to-calc--consult');
+        actionBtn.setAttribute('data-service-consult', svc.id);
+        actionBtn.setAttribute(
+          'aria-label',
+          'Уточнити вартість послуги «' + svc.title + '» — перейти до форми запису'
+        );
+        iconSpan.textContent = '→';
+        labelSpan.textContent = 'Уточнити вартість';
+      }
+
+      actionBtn.appendChild(iconSpan);
+      actionBtn.appendChild(labelSpan);
+
+      footer.appendChild(priceWrap);
+      footer.appendChild(actionBtn);
 
       card.appendChild(createServiceMedia(svc));
       card.appendChild(title);
       card.appendChild(desc);
-      card.appendChild(cta);
+      card.appendChild(footer);
       frag.appendChild(card);
     }
 
     container.textContent = '';
     container.appendChild(frag);
+    syncServiceCardsWithCalculator(null);
 
-    if (!container.dataset.priceJumpBound) {
-      container.dataset.priceJumpBound = '1';
-      container.addEventListener('click', function (e) {
-        var link = e.target.closest('[data-price-jump]');
-        if (!link) return;
-        var targetCat = link.getAttribute('data-price-jump') || 'all';
-        applyPriceFilter(targetCat, false);
+    var servicesSection = document.getElementById('services');
+    var bindRoot = servicesSection || container;
+
+    if (!bindRoot.dataset.serviceCalcBound) {
+      bindRoot.dataset.serviceCalcBound = '1';
+      bindRoot.addEventListener('click', function (e) {
+        var addBtn = e.target.closest('.service-card__add-to-calc[data-calc-item-id]');
+        if (addBtn && !addBtn.disabled) {
+          var calcId = addBtn.getAttribute('data-calc-item-id');
+          var svcId = addBtn.getAttribute('data-service-id');
+          var svcObj =
+            typeof TD.findServiceById === 'function' ? TD.findServiceById(svcId) : null;
+          if (calcId && TD.calculator && typeof TD.calculator.addItem === 'function') {
+            lastAddedServiceTitle = svcObj && svcObj.title ? svcObj.title : '';
+            TD.calculator.addItem(calcId);
+            syncServiceCardsWithCalculator(lastAddedServiceTitle);
+          }
+          return;
+        }
+
+        var consultBtn = e.target.closest('.service-card__add-to-calc[data-service-consult]');
+        if (consultBtn && !consultBtn.disabled) {
+          var consultSvcId = consultBtn.getAttribute('data-service-consult');
+          var serviceSelect = document.getElementById('appointment-service');
+          if (serviceSelect && consultSvcId) {
+            for (var o = 0; o < serviceSelect.options.length; o++) {
+              if (serviceSelect.options[o].value === consultSvcId) {
+                serviceSelect.value = consultSvcId;
+                break;
+              }
+            }
+          }
+          var contactsEl = document.getElementById('contacts');
+          if (contactsEl && typeof contactsEl.scrollIntoView === 'function') {
+            contactsEl.scrollIntoView({
+              behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+              block: 'start'
+            });
+          }
+          focusContactsTarget('form');
+          return;
+        }
+
+        var jumpBtn = e.target.closest('[data-calc-jump]');
+        if (jumpBtn) {
+          var calcEl = document.getElementById('calculator');
+          if (calcEl && typeof calcEl.scrollIntoView === 'function') {
+            calcEl.scrollIntoView({
+              behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+              block: 'start'
+            });
+          }
+          var calcHeading = document.getElementById('heading-calculator');
+          if (calcHeading && typeof calcHeading.focus === 'function') {
+            calcHeading.setAttribute('tabindex', '-1');
+            calcHeading.focus({ preventScroll: true });
+          }
+        }
+      });
+    }
+
+    if (!document.body.dataset.tdServiceCalcSyncBound) {
+      document.body.dataset.tdServiceCalcSyncBound = '1';
+      document.addEventListener('td:calc-change', function () {
+        syncServiceCardsWithCalculator();
       });
     }
   }

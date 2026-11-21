@@ -1919,6 +1919,9 @@ p {
 html.is-theme-switching .brand,
 html.is-theme-switching .service-card,
 html.is-theme-switching .service-card__fallback,
+html.is-theme-switching .service-card__add-to-calc,
+html.is-theme-switching .services-calc-bar,
+html.is-theme-switching .services-calc-bar__jump,
 html.is-theme-switching .section--prices,
 html.is-theme-switching .calc-block,
 html.is-theme-switching .filter-pill,
@@ -2141,17 +2144,222 @@ html.is-theme-switching .calc-summary {
   font-size: 0.875rem;
   line-height: 1.45;
   color: var(--muted);
-  margin-bottom: 22px;
+  margin-bottom: 18px;
   overflow-wrap: anywhere;
 }
 
-.service-card__cta {
+.service-card.is-selected {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme='dark'] .service-card.is-selected {
+  border-color: rgba(236, 239, 243, 0.34);
+}
+
+.service-card__footer {
   margin-top: auto;
-  min-height: 38px;
-  height: 38px;
-  padding: 0 18px;
-  font-size: 0.84375rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--divider);
+}
+
+.service-card__price-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  min-width: 0;
+}
+
+.service-card__price {
+  font-size: 1.03125rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.service-card__price-meta {
+  font-size: 0.78125rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.service-card__price-note {
+  font-size: 0.8125rem;
+  line-height: 1.38;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.service-card__add-to-calc {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 9px 18px;
   border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text);
+  font-size: 0.84375rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease,
+    box-shadow 180ms ease, transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.service-card__add-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--border-subtle);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.service-card__add-label {
+  overflow-wrap: anywhere;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service-card__add-to-calc:hover:not(:disabled) {
+    color: var(--on-primary);
+    background-color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .service-card__add-to-calc:hover:not(:disabled) .service-card__add-icon {
+    background-color: rgba(255, 255, 255, 0.18);
+    color: var(--on-primary);
+  }
+
+  [data-theme='dark'] .service-card__add-to-calc:hover:not(:disabled) .service-card__add-icon {
+    background-color: rgba(18, 21, 26, 0.16);
+  }
+}
+
+.service-card__add-to-calc:focus-visible {
+  outline: 2.5px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.service-card__add-to-calc:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.service-card__add-to-calc.is-selected {
+  color: var(--on-primary);
+  background-color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.service-card__add-to-calc.is-selected .service-card__add-icon {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--on-primary);
+}
+
+[data-theme='dark'] .service-card__add-to-calc.is-selected .service-card__add-icon {
+  background-color: rgba(18, 21, 26, 0.18);
+}
+
+.service-card__add-to-calc:disabled,
+.service-card__add-to-calc[aria-disabled='true'] {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.services-calc-bar {
+  margin-top: 22px;
+  min-height: 58px;
+  padding: 12px 20px;
+  border-radius: 22px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  transition: border-color 200ms ease, background-color 200ms ease, box-shadow 200ms ease;
+}
+
+.services-calc-bar.is-active {
+  background-color: var(--surface-strong);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.services-calc-bar__text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--muted);
+  min-width: 0;
+  flex: 1 1 260px;
+}
+
+.services-calc-bar.is-active .services-calc-bar__text {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.services-calc-bar__jump {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background-color: var(--surface-card);
+  color: var(--text);
+  font-size: 0.84375rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease,
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.services-calc-bar.is-active .services-calc-bar__jump {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .services-calc-bar__jump:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--on-primary);
+    transform: translateY(-1px);
+  }
+}
+
+.services-calc-bar__jump:focus-visible {
+  outline: 2.5px solid var(--focus-ring);
+  outline-offset: 3px;
 }
 
 /* --- Price Filters --- */
@@ -2811,6 +3019,32 @@ html.is-theme-switching .calc-summary {
     border-radius: 28px;
   }
 
+  .service-card__footer {
+    align-items: stretch;
+  }
+
+  .service-card__add-to-calc {
+    width: 100%;
+    padding: 10px 16px;
+    white-space: normal;
+  }
+
+  .services-calc-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px 16px;
+  }
+
+  .services-calc-bar__text {
+    flex: 0 0 auto;
+  }
+
+  .services-calc-bar__jump {
+    width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+
   .calc-item {
     flex-direction: column;
     align-items: stretch;
@@ -3088,6 +3322,9 @@ html.is-theme-switching .advantages-note__mark {
   .stats-card,
   .service-card,
   .service-card__fallback,
+  .service-card__add-to-calc,
+  .services-calc-bar,
+  .services-calc-bar__jump,
   .filter-pill,
   .price-board,
   .price-row,
@@ -3097,10 +3334,15 @@ html.is-theme-switching .advantages-note__mark {
     border: 1px solid CanvasText;
   }
 
-  .filter-pill.is-active {
+  .filter-pill.is-active,
+  .service-card__add-to-calc.is-selected {
     background-color: Highlight;
     border-color: Highlight;
     color: HighlightText;
+  }
+
+  .service-card.is-selected {
+    border: 2px solid Highlight;
   }
 
   .service-card::after {
@@ -6119,6 +6361,8 @@ html.is-theme-switching .site-footer {
   .calc-stepper__btn:hover:not(:disabled),
   .btn:hover,
   .service-card:hover,
+  .service-card__add-to-calc:hover:not(:disabled),
+  .services-calc-bar__jump:hover,
   .advantage-card:hover,
   .doctor-card:hover,
   .work-card:hover,

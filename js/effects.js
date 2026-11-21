@@ -296,7 +296,7 @@
       {
         kind: 'card',
         selector:
-          '.stats-section .stat-item, #services-grid .service-card, #advantages .advantage-card, #advantages .advantages-note, #prices .price-filters, #price-list .price-row:not(.is-filtered-out):not([hidden]), #calc-items .calc-item, #prices .calc-summary, #doctors .doctor-card, #works .works-filters, #works .work-card, #works .works-empty:not([hidden]), #reviews .reviews-summary, #reviews .reviews-stage, #contacts .contacts-card, #contacts .booking-steps-card, #contacts .contacts-map-card, #contacts .appointment-card, #site-footer .site-footer__brand, #site-footer .site-footer__nav, #site-footer .site-footer__contacts, #site-footer .site-footer__bottom'
+          '.stats-section .stat-item, #services-grid .service-card, #services .services-calc-bar, #advantages .advantage-card, #advantages .advantages-note, #prices .price-filters, #price-list .price-row:not(.is-filtered-out):not([hidden]), #calc-items .calc-item, #prices .calc-summary, #doctors .doctor-card, #works .works-filters, #works .work-card, #works .works-empty:not([hidden]), #reviews .reviews-summary, #reviews .reviews-stage, #contacts .contacts-card, #contacts .booking-steps-card, #contacts .contacts-map-card, #contacts .appointment-card, #site-footer .site-footer__brand, #site-footer .site-footer__nav, #site-footer .site-footer__contacts, #site-footer .site-footer__bottom'
       },
       {
         kind: 'deco',

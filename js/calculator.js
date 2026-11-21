@@ -152,6 +152,25 @@
       resetBtn.hidden = !hasItems;
     }
 
+    TD.state = TD.state || {};
+    TD.state.calcSelection = hasItems ? selection : null;
+
+    var selectedIds = Object.create(null);
+    for (var k = 0; k < selection.items.length; k++) {
+      selectedIds[selection.items[k].id] = true;
+    }
+
+    try {
+      var changeEvt = new window.CustomEvent('td:calc-change', {
+        bubbles: true,
+        detail: {
+          selection: selection,
+          selectedIds: selectedIds
+        }
+      });
+      document.dispatchEvent(changeEvt);
+    } catch (e) {}
+
     return selection;
   }
 
@@ -170,7 +189,13 @@
 
     for (var i = 0; i < TD.CALC_ITEMS.length; i++) {
       var item = TD.CALC_ITEMS[i];
-      stateMap[item.id] = { checked: false, qty: item.min };
+      var existing = stateMap[item.id];
+      stateMap[item.id] = existing
+        ? {
+            checked: Boolean(existing.checked),
+            qty: existing.qty >= item.min ? existing.qty : item.min
+          }
+        : { checked: false, qty: item.min };
 
       var row = document.createElement('div');
       row.className = 'calc-item';
@@ -185,6 +210,7 @@
       input.id = item.id;
       input.name = 'calc_service';
       input.value = item.id;
+      input.checked = stateMap[item.id].checked;
 
       var label = document.createElement('label');
       label.className = 'calc-item__label';
@@ -255,6 +281,10 @@
     listEl.textContent = '';
     listEl.appendChild(frag);
 
+    for (var s = 0; s < TD.CALC_ITEMS.length; s++) {
+      syncStepperUI(TD.CALC_ITEMS[s].id);
+    }
+
     if (!listEl.dataset.calcListBound) {
       listEl.dataset.calcListBound = '1';
       listEl.addEventListener('change', function (e) {
@@ -287,6 +317,62 @@
     }
   }
 
+  function resetCalculator() {
+    if (!Array.isArray(TD.CALC_ITEMS)) return null;
+    for (var i = 0; i < TD.CALC_ITEMS.length; i++) {
+      var item = TD.CALC_ITEMS[i];
+      if (!stateMap[item.id]) {
+        stateMap[item.id] = { checked: false, qty: item.min };
+      } else {
+        stateMap[item.id].checked = false;
+        stateMap[item.id].qty = item.min;
+      }
+      var checkbox = document.getElementById(item.id);
+      if (checkbox) checkbox.checked = false;
+      syncStepperUI(item.id);
+    }
+    TD.state = TD.state || {};
+    TD.state.calcSelection = null;
+    return updateSummary();
+  }
+
+  function addItem(calcItemId) {
+    if (!isInitialized) init();
+    var item = findItem(calcItemId);
+    if (!item) return null;
+    var entry = stateMap[item.id];
+    if (!entry) {
+      entry = { checked: false, qty: item.min };
+      stateMap[item.id] = entry;
+    }
+
+    if (!entry.checked) {
+      entry.checked = true;
+      if (item.countable && (!entry.qty || entry.qty < item.min)) {
+        entry.qty = item.min;
+      }
+    }
+
+    var checkbox = document.getElementById(item.id);
+    if (checkbox) {
+      checkbox.checked = true;
+    }
+    syncStepperUI(item.id);
+    return updateSummary();
+  }
+
+  function addService(serviceId) {
+    if (!serviceId || typeof TD.findServiceById !== 'function') return null;
+    var svc = TD.findServiceById(serviceId);
+    if (!svc || !svc.calcItemId) return null;
+    return addItem(svc.calcItemId);
+  }
+
+  function isItemSelected(calcItemId) {
+    if (!calcItemId || !stateMap[calcItemId]) return false;
+    return Boolean(stateMap[calcItemId].checked);
+  }
+
   function bindSummaryActions() {
     var submitBtn = document.getElementById('calc-submit');
     var resetBtn = document.getElementById('calc-reset');
@@ -294,16 +380,7 @@
     if (resetBtn && !resetBtn.dataset.calcResetBound) {
       resetBtn.dataset.calcResetBound = '1';
       resetBtn.addEventListener('click', function () {
-        for (var i = 0; i < TD.CALC_ITEMS.length; i++) {
-          var item = TD.CALC_ITEMS[i];
-          stateMap[item.id].checked = false;
-          stateMap[item.id].qty = item.min;
-          var checkbox = document.getElementById(item.id);
-          if (checkbox) checkbox.checked = false;
-          syncStepperUI(item.id);
-        }
-        TD.state.calcSelection = null;
-        updateSummary();
+        resetCalculator();
       });
     }
 
@@ -351,7 +428,11 @@
 
   TD.calculator = {
     init: init,
-    getSelection: buildSelection
+    getSelection: buildSelection,
+    addItem: addItem,
+    addService: addService,
+    isItemSelected: isItemSelected,
+    reset: resetCalculator
   };
 })(window, document);
 
