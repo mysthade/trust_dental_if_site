@@ -132,6 +132,16 @@
     } catch (e) {
       /* Ignore unsupported matchMedia listeners */
     }
+
+    if (TD.lifecycle && typeof TD.lifecycle.onPageHide === 'function') {
+      TD.lifecycle.onPageHide(function () {
+        if (switchTimer) {
+          window.clearTimeout(switchTimer);
+          switchTimer = null;
+        }
+        document.documentElement.classList.remove(SWITCH_CLASS);
+      });
+    }
   }
 
   TD.theme = {

@@ -11,7 +11,8 @@
   font-family: 'Inter Fallback';
   font-style: normal;
   font-weight: 100 599;
-  src: local('Arial'), local('Helvetica Neue'), local('Segoe UI');
+  src: local('Arial'), local('Helvetica Neue'), local('Segoe UI'), local('Roboto'),
+    local('Liberation Sans'), local('DejaVu Sans');
   ascent-override: 89.9%;
   descent-override: 22.4%;
   line-gap-override: 0%;
@@ -22,7 +23,9 @@
   font-family: 'Inter Fallback';
   font-style: normal;
   font-weight: 600;
-  src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold');
+  src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold'),
+    local('Roboto Medium'), local('Roboto'), local('Liberation Sans Bold'),
+    local('DejaVu Sans Bold');
   ascent-override: 95.0%;
   descent-override: 23.7%;
   line-gap-override: 0%;
@@ -33,7 +36,9 @@
   font-family: 'Inter Fallback';
   font-style: normal;
   font-weight: 700 900;
-  src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold');
+  src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold'),
+    local('Roboto Bold'), local('Roboto'), local('Liberation Sans Bold'),
+    local('DejaVu Sans Bold');
   ascent-override: 96.0%;
   descent-override: 23.9%;
   line-gap-override: 0%;
@@ -803,6 +808,7 @@ p {
   right: 0;
   width: 260px;
   height: 180px;
+  color: var(--deco-line-soft);
   pointer-events: none;
   z-index: 0;
 }
@@ -2300,6 +2306,8 @@ html.is-theme-switching .calc-summary {
 /* --- Cost Calculator Subsection --- */
 .calc-block {
   position: relative;
+  isolation: isolate;
+  overflow: clip;
   margin-top: clamp(44px, 5.5vw, 68px);
   padding: clamp(22px, 3vw, 36px);
   border-radius: clamp(24px, 3vw, 34px);
@@ -2310,6 +2318,8 @@ html.is-theme-switching .calc-summary {
 }
 
 .calc-block__head {
+  position: relative;
+  z-index: 1;
   max-width: 620px;
   margin-bottom: clamp(22px, 2.8vw, 28px);
 }
@@ -2329,6 +2339,8 @@ html.is-theme-switching .calc-summary {
 }
 
 .calc-layout {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1.42fr) minmax(300px, 1fr);
   gap: clamp(20px, 2.4vw, 28px);
@@ -3140,6 +3152,18 @@ html.is-theme-switching .advantages-note__mark {
   overflow-y: visible;
 }
 
+@supports not (overflow-x: clip) {
+  body,
+  .drawer,
+  .section,
+  .advantages-section,
+  .stats-section,
+  .footer,
+  .section--services {
+    overflow-x: hidden;
+  }
+}
+
 .stats-section>.container,
 .section>.container,
 .advantages-section>.container,
@@ -3204,11 +3228,11 @@ html.is-theme-switching .advantages-note__mark {
 }
 
 .deco--prices-arc {
-  left: -265px;
-  bottom: 90px;
-  width: 400px;
-  height: 600px;
-  transform: rotate(-10deg);
+  left: -175px;
+  top: 270px;
+  width: 334px;
+  height: 500px;
+  transform: rotate(10deg);
 }
 
 .deco--prices-wave {
@@ -3217,6 +3241,30 @@ html.is-theme-switching .advantages-note__mark {
   bottom: 0;
   width: 100%;
   height: 110px;
+}
+
+.deco--prices-calc-ribbon {
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 210px;
+}
+
+.deco--prices-calc-arc {
+  right: -135px;
+  bottom: -105px;
+  width: 320px;
+  height: 480px;
+  transform: rotate(16deg);
+}
+
+.deco--prices-calc-wave {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 84px;
+  transform: scaleX(-1);
 }
 
 .deco--doctors-tooth {
@@ -3304,11 +3352,25 @@ html.is-theme-switching .advantages-note__mark {
   }
 
   .deco--prices-arc {
-    left: -220px;
-    bottom: 80px;
-    width: 280px;
-    height: 420px;
-    opacity: 0.75;
+    left: -145px;
+    top: 210px;
+    width: 250px;
+    height: 375px;
+  }
+
+  .deco--prices-calc-ribbon {
+    height: 170px;
+  }
+
+  .deco--prices-calc-arc {
+    right: -135px;
+    bottom: -95px;
+    width: 250px;
+    height: 375px;
+  }
+
+  .deco--prices-calc-wave {
+    height: 72px;
   }
 
   .deco--doctors-tooth {
@@ -3358,6 +3420,9 @@ html.is-theme-switching .advantages-note__mark {
   .deco--hero-arc,
   .deco--advantages-arc,
   .deco--prices-arc,
+  .deco--prices-calc-ribbon,
+  .deco--prices-calc-arc,
+  .deco--prices-calc-wave,
   .deco--works-contour,
   .deco--reviews-arc {
     display: none;
@@ -3384,7 +3449,6 @@ html.is-theme-switching .advantages-note__mark {
 
   .deco--prices-ribbon {
     height: 150px;
-    opacity: 0.65;
   }
 
   .deco--prices-wave {
@@ -5965,12 +6029,12 @@ html.is-theme-switching .site-footer {
    -------------------------------------------------------------------------- */
 .section__eyebrow::before {
   transform-origin: left center;
-  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1) 80ms;
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1) 80ms;
 }
 
 [data-reveal="head"].td-reveal-pending {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(14px);
 }
 
 [data-reveal="head"].td-reveal-pending .section__eyebrow::before {
@@ -5979,7 +6043,7 @@ html.is-theme-switching .site-footer {
 
 [data-reveal="card"].td-reveal-pending {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(14px);
 }
 
 [data-reveal="deco"].td-reveal-pending {
@@ -5988,17 +6052,36 @@ html.is-theme-switching .site-footer {
 
 [data-reveal="head"].is-revealing,
 [data-reveal="card"].is-revealing {
-  transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
-    transform 440ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
+  transition: opacity 520ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
+    transform 560ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
     box-shadow 220ms ease, border-color 200ms ease, background-color 200ms ease;
 }
 
 [data-reveal="deco"].is-revealing {
-  transition: opacity 540ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 620ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+:where([data-reveal]:not(.td-reveal-pending), [data-reveal].is-visible, [data-reveal].is-revealed) {
+  opacity: 1;
+}
+
+[data-reveal].is-visible:hover,
 [data-reveal].is-revealed:hover {
   transition-delay: 0ms;
+}
+
+@media (max-width: 719px) {
+  [data-reveal="head"].td-reveal-pending,
+  [data-reveal="card"].td-reveal-pending {
+    transform: translateY(10px);
+  }
+
+  [data-reveal="head"].is-revealing,
+  [data-reveal="card"].is-revealing {
+    transition: opacity 450ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
+      transform 480ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
+      box-shadow 220ms ease, border-color 200ms ease, background-color 200ms ease;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -6009,13 +6092,26 @@ html.is-theme-switching .site-footer {
     scroll-behavior: auto !important;
   }
 
-  [data-reveal],
-  .td-reveal-pending,
+  [data-reveal="head"],
+  [data-reveal="card"],
+  [data-reveal="head"].is-visible,
+  [data-reveal="card"].is-visible,
+  [data-reveal="head"].is-revealed,
+  [data-reveal="card"].is-revealed,
+  .td-reveal-pending:not([data-reveal="deco"]),
   .section__eyebrow::before,
   .work-card.is-entering,
   .price-row.is-entering {
     opacity: 1 !important;
     transform: none !important;
+    transition: none !important;
+  }
+
+  [data-reveal="deco"],
+  [data-reveal="deco"].is-visible,
+  [data-reveal="deco"].is-revealed,
+  [data-reveal="deco"].td-reveal-pending {
+    opacity: 1 !important;
     transition: none !important;
   }
 

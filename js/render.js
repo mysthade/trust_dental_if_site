@@ -37,19 +37,8 @@
   }
 
   function createArrowSvg(className) {
-    var svg = document.createElementNS(SVG_NS, 'svg');
-    svg.setAttribute('class', className);
+    var svg = createSvgUse('td-icon-arrow', className);
     svg.setAttribute('viewBox', '0 0 20 20');
-    svg.setAttribute('fill', 'none');
-    svg.setAttribute('stroke', 'currentColor');
-    svg.setAttribute('stroke-width', '1.8');
-    svg.setAttribute('stroke-linecap', 'round');
-    svg.setAttribute('stroke-linejoin', 'round');
-    svg.setAttribute('aria-hidden', 'true');
-    svg.setAttribute('focusable', 'false');
-    var path = document.createElementNS(SVG_NS, 'path');
-    path.setAttribute('d', 'M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5');
-    svg.appendChild(path);
     return svg;
   }
 
@@ -327,7 +316,8 @@
       if (matches) {
         visibleCount++;
         row.hidden = false;
-        row.classList.remove('is-filtered-out');
+        row.classList.remove('is-filtered-out', 'td-reveal-pending', 'is-revealing');
+        row.classList.add('is-visible', 'is-revealed');
         if (shouldAnimate) {
           row.classList.add('is-entering');
         }
@@ -339,11 +329,16 @@
     }
 
     if (shouldAnimate) {
-      window.requestAnimationFrame(function () {
+      var clearEnteringRows = function () {
         for (var j = 0; j < rows.length; j++) {
           rows[j].classList.remove('is-entering');
         }
-      });
+      };
+      if (document.hidden || typeof window.requestAnimationFrame !== 'function') {
+        window.setTimeout(clearEnteringRows, 16);
+      } else {
+        window.requestAnimationFrame(clearEnteringRows);
+      }
     }
 
     updatePriceStatus(visibleCount, target);
@@ -653,6 +648,8 @@
     var cards = [];
     for (var i = 0; i < list.length; i++) {
       var card = createWorkCard(list[i]);
+      card.setAttribute('data-reveal', 'card');
+      card.classList.add('is-visible', 'is-revealed');
       if (shouldAnimate) {
         card.classList.add('is-entering');
       }
@@ -666,11 +663,16 @@
     if (empty) empty.hidden = true;
 
     if (shouldAnimate && cards.length) {
-      window.requestAnimationFrame(function () {
+      var clearEnteringCards = function () {
         for (var j = 0; j < cards.length; j++) {
           cards[j].classList.remove('is-entering');
         }
-      });
+      };
+      if (document.hidden || typeof window.requestAnimationFrame !== 'function') {
+        window.setTimeout(clearEnteringCards, 16);
+      } else {
+        window.requestAnimationFrame(clearEnteringCards);
+      }
     }
 
     updateWorksStatus(list.length, activeWorkCategory);
@@ -1356,6 +1358,7 @@
     if (m.googleUrl) {
       var cta = document.createElement('a');
       cta.className = 'btn btn--primary reviews-summary__cta';
+      cta.setAttribute('data-clinic', 'maps-link');
       cta.href = m.googleUrl;
       cta.target = '_blank';
       cta.rel = 'noopener noreferrer';
@@ -1493,6 +1496,12 @@
   function renderSliderDots(count) {
     var dotsEl = document.getElementById('reviews-dots');
     if (!dotsEl) return;
+
+    dotsEl.hidden = !(count > 0);
+    if (!(count > 0)) {
+      dotsEl.textContent = '';
+      return;
+    }
 
     var frag = document.createDocumentFragment();
     for (var i = 0; i < count; i++) {
@@ -1811,7 +1820,20 @@
 
       window.addEventListener('pagehide', function () {
         clearSliderTimers();
+        if (modalCloseTimer) {
+          window.clearTimeout(modalCloseTimer);
+          modalCloseTimer = null;
+        }
       });
+
+      if (TD.lifecycle && typeof TD.lifecycle.onPageShow === 'function') {
+        TD.lifecycle.onPageShow(function (e) {
+          if (e && e.persisted) {
+            reviewsSliderState.hiddenPaused = Boolean(document.hidden);
+            scheduleSliderAutoplay();
+          }
+        });
+      }
 
       try {
         var mq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');

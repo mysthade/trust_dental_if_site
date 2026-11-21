@@ -51,6 +51,47 @@
     calcSelection: null
   };
 
+  /* Centralized BFcache (pagehide / pageshow) lifecycle registry */
+  var pageHideHandlers = [];
+  var pageShowHandlers = [];
+  var lifecycleBound = false;
+
+  function ensureLifecycleListeners() {
+    if (lifecycleBound) return;
+    lifecycleBound = true;
+    window.addEventListener('pagehide', function (e) {
+      for (var i = 0; i < pageHideHandlers.length; i++) {
+        try {
+          pageHideHandlers[i](e);
+        } catch (err) {}
+      }
+    });
+    window.addEventListener('pageshow', function (e) {
+      for (var i = 0; i < pageShowHandlers.length; i++) {
+        try {
+          pageShowHandlers[i](e);
+        } catch (err) {}
+      }
+    });
+  }
+
+  TD.lifecycle = {
+    onPageHide: function (fn) {
+      if (typeof fn !== 'function') return;
+      ensureLifecycleListeners();
+      if (pageHideHandlers.indexOf(fn) === -1) {
+        pageHideHandlers.push(fn);
+      }
+    },
+    onPageShow: function (fn) {
+      if (typeof fn !== 'function') return;
+      ensureLifecycleListeners();
+      if (pageShowHandlers.indexOf(fn) === -1) {
+        pageShowHandlers.push(fn);
+      }
+    }
+  };
+
   /* --------------------------------------------------------------------------
      Services (8 items) — strictly owner facts or confirmation placeholders
      -------------------------------------------------------------------------- */

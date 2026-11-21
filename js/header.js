@@ -213,6 +213,20 @@
       /* Ignore older browsers */
     }
 
+    if (TD.lifecycle && typeof TD.lifecycle.onPageHide === 'function') {
+      TD.lifecycle.onPageHide(function () {
+        if (closeTimer) {
+          window.clearTimeout(closeTimer);
+          closeTimer = null;
+        }
+        if (isDrawerOpen) {
+          closeDrawer(false);
+          drawer.hidden = true;
+          backdrop.hidden = true;
+        }
+      });
+    }
+
     TD.header.openDrawer = openDrawer;
     TD.header.closeDrawer = closeDrawer;
   }
