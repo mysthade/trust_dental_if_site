@@ -2339,17 +2339,35 @@
     if (stepsEl && Array.isArray(cfg.bookingSteps) && cfg.bookingSteps.length) {
       var stepsFrag = document.createDocumentFragment();
       for (var i = 0; i < cfg.bookingSteps.length; i++) {
+        var stepData = cfg.bookingSteps[i];
         var li = document.createElement('li');
         li.className = 'booking-steps__item';
         var num = document.createElement('span');
         num.className = 'booking-steps__num';
         num.setAttribute('aria-hidden', 'true');
         num.textContent = (i < 9 ? '0' : '') + (i + 1);
-        var txt = document.createElement('span');
-        txt.className = 'booking-steps__text';
-        txt.textContent = String(cfg.bookingSteps[i]);
         li.appendChild(num);
-        li.appendChild(txt);
+
+        if (stepData && typeof stepData === 'object' && stepData.title) {
+          var bodyDiv = document.createElement('div');
+          bodyDiv.className = 'booking-steps__body';
+          var headStrong = document.createElement('strong');
+          headStrong.className = 'booking-steps__heading';
+          headStrong.textContent = String(stepData.title);
+          bodyDiv.appendChild(headStrong);
+          if (stepData.text) {
+            var subSpan = document.createElement('span');
+            subSpan.className = 'booking-steps__text';
+            subSpan.textContent = String(stepData.text);
+            bodyDiv.appendChild(subSpan);
+          }
+          li.appendChild(bodyDiv);
+        } else {
+          var txt = document.createElement('span');
+          txt.className = 'booking-steps__text';
+          txt.textContent = String(stepData);
+          li.appendChild(txt);
+        }
         stepsFrag.appendChild(li);
       }
       stepsEl.textContent = '';
@@ -2390,43 +2408,47 @@
   function initContactsMapCard() {
     var container = document.getElementById('contacts-map-container');
     var cfg = TD.APPOINTMENT_CONFIG || {};
+    var clinic = TD.CLINIC || {};
     if (!container) return;
 
-    var embedUrl = cfg.mapEmbedUrl ? String(cfg.mapEmbedUrl).trim() : '';
-    if (!isSafeHttpUrl(embedUrl) || container.dataset.mapEmbedMounted) return;
+    var embedUrl =
+      (cfg.mapEmbedUrl && String(cfg.mapEmbedUrl).trim()) ||
+      (clinic.GOOGLE_MAPS_EMBED_URL && String(clinic.GOOGLE_MAPS_EMBED_URL).trim()) ||
+      '';
+    if (!isSafeHttpUrl(embedUrl)) return;
 
-    container.dataset.mapEmbedMounted = '1';
-    var clinicUrl = (TD.CLINIC && TD.CLINIC.GOOGLE_MAPS_URL) || '';
-
-    var wrap = document.createElement('div');
-    wrap.className = 'contacts-map__embed';
-
-    var iframe = document.createElement('iframe');
-    iframe.className = 'contacts-map__iframe';
-    iframe.src = embedUrl;
-    iframe.title = 'Карта проїзду до стоматології TRUST DENTAL';
-    iframe.loading = 'lazy';
-    iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
-    wrap.appendChild(iframe);
-
-    if (isSafeHttpUrl(clinicUrl)) {
-      var fbBar = document.createElement('div');
-      fbBar.className = 'contacts-map__fallback-bar';
-      var fbLink = document.createElement('a');
-      fbLink.className = 'btn btn--outline contacts-map__btn';
-      fbLink.href = clinicUrl;
-      fbLink.target = '_blank';
-      fbLink.rel = 'noopener noreferrer';
-      var span = document.createElement('span');
-      span.textContent = 'Відкрити в Google Maps';
-      fbLink.appendChild(span);
-      fbLink.appendChild(createArrowSvg('btn__arrow'));
-      fbBar.appendChild(fbLink);
-      wrap.appendChild(fbBar);
+    var existingIframe = container.querySelector('iframe.contact-map__iframe, iframe.contacts-map__iframe');
+    if (existingIframe) {
+      if (existingIframe.getAttribute('src') !== embedUrl) {
+        existingIframe.setAttribute('src', embedUrl);
+      }
+      container.dataset.mapEmbedMounted = '1';
+      return;
     }
 
-    container.textContent = '';
-    container.appendChild(wrap);
+    if (container.dataset.mapEmbedMounted) return;
+    container.dataset.mapEmbedMounted = '1';
+
+    var frameWrap =
+      container.querySelector('.contact-map__frame') || document.createElement('div');
+    if (!frameWrap.parentNode) {
+      frameWrap.className = 'contact-map__frame';
+      container.insertBefore(frameWrap, container.firstChild);
+    }
+
+    var iframe = document.createElement('iframe');
+    iframe.id = 'contacts-map-iframe';
+    iframe.className = 'contact-map__iframe contacts-map__iframe';
+    iframe.src = embedUrl;
+    iframe.title =
+      'Розташування TRUST DENTAL на карті — м. Івано-Франківськ, вул. Галицька, 51а';
+    iframe.width = '640';
+    iframe.height = '236';
+    iframe.loading = 'lazy';
+    iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+    iframe.setAttribute('allowfullscreen', '');
+    frameWrap.textContent = '';
+    frameWrap.appendChild(iframe);
   }
 
   function syncPrivacySlots() {

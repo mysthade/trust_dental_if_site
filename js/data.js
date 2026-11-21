@@ -32,6 +32,8 @@
     GOOGLE_PLACE_ID: 'ChIJ9QI8s0nG1EARlyS0q9U9PV0',
     GOOGLE_MAPS_URL:
       'https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu',
+    GOOGLE_MAPS_EMBED_URL:
+      'https://www.google.com/maps?q=%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental,+%D0%BC.+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA,+%D0%B2%D1%83%D0%BB.+%D0%93%D0%B0%D0%BB%D0%B8%D1%86%D1%8C%D0%BA%D0%B0,+51%D0%B0&hl=uk&z=16&output=embed',
     INSTAGRAM_HANDLE: '@trust_dental_ua',
     INSTAGRAM_URL: 'https://www.instagram.com/trust_dental_ua/'
   });
@@ -434,16 +436,26 @@
   TD.APPOINTMENT_CONFIG = Object.freeze({
     endpoint: '',
     privacyPolicyUrl: '',
-    mapEmbedUrl: '',
+    mapEmbedUrl:
+      'https://www.google.com/maps?q=%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental,+%D0%BC.+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA,+%D0%B2%D1%83%D0%BB.+%D0%93%D0%B0%D0%BB%D0%B8%D1%86%D1%8C%D0%BA%D0%B0,+51%D0%B0&hl=uk&z=16&output=embed',
     contactMethods: Object.freeze([
       Object.freeze({ id: 'phone', label: 'Телефонний дзвінок' }),
       Object.freeze({ id: 'messenger', label: 'Месенджер (Viber / Telegram)' }),
       Object.freeze({ id: 'any', label: 'Будь-який зручний спосіб' })
     ]),
     bookingSteps: Object.freeze([
-      'Залишаєте заявку або телефонуєте.',
-      'Адміністратор уточнює деталі та час.',
-      'Ви отримуєте підтвердження запису.'
+      Object.freeze({
+        title: 'Залишаєте заявку або телефонуєте',
+        text: 'Оберіть зручний спосіб зв’язку онлайн або за номером клініки.'
+      }),
+      Object.freeze({
+        title: 'Адміністратор уточнює деталі та час',
+        text: 'Зв’язуємося у робочий час і підбираємо зручну дату прийому.'
+      }),
+      Object.freeze({
+        title: 'Ви отримуєте підтвердження запису',
+        text: 'Фіксуємо ваш візит точно на узгоджений час без черг.'
+      })
     ])
   });
 
@@ -538,6 +550,11 @@
       'reviews-text': function (el) { el.textContent = reviewsText; },
       'maps-link': function (el) {
         el.setAttribute('href', c.GOOGLE_MAPS_URL);
+      },
+      'maps-embed': function (el) {
+        if (c.GOOGLE_MAPS_EMBED_URL && el.getAttribute('src') !== c.GOOGLE_MAPS_EMBED_URL) {
+          el.setAttribute('src', c.GOOGLE_MAPS_EMBED_URL);
+        }
       },
       'instagram-handle': function (el) {
         el.textContent = c.INSTAGRAM_HANDLE;
