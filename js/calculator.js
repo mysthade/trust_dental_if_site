@@ -255,40 +255,44 @@
     listEl.textContent = '';
     listEl.appendChild(frag);
 
-    listEl.addEventListener('change', function (e) {
-      var input = e.target;
-      if (!input || input.type !== 'checkbox' || !stateMap[input.id]) return;
-      stateMap[input.id].checked = input.checked;
-      syncStepperUI(input.id);
-      updateSummary();
-    });
+    if (!listEl.dataset.calcListBound) {
+      listEl.dataset.calcListBound = '1';
+      listEl.addEventListener('change', function (e) {
+        var input = e.target;
+        if (!input || input.type !== 'checkbox' || !stateMap[input.id]) return;
+        stateMap[input.id].checked = input.checked;
+        syncStepperUI(input.id);
+        updateSummary();
+      });
 
-    listEl.addEventListener('click', function (e) {
-      var decBtn = e.target.closest('[data-calc-dec]');
-      var incBtn = e.target.closest('[data-calc-inc]');
-      var btn = decBtn || incBtn;
-      if (!btn || btn.disabled) return;
+      listEl.addEventListener('click', function (e) {
+        var decBtn = e.target.closest('[data-calc-dec]');
+        var incBtn = e.target.closest('[data-calc-inc]');
+        var btn = decBtn || incBtn;
+        if (!btn || btn.disabled) return;
 
-      var id = btn.getAttribute(decBtn ? 'data-calc-dec' : 'data-calc-inc');
-      var item = findItem(id);
-      var entry = stateMap[id];
-      if (!item || !entry || !entry.checked) return;
+        var id = btn.getAttribute(decBtn ? 'data-calc-dec' : 'data-calc-inc');
+        var item = findItem(id);
+        var entry = stateMap[id];
+        if (!item || !entry || !entry.checked) return;
 
-      var delta = decBtn ? -1 : 1;
-      var nextQty = Math.max(item.min, Math.min(item.max, entry.qty + delta));
-      if (nextQty === entry.qty) return;
+        var delta = decBtn ? -1 : 1;
+        var nextQty = Math.max(item.min, Math.min(item.max, entry.qty + delta));
+        if (nextQty === entry.qty) return;
 
-      entry.qty = nextQty;
-      syncStepperUI(id);
-      updateSummary();
-    });
+        entry.qty = nextQty;
+        syncStepperUI(id);
+        updateSummary();
+      });
+    }
   }
 
   function bindSummaryActions() {
     var submitBtn = document.getElementById('calc-submit');
     var resetBtn = document.getElementById('calc-reset');
 
-    if (resetBtn) {
+    if (resetBtn && !resetBtn.dataset.calcResetBound) {
+      resetBtn.dataset.calcResetBound = '1';
       resetBtn.addEventListener('click', function () {
         for (var i = 0; i < TD.CALC_ITEMS.length; i++) {
           var item = TD.CALC_ITEMS[i];
@@ -303,7 +307,8 @@
       });
     }
 
-    if (submitBtn) {
+    if (submitBtn && !submitBtn.dataset.calcSubmitBound) {
+      submitBtn.dataset.calcSubmitBound = '1';
       submitBtn.addEventListener('click', function () {
         var selection = buildSelection();
         if (!selection.items.length) return;

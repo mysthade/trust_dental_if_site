@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" fill="none">
+  <defs>
+    <linearGradient id="d2-fig" x1="210" y1="68" x2="430" y2="265" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8B94A2"/>
+      <stop offset="100%" stop-color="#5E6674"/>
+    </linearGradient>
+    <linearGradient id="d2-coat" x1="165" y1="255" x2="475" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#9AA3B0" stop-opacity="0.34"/>
+      <stop offset="100%" stop-color="#6E7785" stop-opacity="0.16"/>
+    </linearGradient>
+    <linearGradient id="d2-arc" x1="0" y1="0" x2="280" y2="280" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8B94A2" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#8B94A2" stop-opacity="0.02"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M272 0C216 72 132 134 0 162V0H272Z" fill="url(#d2-arc)"/>
+  <path d="M272 0C216 72 132 134 0 162" stroke="#8C95A3" stroke-opacity="0.24" stroke-width="1.2"/>
+  <circle cx="320" cy="212" r="142" stroke="#8C95A3" stroke-opacity="0.18" stroke-width="1"/>
+  <circle cx="320" cy="212" r="108" stroke="#8C95A3" stroke-opacity="0.11" stroke-width="1"/>
+
+  <!-- Single unified head + neck silhouette inside group alpha to avoid chin seam -->
+  <g opacity="0.42">
+    <path d="M320 81c29 0 52 28 52 63 0 28-13 50-27 59v26c0 12-11 20-25 20s-25-8-25-20v-26c-14-9-27-31-27-59 0-35 23-63 52-63Z" fill="url(#d2-fig)"/>
+  </g>
+  <ellipse cx="320" cy="144" rx="52" ry="63" stroke="#9DA6B3" stroke-opacity="0.28" stroke-width="1.2"/>
+
+  <!-- Medical collar / shoulders silhouette -->
+  <path d="M174 400c8-84 60-136 146-136s138 52 146 136H174Z" fill="url(#d2-coat)" stroke="#9DA6B3" stroke-opacity="0.28" stroke-width="1.2"/>
+  <path d="M284 266c11 16 23 24 36 24s25-8 36-24" stroke="#9DA6B3" stroke-opacity="0.38" stroke-width="1.4" stroke-linecap="round"/>
+  <path d="M274 334h92" stroke="#9DA6B3" stroke-opacity="0.18" stroke-width="1.2" stroke-linecap="round"/>
+</svg>

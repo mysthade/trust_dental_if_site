@@ -9,6 +9,7 @@
   var SWITCH_CLASS = 'is-theme-switching';
   var SWITCH_DURATION_MS = 320;
   var switchTimer = null;
+  var isInitialized = false;
 
   function readSavedTheme() {
     try {
@@ -104,6 +105,9 @@
   function init() {
     var initial = readSavedTheme() || getCurrentTheme() || getSystemTheme();
     applyTheme(initial, false);
+
+    if (isInitialized) return;
+    isInitialized = true;
 
     var buttons = document.querySelectorAll('[data-theme-toggle]');
     for (var i = 0; i < buttons.length; i++) {

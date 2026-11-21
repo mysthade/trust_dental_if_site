@@ -37,19 +37,21 @@
   <!-- Preload critical self-hosted Inter Variable subsets & LCP monochrome hero image -->
   <link rel="preload" href="fonts/inter-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" as="image" type="image/webp" imagesrcset="img/hero-mono-800.webp 800w, img/hero-mono-1200.webp 1200w, img/hero-mono-1600.webp 1600w" imagesizes="(max-width: 979px) 100vw, 50vw" fetchpriority="high">
+  <link rel="preload" as="image" type="image/webp" imagesrcset="img/hero-mono-800.webp 800w, img/hero-mono-1200.webp 1200w, img/hero-mono-1600.webp 1600w" imagesizes="(max-width: 979px) 96vw, (max-width: 1220px) 47.5vw, 50vw" fetchpriority="high">
 
-  <!-- Inline Critical CSS (light & dark variables + above-the-fold layout for CLS < 0.05) -->
+  <!-- Inline Critical CSS (light & dark variables + above-the-fold layout for CLS 0) -->
   <style>
-    @font-face{font-family:'Inter Fallback';src:local('Arial'),local('Helvetica Neue'),local('Segoe UI');ascent-override:90.2%;descent-override:22.48%;line-gap-override:0%;size-adjust:107.4%}
+    @font-face{font-family:'Inter Fallback';font-style:normal;font-weight:100 599;src:local('Arial'),local('Helvetica Neue'),local('Segoe UI');ascent-override:89.9%;descent-override:22.4%;line-gap-override:0%;size-adjust:107.8%}
+    @font-face{font-family:'Inter Fallback';font-style:normal;font-weight:600;src:local('Arial Bold'),local('Arial'),local('Helvetica Neue'),local('Segoe UI Semibold');ascent-override:95.0%;descent-override:23.7%;line-gap-override:0%;size-adjust:102.0%}
+    @font-face{font-family:'Inter Fallback';font-style:normal;font-weight:700 900;src:local('Arial Bold'),local('Arial'),local('Helvetica Neue'),local('Segoe UI Bold');ascent-override:96.0%;descent-override:23.9%;line-gap-override:0%;size-adjust:101.0%}
     @font-face{font-family:'Inter Variable';font-style:normal;font-weight:100 900;font-display:swap;src:url('fonts/inter-cyrillic-ext-wght-normal.woff2') format('woff2');unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F}
     @font-face{font-family:'Inter Variable';font-style:normal;font-weight:100 900;font-display:swap;src:url('fonts/inter-cyrillic-wght-normal.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
     @font-face{font-family:'Inter Variable';font-style:normal;font-weight:100 900;font-display:swap;src:url('fonts/inter-latin-wght-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-    :root{color-scheme:light;--font-sans:'Inter Variable','Inter Fallback',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--bg:#EEF0F2;--bg-top:#F8F9FA;--bg-bottom:#E4E8EE;--surface:rgba(255,255,255,.72);--surface-strong:rgba(255,255,255,.94);--surface-card:rgba(255,255,255,.86);--surface-scrolled:rgba(244,246,248,.88);--line-soft:rgba(120,128,140,.28);--line-strong:rgba(70,78,90,.55);--wave-a:#D5D9DF;--wave-b:#AEB4BD;--wave-c:#9AA1AB;--wave-stroke:rgba(90,98,110,.35);--card-grad:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(242,245,248,.74) 100%);--card-border:var(--line-soft);--card-shadow:0 10px 30px rgba(20,24,31,.08),inset 0 1px 0 rgba(255,255,255,.9);--brand-pill-bg:rgba(255,255,255,.72);--brand-pill-border:rgba(255,255,255,.92);--toggle-bg:#FFFFFF;--toggle-border:rgba(255,255,255,.95);--toggle-shadow:0 6px 18px rgba(20,24,31,.1),inset 0 1px 0 #FFFFFF;--border:var(--line-soft);--border-subtle:rgba(27,31,39,.08);--text:#1B1F27;--muted:#5B6370;--primary:#1E222B;--primary-hover:#2E3442;--on-primary:#FFFFFF;--accent:#626975;--line:#C9CED6;--divider:rgba(27,31,39,.1);--arc-line:rgba(70,78,90,.45);--arc-width:1.5px;--header-scrim:rgba(240,242,245,.9);--header-scrim-mid:rgba(240,242,245,.48);--media-placeholder-start:#DDE2E8;--media-placeholder-end:#C3CAD4;--backdrop:rgba(15,18,23,.42);--focus-ring:#1E222B;--star-color:#EAB308;--tooth-hi:var(--wave-a);--tooth-mid:#C4CAD3;--tooth-lo:#B3BAC4;--tooth-spec:rgba(255,255,255,.9);--ribbon-hi:var(--wave-a);--ribbon-mid:var(--wave-b);--ribbon-lo:var(--wave-c);--ribbon-edge:var(--wave-stroke);--wave-fill-2:rgba(248,249,250,.96);--radius-card:28px;--radius-pill:999px;--shadow-sm:0 4px 16px rgba(27,31,39,.05);--shadow-md:0 10px 30px rgba(20,24,31,.08),inset 0 1px 0 rgba(255,255,255,.9);--shadow-lg:0 18px 46px rgba(20,24,31,.09),inset 0 1px 0 rgba(255,255,255,.9);--container:1280px;--header-h:72px}
-    [data-theme='dark']{color-scheme:dark;--bg:#0F1217;--bg-top:#151921;--bg-bottom:#0B0D11;--surface:rgba(24,28,35,.8);--surface-strong:rgba(24,28,35,.94);--surface-card:rgba(24,28,35,.9);--surface-scrolled:rgba(15,18,23,.88);--line-soft:rgba(255,255,255,.12);--line-strong:#2A303A;--wave-a:#2A2E35;--wave-b:#1A1E24;--wave-c:#0F1114;--wave-stroke:rgba(255,255,255,.09);--card-grad:linear-gradient(180deg,rgba(32,37,46,.92) 0%,rgba(20,24,31,.82) 100%);--card-border:rgba(255,255,255,.12);--card-shadow:0 12px 32px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.1);--brand-pill-bg:rgba(24,28,35,.78);--brand-pill-border:rgba(255,255,255,.12);--toggle-bg:#222731;--toggle-border:rgba(255,255,255,.14);--toggle-shadow:0 6px 18px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08);--border:rgba(255,255,255,.12);--border-subtle:rgba(255,255,255,.1);--text:#ECEFF3;--muted:#9BA3AF;--primary:#ECEFF3;--primary-hover:#FFFFFF;--on-primary:#12151A;--accent:#9AA2AE;--line:#2A303A;--divider:rgba(255,255,255,.09);--arc-line:rgba(154,162,174,.34);--arc-width:1px;--header-scrim:rgba(15,18,23,.9);--header-scrim-mid:rgba(15,18,23,.5);--media-placeholder-start:#1E242E;--media-placeholder-end:#141820;--backdrop:rgba(0,0,0,.65);--focus-ring:#ECEFF3;--star-color:#FACC15;--tooth-hi:#2A2E35;--tooth-mid:#1C2026;--tooth-lo:#0F1114;--tooth-spec:rgba(255,255,255,.12);--ribbon-hi:#2A2E35;--ribbon-mid:#1A1E24;--ribbon-lo:#0F1114;--ribbon-edge:rgba(255,255,255,.09);--wave-fill-2:rgba(15,18,23,.98);--shadow-sm:0 4px 16px rgba(0,0,0,.28);--shadow-md:0 12px 32px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.1);--shadow-lg:0 22px 54px rgba(0,0,0,.46),inset 0 1px 0 rgba(255,255,255,.1)}
+    :root{color-scheme:light;--font-sans:'Inter Variable','Inter Fallback',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--bg:#EEF0F2;--bg-top:#F8F9FA;--bg-bottom:#E4E8EE;--surface:rgba(255,255,255,.72);--surface-strong:rgba(255,255,255,.94);--surface-card:rgba(255,255,255,.86);--surface-scrolled:rgba(244,246,248,.88);--line-soft:rgba(120,128,140,.28);--line-strong:rgba(70,78,90,.55);--wave-a:#D5D9DF;--wave-b:#AEB4BD;--wave-c:#9AA1AB;--wave-stroke:rgba(90,98,110,.35);--card-grad:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(242,245,248,.74) 100%);--card-border:var(--line-soft);--card-shadow:0 10px 30px rgba(20,24,31,.08),inset 0 1px 0 rgba(255,255,255,.9);--brand-pill-bg:rgba(255,255,255,.72);--brand-pill-border:rgba(255,255,255,.92);--toggle-bg:#FFFFFF;--toggle-border:rgba(255,255,255,.95);--toggle-shadow:0 6px 18px rgba(20,24,31,.1),inset 0 1px 0 #FFFFFF;--border:var(--line-soft);--border-subtle:rgba(27,31,39,.08);--text:#1B1F27;--muted:#5B6370;--primary:#1E222B;--primary-hover:#2E3442;--on-primary:#FFFFFF;--accent:#626975;--line:#C9CED6;--divider:rgba(27,31,39,.1);--arc-line:rgba(70,78,90,.45);--arc-width:1.5px;--header-scrim:rgba(240,242,245,.9);--header-scrim-mid:rgba(240,242,245,.48);--media-placeholder-start:#DDE2E8;--media-placeholder-end:#C3CAD4;--backdrop:rgba(15,18,23,.42);--focus-ring:#1E222B;--star-color:#EAB308;--tooth-hi:var(--wave-a);--tooth-mid:#C4CAD3;--tooth-lo:#B3BAC4;--tooth-spec:rgba(255,255,255,.9);--ribbon-hi:var(--wave-a);--ribbon-mid:var(--wave-b);--ribbon-lo:var(--wave-c);--ribbon-edge:var(--wave-stroke);--wave-fill-2:rgba(248,249,250,.96);--deco-fill-1:rgba(190,196,206,.28);--deco-fill-2:rgba(190,196,206,.10);--deco-wave:rgba(205,210,218,.42);--deco-wave-soft:rgba(225,228,233,.68);--deco-line:rgba(120,128,140,.25);--deco-line-soft:rgba(120,128,140,.13);--radius-card:28px;--radius-pill:999px;--shadow-sm:0 4px 16px rgba(27,31,39,.05);--shadow-md:0 10px 30px rgba(20,24,31,.08),inset 0 1px 0 rgba(255,255,255,.9);--shadow-lg:0 18px 46px rgba(20,24,31,.09),inset 0 1px 0 rgba(255,255,255,.9);--container:1280px;--header-h:72px}
+    [data-theme='dark']{color-scheme:dark;--bg:#0F1217;--bg-top:#151921;--bg-bottom:#0B0D11;--surface:rgba(24,28,35,.8);--surface-strong:rgba(24,28,35,.94);--surface-card:rgba(24,28,35,.9);--surface-scrolled:rgba(15,18,23,.88);--line-soft:rgba(255,255,255,.12);--line-strong:#2A303A;--wave-a:#2A2E35;--wave-b:#1A1E24;--wave-c:#0F1114;--wave-stroke:rgba(255,255,255,.09);--card-grad:linear-gradient(180deg,rgba(32,37,46,.92) 0%,rgba(20,24,31,.82) 100%);--card-border:rgba(255,255,255,.12);--card-shadow:0 12px 32px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.1);--brand-pill-bg:rgba(24,28,35,.78);--brand-pill-border:rgba(255,255,255,.12);--toggle-bg:#222731;--toggle-border:rgba(255,255,255,.14);--toggle-shadow:0 6px 18px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08);--border:rgba(255,255,255,.12);--border-subtle:rgba(255,255,255,.1);--text:#ECEFF3;--muted:#9BA3AF;--primary:#ECEFF3;--primary-hover:#FFFFFF;--on-primary:#12151A;--accent:#9AA2AE;--line:#2A303A;--divider:rgba(255,255,255,.09);--arc-line:rgba(154,162,174,.34);--arc-width:1px;--header-scrim:rgba(15,18,23,.9);--header-scrim-mid:rgba(15,18,23,.5);--media-placeholder-start:#1E242E;--media-placeholder-end:#141820;--backdrop:rgba(0,0,0,.65);--focus-ring:#ECEFF3;--star-color:#FACC15;--tooth-hi:#2A2E35;--tooth-mid:#1C2026;--tooth-lo:#0F1114;--tooth-spec:rgba(255,255,255,.12);--ribbon-hi:#2A2E35;--ribbon-mid:#1A1E24;--ribbon-lo:#0F1114;--ribbon-edge:rgba(255,255,255,.09);--wave-fill-2:rgba(15,18,23,.98);--deco-fill-1:rgba(255,255,255,.05);--deco-fill-2:rgba(255,255,255,.02);--deco-wave:rgba(255,255,255,.055);--deco-wave-soft:rgba(255,255,255,.025);--deco-line:rgba(255,255,255,.10);--deco-line-soft:rgba(255,255,255,.06);--shadow-sm:0 4px 16px rgba(0,0,0,.28);--shadow-md:0 12px 32px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.1);--shadow-lg:0 22px 54px rgba(0,0,0,.46),inset 0 1px 0 rgba(255,255,255,.1)}
     *,*::before,*::after{box-sizing:border-box}
     html{font-size:16px;background-color:var(--bg);-webkit-text-size-adjust:100%;scrollbar-gutter:stable}
-    body{margin:0;min-height:100vh;font-family:var(--font-sans);font-size:1rem;line-height:1.55;color:var(--text);background:linear-gradient(180deg,var(--bg-top) 0%,var(--bg) 42%,var(--bg) 100%);overflow-x:clip;-webkit-font-smoothing:antialiased}
+    body{margin:0;min-height:100vh;font-family:var(--font-sans);font-size:1rem;line-height:1.55;color:var(--text);background:linear-gradient(180deg,var(--bg-top) 0%,var(--bg) 42%,var(--bg-bottom) 100%);background-attachment:scroll;overflow-x:clip;-webkit-font-smoothing:antialiased}
     img,picture,svg{display:block;max-width:100%}
     a{color:inherit;text-decoration:none}
     button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
@@ -66,7 +68,7 @@
     .brand__picture--dark{display:none}
     [data-theme='dark'] .brand__picture--light{display:none}
     [data-theme='dark'] .brand__picture--dark{display:block}
-    .brand__img{height:34px;width:auto;object-fit:contain}
+    .brand__img{height:34px;width:auto;aspect-ratio:373/84;object-fit:contain}
     .nav{display:flex;align-items:center}
     .nav__list{display:flex;align-items:center;gap:clamp(14px,1.8vw,24px)}
     .nav__link{position:relative;display:inline-flex;align-items:center;min-height:44px;padding-inline:2px;font-size:.9rem;font-weight:500;color:var(--muted)}
@@ -84,7 +86,7 @@
     .theme-toggle__icon--sun{opacity:0}
     [data-theme='dark'] .theme-toggle__icon--moon{opacity:0}
     [data-theme='dark'] .theme-toggle__icon--sun{opacity:1}
-    .burger{display:none;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--toggle-bg);border:1px solid var(--toggle-border);color:var(--text);box-shadow:var(--toggle-shadow)}
+    .burger{display:none;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--surface);border:1px solid var(--line);color:var(--text);box-shadow:var(--shadow-sm)}
     .burger__lines{display:flex;flex-direction:column;gap:5px;width:18px}
     .burger__line{display:block;height:1.75px;width:100%;border-radius:2px;background:currentColor}
     .hero{position:relative;overflow:clip;padding-top:calc(var(--header-h) + 34px);padding-bottom:108px;min-height:clamp(610px,74vh,720px);display:flex;align-items:center;background:linear-gradient(148deg,var(--bg-top) 0%,var(--bg) 52%,var(--bg-bottom) 100%)}
@@ -103,10 +105,14 @@
     .hero__wave-outline{position:absolute;top:0;bottom:0;left:-20px;width:100%;height:100%;pointer-events:none;z-index:3}
     .hero__wave-path{stroke-width:var(--arc-width)}
     .hero__wave-path--mobile{display:none}
-    .hero__media{position:relative;width:100%;height:100%;overflow:hidden;clip-path:url(#td-hero-clip);background:linear-gradient(135deg,var(--media-placeholder-start) 0%,var(--media-placeholder-end) 100%)}
+    :root:not([data-theme='dark']) .hero__bg-waves path:nth-of-type(4){stroke:var(--wave-stroke);stroke-width:1.5;vector-effect:non-scaling-stroke}
+    .hero__media{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;clip-path:url(#td-hero-clip);background:linear-gradient(135deg,var(--media-placeholder-start) 0%,var(--media-placeholder-end) 100%)}
     .hero__media::after{content:'';position:absolute;top:0;left:0;right:0;height:104px;background:linear-gradient(180deg,var(--header-scrim) 0%,var(--header-scrim-mid) 58%,rgba(0,0,0,0) 100%);pointer-events:none;z-index:2}
-    .hero__picture{width:100%;height:100%}
-    .hero__img{width:100%;height:100%;object-fit:cover;object-position:42% center}
+    .hero__picture{display:block;width:100%;height:100%}
+    .hero__img{display:block;width:100%;height:100%;object-fit:cover;object-position:42% center}
+    .deco{position:absolute;display:block;max-width:none;pointer-events:none;user-select:none;z-index:0}
+    .deco--hero-arc{left:16%;top:-80px;width:480px;height:740px;transform:rotate(-14deg)}
+    .deco--stats-wave{left:0;right:0;bottom:0;width:100%;height:96px}
     .google-badge{position:absolute;right:clamp(20px,3.2vw,48px);bottom:86px;z-index:4;display:inline-flex;align-items:center;gap:14px;padding:12px 14px 12px 18px;border-radius:var(--radius-pill);background:var(--surface-strong);border:1px solid var(--card-border);box-shadow:var(--card-shadow)}
     .google-badge__logo{width:28px;height:28px;flex-shrink:0}
     .google-badge__info{display:flex;flex-direction:column;gap:2px}
@@ -116,7 +122,8 @@
     .google-badge__star{width:14px;height:14px}
     .google-badge__count{font-size:.78125rem;font-weight:500;color:var(--muted);white-space:nowrap}
     .google-badge__btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--surface);border:1px solid var(--line);color:var(--text)}
-    .stats-section{position:relative;z-index:6;margin-top:-54px;padding-bottom:36px}
+    .stats-section{position:relative;isolation:isolate;overflow-x:clip;z-index:6;margin-top:-54px;padding-bottom:36px}
+    .stats-section>.container{position:relative;z-index:1}
     .stats-card{border-radius:32px;background:var(--card-grad);border:1px solid var(--card-border);box-shadow:var(--card-shadow);padding:26px 12px}
     .stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
     .stat-item{display:flex;align-items:center;gap:16px;padding:6px 24px;border-right:1px solid var(--divider)}
@@ -126,8 +133,10 @@
     .stat-item__value{font-size:clamp(1.35rem,1.9vw,1.7rem);font-weight:800;line-height:1.08;letter-spacing:-.03em;color:var(--text);font-variant-numeric:tabular-nums}
     .stat-item__label{font-size:.8125rem;line-height:1.35;color:var(--muted)}
     @media (max-width:1220px) and (min-width:980px){.header__inner{gap:8px;padding-inline:16px}.brand{padding:5px 12px 5px 10px}.brand__img{height:28px}.nav__list{gap:9px}.nav__link{font-size:.8125rem}.header__actions{gap:7px}.header__phone{font-size:.8125rem;gap:5px;padding-inline:2px}.header__cta{padding:9px 12px;font-size:.8125rem;gap:6px}.hero__content{max-width:495px}.hero__cta .btn--lg{padding:12px 20px;font-size:.875rem}.hero__media-wrap{width:47.5%}.stat-item{padding:6px 16px;gap:12px}}
-    @media (max-width:979px){.nav,.header__phone,.header__cta{display:none}.burger{display:inline-flex}.brand{padding:5px 14px 5px 10px}.brand__img{height:30px}.hero{display:block;min-height:auto;padding-top:calc(var(--header-h) + 24px);padding-bottom:44px}.hero__content{max-width:640px;margin-bottom:32px}.hero__bg-tooth{width:234px;height:270px;left:-85px;top:36px}.hero__media-wrap{position:relative;top:auto;right:auto;bottom:auto;width:calc(100% - clamp(16px,3vw,32px));margin-left:auto;aspect-ratio:16/10;max-height:440px}.hero__wave-outline{left:-12px}.hero__wave-path--desktop{display:none}.hero__wave-path--mobile{display:block}.hero__media{clip-path:url(#td-hero-clip-mobile)}.hero__media::after{display:none}.google-badge{right:16px;bottom:16px;padding:10px 10px 10px 14px;gap:10px}.stats-section{margin-top:-18px}.stats-card{padding:18px 8px;border-radius:28px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stat-item{padding:16px 18px;border-right:1px solid var(--divider);border-bottom:1px solid var(--divider)}.stat-item:nth-child(2n){border-right:0}.stat-item:nth-last-child(-n+2){border-bottom:0}}
-    @media (max-width:540px){.brand__img{height:28px}.hero{padding-top:calc(var(--header-h) + 18px);padding-bottom:36px}.hero__badge{font-size:.78125rem;padding:7px 13px;margin-bottom:18px}.hero__title{margin-bottom:16px}.hero__subtitle{margin-bottom:24px}.hero__cta{flex-direction:column;align-items:stretch}.hero__cta .btn{width:100%}.hero__media-wrap{aspect-ratio:4/3}.google-badge{right:12px;bottom:12px;padding:8px 8px 8px 12px;gap:9px}.google-badge__logo{width:24px;height:24px}.google-badge__score{font-size:.9375rem}.google-badge__star{width:12px;height:12px}.google-badge__count{font-size:.72rem}.stats-section{margin-top:-12px}.stats-card{padding:12px 6px;border-radius:26px}.stat-item{flex-direction:column;align-items:flex-start;gap:10px;padding:14px 12px}.stat-item__icon{width:28px;height:28px}.stat-item__value{font-size:1.25rem}.stat-item__label{font-size:.75rem}}
+    @media (max-width:979px){.nav,.header__phone,.header__cta{display:none}.burger{display:inline-flex}.brand{padding:5px 14px 5px 10px}.brand__img{height:30px}.hero{display:block;min-height:auto;padding-top:calc(var(--header-h) + 24px);padding-bottom:44px}.hero__content{max-width:640px;margin-bottom:32px}.hero__bg-tooth{width:234px;height:270px;left:-85px;top:36px}.hero__bg-waves{top:auto;bottom:0;height:240px}.hero__bg-waves path:nth-of-type(1){display:none}.deco--hero-arc{left:26%;top:-60px;width:340px;height:520px}.hero__media-wrap{position:relative;top:auto;right:auto;bottom:auto;width:calc(100% - clamp(16px,3vw,32px));margin-left:auto;aspect-ratio:16/10;max-height:440px}.hero__wave-outline{left:-12px}.hero__wave-path--desktop{display:none}.hero__wave-path--mobile{display:block}.hero__media{clip-path:url(#td-hero-clip-mobile)}.hero__media::after{display:none}.google-badge{right:16px;bottom:16px;padding:10px 10px 10px 14px;gap:10px}.stats-section{margin-top:-18px}.stats-card{padding:18px 8px;border-radius:28px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stat-item{padding:16px 18px;border-right:1px solid var(--divider);border-bottom:1px solid var(--divider)}.stat-item:nth-child(2n){border-right:0}.stat-item:nth-last-child(-n+2){border-bottom:0}}
+    @media (max-width:719px){:root{--deco-fill-1:rgba(190,196,206,.17);--deco-fill-2:rgba(190,196,206,.06);--deco-wave:rgba(205,210,218,.28);--deco-wave-soft:rgba(225,228,233,.44);--deco-line:rgba(120,128,140,.16);--deco-line-soft:rgba(120,128,140,.08)}[data-theme='dark']{--deco-fill-1:rgba(255,255,255,.032);--deco-fill-2:rgba(255,255,255,.012);--deco-wave:rgba(255,255,255,.035);--deco-wave-soft:rgba(255,255,255,.016);--deco-line:rgba(255,255,255,.065);--deco-line-soft:rgba(255,255,255,.038)}.deco--hero-arc{display:none}.deco--stats-wave{height:64px}}
+    @media (max-width:540px){.brand__img{height:28px}.hero{padding-top:calc(var(--header-h) + 18px);padding-bottom:36px}.hero__bg-tooth{width:176px;height:204px;left:-72px;top:44px}:root:not([data-theme='dark']) .hero__bg-tooth{opacity:.55}.hero__bg-waves{height:170px}.hero__badge{font-size:clamp(.68rem,3.15vw,.78125rem);padding:6px 11px;gap:7px;margin-bottom:18px}.hero__title{margin-bottom:16px}.hero__subtitle{margin-bottom:24px}.hero__cta{flex-direction:column;align-items:stretch}.hero__cta .btn{width:100%}.hero__media-wrap{aspect-ratio:4/3}.hero__img{object-position:36% center}.google-badge{right:12px;bottom:12px;padding:8px 8px 8px 12px;gap:9px}.google-badge__logo{width:24px;height:24px}.google-badge__score{font-size:.9375rem}.google-badge__star{width:12px;height:12px}.google-badge__count{font-size:.72rem}.stats-section{margin-top:-12px}.stats-card{padding:12px 6px;border-radius:26px}.stat-item{flex-direction:column;align-items:flex-start;gap:10px;padding:14px 12px}.stat-item__icon{width:28px;height:28px}.stat-item__value{font-size:1.25rem}.stat-item__label{font-size:.75rem}}
+    @media (max-width:979px) and (max-height:520px){.hero{padding-top:calc(var(--header-h) + 14px);padding-bottom:28px}.hero__content{margin-bottom:20px}.hero__badge{margin-bottom:12px}.hero__title{font-size:clamp(1.85rem,3.6vw,2.5rem);margin-bottom:12px}.hero__subtitle{margin-bottom:16px;font-size:.9375rem}.hero__media-wrap{max-height:290px}}
   </style>
 
   <!-- Full stylesheet -->
@@ -203,6 +212,60 @@
         <path d="M5.5 10.5V7.8A2.3 2.3 0 0 1 7.8 5.5h2.7M21.5 5.5h2.7a2.3 2.3 0 0 1 2.3 2.3v2.7M26.5 21.5v2.7a2.3 2.3 0 0 1-2.3 2.3h-2.7M10.5 26.5H7.8a2.3 2.3 0 0 1-2.3-2.3v-2.7"/>
         <path d="M12.5 10.5c-1.8 0-3 1.4-2.9 3.4.1 2.5 1.1 5.6 2.2 7.8.3.7 1.2.6 1.4-.1l.9-2.8c.3-.8 1.5-.8 1.8 0l.9 2.8c.2.7 1.1.8 1.4.1 1.1-2.2 2.1-5.3 2.2-7.8.1-2-1.1-3.4-2.9-3.4-1 0-1.7.5-2.5.9-.8-.4-1.5-.9-2.5-.9Z"/>
       </symbol>
+
+      <!-- Page-wide decorative gradients & reusable background symbols -->
+      <linearGradient id="deco-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="var(--deco-fill-1)"></stop>
+        <stop offset="100%" stop-color="var(--deco-fill-2)"></stop>
+      </linearGradient>
+      <linearGradient id="deco-grad-wave" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--deco-wave)" stop-opacity="1"></stop>
+        <stop offset="62%" stop-color="var(--deco-wave-soft)" stop-opacity="0.7"></stop>
+        <stop offset="100%" stop-color="var(--deco-wave-soft)" stop-opacity="0"></stop>
+      </linearGradient>
+      <linearGradient id="deco-grad-wave-b" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--deco-wave-soft)" stop-opacity="1"></stop>
+        <stop offset="65%" stop-color="var(--deco-wave-soft)" stop-opacity="0.45"></stop>
+        <stop offset="100%" stop-color="var(--deco-wave-soft)" stop-opacity="0"></stop>
+      </linearGradient>
+      <symbol id="deco-tooth" viewBox="0 0 400 480">
+        <path d="M116 32 C58 32 24 84 32 162 C40 248 68 358 100 428 C112 454 142 452 152 424 L182 326 C190 302 210 302 218 326 L248 424 C258 452 288 454 300 428 C332 358 360 248 368 162 C376 84 342 32 284 32 C246 32 222 50 200 64 C178 50 154 32 116 32 Z" fill="url(#deco-grad)" stroke="var(--deco-line-soft)" stroke-width="1.2" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="deco-wave-a" viewBox="0 0 1440 180" preserveAspectRatio="none">
+        <path d="M0 78 C290 14 575 138 945 72 C1175 30 1330 56 1440 94 V180 H0 Z" fill="url(#deco-grad-wave)"/>
+        <path d="M0 78 C290 14 575 138 945 72 C1175 30 1330 56 1440 94" fill="none" stroke="var(--deco-line)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      </symbol>
+      <symbol id="deco-wave-b" viewBox="0 0 1440 140" preserveAspectRatio="none">
+        <path d="M0 64 C320 112 670 16 1040 58 C1235 80 1355 56 1440 34 V140 H0 Z" fill="url(#deco-grad-wave-b)"/>
+        <path d="M0 64 C320 112 670 16 1040 58 C1235 80 1355 56 1440 34" fill="none" stroke="var(--deco-line-soft)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      </symbol>
+      <symbol id="deco-arc" viewBox="0 0 600 900">
+        <ellipse cx="340" cy="450" rx="250" ry="410" fill="none" stroke="var(--deco-line)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <ellipse cx="370" cy="465" rx="210" ry="355" fill="none" stroke="var(--deco-line-soft)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      </symbol>
+      <symbol id="deco-ribbon" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path d="M420 0 C560 98 790 142 1060 118 C1245 102 1358 148 1440 210 V0 H420 Z" fill="url(#deco-grad)"/>
+        <path d="M420 0 C560 98 790 142 1060 118 C1245 102 1358 148 1440 210" fill="none" stroke="var(--deco-line-soft)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      </symbol>
+      <symbol id="td-work-before" viewBox="0 0 240 180" fill="none">
+        <rect x="28" y="24" width="184" height="132" rx="22" stroke="var(--deco-line)" stroke-width="1.4"/>
+        <path d="M90 52c-16 0-26 13-25 32 1 22 10 47 19 65 3 6 10 5 12-1l8-24c2-7 13-7 15 0l8 24c2 6 9 7 12 1 9-18 18-43 19-65 1-19-9-32-25-32-9 0-15 4-23 9-8-5-14-9-23-9Z" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="4 4"/>
+        <circle cx="95" cy="84" r="9" stroke="var(--muted)" stroke-width="1.4"/>
+      </symbol>
+      <symbol id="td-work-after" viewBox="0 0 240 180" fill="none">
+        <rect x="28" y="24" width="184" height="132" rx="22" stroke="var(--deco-line)" stroke-width="1.4"/>
+        <path d="M90 52c-16 0-26 13-25 32 1 22 10 47 19 65 3 6 10 5 12-1l8-24c2-7 13-7 15 0l8 24c2 6 9 7 12 1 9-18 18-43 19-65 1-19-9-32-25-32-9 0-15 4-23 9-8-5-14-9-23-9Z" fill="var(--deco-fill-2)" stroke="var(--text)" stroke-opacity="0.55" stroke-width="1.6"/>
+        <path d="M168 42v14M161 49h14" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round"/>
+      </symbol>
+      <symbol id="td-google-logo" viewBox="0 0 48 48">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.01 24.01 0 0 0 0 21.56l7.98-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </symbol>
+      <symbol id="td-star" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10 1.5l2.62 5.3 5.85.85-4.23 4.13 1 5.82L10 14.85 4.76 17.6l1-5.82L1.53 7.65l5.85-.85L10 1.5z"/>
+      </symbol>
     </defs>
   </svg>
 
@@ -211,10 +274,10 @@
     <div class="container header__inner">
       <a class="brand" href="#top" aria-label="TRUST DENTAL — турбота про вашу усмішку, на початок сторінки">
         <picture class="brand__picture brand__picture--light">
-          <img class="brand__img" src="img/logo.png" alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" decoding="async">
+          <img class="brand__img" src="img/logo.png" alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" decoding="sync">
         </picture>
         <picture class="brand__picture brand__picture--dark">
-          <img class="brand__img" src="img/logo-white.png" alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" decoding="async">
+          <img class="brand__img" src="img/logo-white.png" alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" decoding="sync">
         </picture>
       </a>
 
@@ -367,6 +430,11 @@
         <path d="M0 575C290 638 615 655 960 582C1180 536 1335 560 1440 598" stroke="var(--ribbon-edge)" stroke-width="1.5"/>
       </svg>
 
+      <!-- BG SVG #2.5: Subtle elliptical architectural arc behind hero composition -->
+      <svg class="deco deco--hero-arc" viewBox="0 0 600 900" aria-hidden="true" focusable="false">
+        <use href="#deco-arc"></use>
+      </svg>
+
       <div class="container hero__container">
         <div class="hero__content">
           <div class="hero__badge">
@@ -406,7 +474,7 @@
             <source
               type="image/webp"
               srcset="img/hero-mono-800.webp 800w, img/hero-mono-1200.webp 1200w, img/hero-mono-1600.webp 1600w"
-              sizes="(max-width: 979px) 100vw, 50vw">
+              sizes="(max-width: 979px) 96vw, (max-width: 1220px) 47.5vw, 50vw">
             <img
               class="hero__img"
               src="img/hero-mono.jpg"
@@ -414,7 +482,7 @@
               width="960"
               height="454"
               fetchpriority="high"
-              decoding="async">
+              decoding="sync">
           </picture>
         </div>
 
@@ -441,7 +509,7 @@
             <span class="google-badge__count" data-clinic="reviews-text">73 відгуки на Google</span>
           </div>
 
-          <a class="google-badge__btn" data-clinic="maps-link" href="https://www.google.com/maps/search/?api=1&query=TRUST+DENTAL+%D0%B2%D1%83%D0%BB.+%D0%93%D0%B0%D0%BB%D0%B8%D1%86%D1%8C%D0%BA%D0%B0+51%D0%B0+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA" target="_blank" rel="noopener noreferrer" aria-label="Відкрити відгуки TRUST DENTAL у Google Картах">
+          <a class="google-badge__btn" data-clinic="maps-link" href="https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu" target="_blank" rel="noopener noreferrer" aria-label="Відкрити відгуки TRUST DENTAL у Google Картах">
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
               <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
             </svg>
@@ -452,6 +520,9 @@
 
     <!-- ======================== STATS GLASS BAR ======================== -->
     <section class="stats-section" aria-label="Ключові показники клініки">
+      <svg class="deco deco--stats-wave" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <use href="#deco-wave-b"></use>
+      </svg>
       <div class="container">
         <div id="stats-card" class="stats-card">
           <ul class="stats-grid">
@@ -525,6 +596,10 @@
           <path d="M0 705C280 635 595 758 950 692C1165 652 1320 690 1440 742" stroke="var(--ribbon-edge)" stroke-width="1.2"/>
         </svg>
 
+        <svg class="deco deco--services-tooth" viewBox="0 0 400 480" aria-hidden="true" focusable="false">
+          <use href="#deco-tooth"></use>
+        </svg>
+
         <div class="container services__container">
           <div class="section__head">
             <span class="section__eyebrow">Послуги</span>
@@ -538,17 +613,91 @@
         </div>
       </section>
 
-      <section id="advantages" class="stub-section" aria-labelledby="heading-advantages">
-        <div class="container">
-          <div class="stub-card">
-            <span class="stub-section__eyebrow">Переваги</span>
-            <h2 id="heading-advantages" class="stub-section__title">Чому обирають TRUST DENTAL</h2>
-            <p class="stub-section__note">[Секція «Переваги» буде наповнена на наступному етапі.]</p>
+      <section id="advantages" class="advantages-section" aria-labelledby="heading-advantages">
+        <svg class="deco deco--advantages-ribbon" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <use href="#deco-ribbon"></use>
+        </svg>
+        <svg class="deco deco--advantages-arc" viewBox="0 0 600 900" aria-hidden="true" focusable="false">
+          <use href="#deco-arc"></use>
+        </svg>
+        <div class="container advantages-section__container">
+          <div class="advantages-section__intro">
+            <span class="section__eyebrow">Переваги</span>
+            <h2 id="heading-advantages" class="section__title">Лікування, продумане до деталей</h2>
+            <p class="section__lead">
+              Від першої консультації до плану лікування - зрозумілий процес, уважна команда та рішення, підібрані під вас.
+            </p>
+            <a class="btn btn--outline btn--lg advantages-section__link" href="#contacts">
+              <span>Записатися на консультацію</span>
+              <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="advantages-grid">
+            <article class="advantage-card">
+              <div class="advantage-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M16 4.5 26 8.5v7.2c0 6.1-4.1 10.6-10 12.3-5.9-1.7-10-6.2-10-12.3V8.5l10-4Z"/>
+                  <path d="m11.5 16.2 3 3 6-6.2"/>
+                </svg>
+              </div>
+              <h3 class="advantage-card__title">Дбайливий підхід</h3>
+              <p class="advantage-card__text">Пояснюємо кожен етап і працюємо уважно до вашого самопочуття.</p>
+            </article>
+
+            <article class="advantage-card">
+              <div class="advantage-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <circle cx="14" cy="14" r="7.5"/>
+                  <path d="m19.5 19.5 6 6M14 10v8M10 14h8"/>
+                </svg>
+              </div>
+              <h3 class="advantage-card__title">Точна діагностика</h3>
+              <p class="advantage-card__text">Починаємо з огляду та діагностики, щоб скласти зрозумілий план.</p>
+            </article>
+
+            <article class="advantage-card">
+              <div class="advantage-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <rect x="5.5" y="7.5" width="21" height="19" rx="3.5"/>
+                  <path d="M10.5 4.5v5M21.5 4.5v5M5.5 13h21M10.5 18h4M17.5 18h4M10.5 22h4"/>
+                </svg>
+              </div>
+              <h3 class="advantage-card__title">Прийом за записом</h3>
+              <p class="advantage-card__text">Плануємо час заздалегідь, щоб прийом був зручним і без зайвого очікування.</p>
+            </article>
+
+            <article class="advantage-card">
+              <div class="advantage-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <circle cx="16" cy="16" r="10.5"/>
+                  <path d="m11.5 16.2 3 3 6-6.2"/>
+                </svg>
+              </div>
+              <h3 class="advantage-card__title">Прозорі рішення</h3>
+              <p class="advantage-card__text">Прайс і попередній розрахунок допомагають оцінити лікування заздалегідь.</p>
+            </article>
+          </div>
+
+          <div class="advantages-note">
+            <span class="advantages-note__mark" aria-hidden="true"></span>
+            <p>Остаточний план і вартість лікар визначає після огляду та консультації.</p>
           </div>
         </div>
       </section>
 
       <section id="prices" class="section section--prices" aria-labelledby="heading-prices">
+        <svg class="deco deco--prices-ribbon" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <use href="#deco-ribbon"></use>
+        </svg>
+        <svg class="deco deco--prices-arc" viewBox="0 0 600 900" aria-hidden="true" focusable="false">
+          <use href="#deco-arc"></use>
+        </svg>
+        <svg class="deco deco--prices-wave" viewBox="0 0 1440 180" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <use href="#deco-wave-a"></use>
+        </svg>
         <div class="container">
           <div class="section__head">
             <span class="section__eyebrow">Прайс</span>
@@ -611,65 +760,719 @@
         </div>
       </section>
 
-      <section id="doctors" class="stub-section" aria-labelledby="heading-doctors">
-        <div class="container">
-          <div class="stub-card">
-            <span class="stub-section__eyebrow">Лікарі</span>
-            <h2 id="heading-doctors" class="stub-section__title">Команда фахівців</h2>
-            <p class="stub-section__note">[Секція «Лікарі» буде наповнена на наступному етапі.]</p>
+      <section id="doctors" class="section doctors-section" aria-labelledby="heading-doctors">
+        <svg class="deco deco--doctors-tooth" viewBox="0 0 400 480" aria-hidden="true" focusable="false">
+          <use href="#deco-tooth"></use>
+        </svg>
+
+        <div class="container doctors-section__container">
+          <div class="section__head doctors-section__head">
+            <span class="section__eyebrow">Лікарі</span>
+            <h2 id="heading-doctors" class="section__title">Команда фахівців</h2>
+            <p class="section__lead">
+              Лікарі клініки TRUST DENTAL — продуманий план лікування, делікатна діагностика та уважний прийом за попереднім записом.
+            </p>
+          </div>
+
+          <div class="doctors-grid">
+            <!-- Placeholder slot 1: replace image src, alt, role, name and bio once owner confirms doctor details -->
+            <article class="doctor-card">
+              <div class="doctor-card__media">
+                <div class="doctor-card__fallback" aria-hidden="true">
+                  <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <circle cx="60" cy="42" r="18"/>
+                    <path d="M26 102c3-20 17-31 34-31s31 11 34 31"/>
+                  </svg>
+                </div>
+                <img
+                  class="doctor-card__img"
+                  src="img/doctors/doctor-1-placeholder.svg"
+                  width="640"
+                  height="400"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Тимчасовий портретний placeholder для лікаря 1 клініки TRUST DENTAL">
+              </div>
+
+              <div class="doctor-card__body">
+                <span class="doctor-card__role">[Спеціалізація лікаря 1]</span>
+                <h3 class="doctor-card__name">[Ім'я та прізвище лікаря 1]</h3>
+                <p class="doctor-card__bio">
+                  Первинна консультація, діагностика та узгодження поетапного плану лікування. [Професійний опис і клінічний профіль буде додано після підтвердження даних.]
+                </p>
+                <a class="btn btn--primary doctor-card__link" href="#contacts">
+                  <span>Записатися на консультацію</span>
+                  <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+                  </svg>
+                </a>
+              </div>
+            </article>
+
+            <!-- Placeholder slot 2: replace image src, alt, role, name and bio once owner confirms doctor details -->
+            <article class="doctor-card">
+              <div class="doctor-card__media">
+                <div class="doctor-card__fallback" aria-hidden="true">
+                  <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <circle cx="60" cy="42" r="18"/>
+                    <path d="M26 102c3-20 17-31 34-31s31 11 34 31"/>
+                  </svg>
+                </div>
+                <img
+                  class="doctor-card__img"
+                  src="img/doctors/doctor-2-placeholder.svg"
+                  width="640"
+                  height="400"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Тимчасовий портретний placeholder для лікаря 2 клініки TRUST DENTAL">
+              </div>
+
+              <div class="doctor-card__body">
+                <span class="doctor-card__role">[Спеціалізація лікаря 2]</span>
+                <h3 class="doctor-card__name">[Ім'я та прізвище лікаря 2]</h3>
+                <p class="doctor-card__bio">
+                  Плановий прийом, детальне пояснення кожного етапу та супровід пацієнтів. [Професійний опис і клінічний профіль буде додано після підтвердження даних.]
+                </p>
+                <a class="btn btn--primary doctor-card__link" href="#contacts">
+                  <span>Записатися на консультацію</span>
+                  <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+                  </svg>
+                </a>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      <section id="works" class="stub-section" aria-labelledby="heading-works">
-        <div class="container">
-          <div class="stub-card">
-            <span class="stub-section__eyebrow">Роботи</span>
-            <h2 id="heading-works" class="stub-section__title">Приклади лікування</h2>
-            <p class="stub-section__note">[Секція «Роботи» буде наповнена на наступному етапі.]</p>
+      <section id="works" class="section works-section" aria-labelledby="heading-works">
+        <svg class="deco deco--works-contour" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <use href="#deco-wave-b"></use>
+        </svg>
+        <svg class="deco deco--works-arc" viewBox="0 0 600 900" aria-hidden="true" focusable="false">
+          <use href="#deco-arc"></use>
+        </svg>
+
+        <div class="container works-section__container">
+          <div class="section__head works-section__head">
+            <span class="section__eyebrow">Роботи</span>
+            <h2 id="heading-works" class="section__title">Приклади лікування</h2>
+            <p class="section__lead">
+              Огляньте структуру клінічних випадків у форматі «До» та «Після» або оберіть потрібний напрямок.
+            </p>
           </div>
+
+          <div id="works-filters" class="works-filters" role="group" aria-label="Фільтр прикладів лікування"></div>
+          <p id="works-status" class="works-status" aria-live="polite"></p>
+
+          <div id="works-grid" class="works-grid"></div>
+          <div id="works-empty" class="works-empty" hidden>
+            <p class="works-empty__text">Приклади для цієї категорії будуть додані пізніше.</p>
+            <button type="button" id="works-reset-filter" class="btn btn--outline works-empty__btn">
+              Показати всі роботи
+            </button>
+          </div>
+
+          <noscript><p class="section__note">Увімкніть JavaScript для перегляду прикладів лікування.</p></noscript>
         </div>
       </section>
 
-      <section id="reviews" class="stub-section" aria-labelledby="heading-reviews">
-        <div class="container">
-          <div class="stub-card">
-            <span class="stub-section__eyebrow">Відгуки</span>
-            <h2 id="heading-reviews" class="stub-section__title">Відгуки пацієнтів</h2>
-            <p class="stub-section__note">[Секція «Відгуки» буде наповнена на наступному етапі.]</p>
+      <section id="reviews" class="section reviews-section" aria-labelledby="heading-reviews">
+        <svg class="deco deco--reviews-arc" viewBox="0 0 600 900" aria-hidden="true" focusable="false">
+          <use href="#deco-arc"></use>
+        </svg>
+        <svg class="deco deco--reviews-wave" viewBox="0 0 1440 180" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <use href="#deco-wave-a"></use>
+        </svg>
+
+        <div class="container reviews-section__container">
+          <header class="section__head reviews-section__head">
+            <span class="section__eyebrow">Відгуки</span>
+            <h2 id="heading-reviews" class="section__title">Відгуки пацієнтів</h2>
+            <p class="section__lead">
+              Реальні враження пацієнтів про лікування в TRUST DENTAL із Google Business Profile.
+            </p>
+          </header>
+
+          <div id="reviews-summary" class="reviews-summary"></div>
+          <p id="reviews-live" class="reviews-live" aria-live="polite"></p>
+
+          <div id="reviews-loading" class="reviews-loading" hidden aria-label="Завантаження відгуків із Google">
+            <div class="reviews-loading__grid" aria-hidden="true">
+              <div class="review-skeleton"></div>
+              <div class="review-skeleton"></div>
+              <div class="review-skeleton"></div>
+            </div>
+            <p class="sr-only">Очікування відповіді від джерела відгуків…</p>
           </div>
+
+          <div id="reviews-error" class="reviews-state" hidden>
+            <p id="reviews-error-text" class="reviews-state__text">
+              Не вдалося завантажити відгуки. Перегляньте актуальні відгуки безпосередньо в профілі клініки на Google.
+            </p>
+            <div class="reviews-state__actions">
+              <button type="button" id="reviews-retry" class="btn btn--outline reviews-state__btn" hidden>
+                Спробувати ще раз
+              </button>
+              <a
+                class="btn btn--primary reviews-state__btn"
+                data-clinic="maps-link"
+                href="https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>Переглянути всі відгуки в Google</span>
+                <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <div id="reviews-empty" class="reviews-state" hidden>
+            <p class="reviews-state__title">Реальні відгуки пацієнтів доступні в Google.</p>
+            <p class="reviews-state__hint">
+              Огляньте перевірені відгуки пацієнтів та актуальні оцінки безпосередньо в офіційному профілі клініки TRUST DENTAL на Google.
+            </p>
+            <a
+              class="btn btn--outline reviews-state__btn"
+              data-clinic="maps-link"
+              href="https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Переглянути всі відгуки</span>
+              <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+              </svg>
+            </a>
+          </div>
+
+          <div
+            id="reviews-slider"
+            class="reviews-slider"
+            data-reviews-slider
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Відгуки пацієнтів"
+            hidden
+          >
+            <div id="reviews-slider-viewport" class="reviews-slider__viewport">
+              <div id="reviews-slider-track" class="reviews-slider__track"></div>
+            </div>
+
+            <div id="reviews-slider-controls" class="reviews-slider__controls">
+              <button
+                type="button"
+                id="reviews-prev"
+                class="reviews-slider__btn reviews-slider__prev"
+                aria-label="Попередній відгук"
+              >
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M16 10H4m0 0 4.5-4.5M4 10l4.5 4.5"/>
+                </svg>
+              </button>
+
+              <div
+                id="reviews-dots"
+                class="reviews-slider__dots"
+                role="tablist"
+                aria-label="Вибір відгуку"
+              ></div>
+
+              <button
+                type="button"
+                id="reviews-next"
+                class="reviews-slider__btn reviews-slider__next"
+                aria-label="Наступний відгук"
+              >
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+                </svg>
+              </button>
+
+              <button
+                type="button"
+                id="reviews-pause"
+                class="reviews-slider__pause"
+                aria-pressed="false"
+                aria-label="Призупинити автоматичне перемикання"
+              >
+                Пауза
+              </button>
+            </div>
+
+            <p id="reviews-slider-status" class="sr-only" aria-live="polite"></p>
+
+            <div class="reviews-section__footer">
+              <a
+                class="btn btn--outline reviews-section__google-link"
+                data-clinic="maps-link"
+                href="https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>Переглянути всі відгуки в Google</span>
+                <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <noscript>
+            <p class="section__note">
+              Реальні відгуки пацієнтів доступні в Google. Увімкніть JavaScript або відкрийте
+              <a href="https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu" target="_blank" rel="noopener noreferrer">профіль TRUST DENTAL у Google</a>.
+            </p>
+          </noscript>
         </div>
       </section>
 
-      <section id="contacts" class="stub-section" aria-labelledby="heading-contacts" tabindex="-1">
-        <div class="container">
-          <div class="stub-card">
-            <span class="stub-section__eyebrow">Контакти</span>
-            <h2 id="heading-contacts" class="stub-section__title">Запис та контакти клініки</h2>
-            <p class="stub-section__note">[Секція «Контакти» та форма запису будуть наповнені на наступному етапі.]</p>
+      <section id="contacts" class="section contacts-section" aria-labelledby="heading-contacts" tabindex="-1">
+        <svg class="deco deco--contacts-ribbon" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <use href="#deco-ribbon"></use>
+        </svg>
+
+        <div class="container contacts-section__container">
+          <header class="section__head contacts-section__head">
+            <span class="section__eyebrow">Контакти</span>
+            <h2 id="heading-contacts" class="section__title" tabindex="-1">Запис та контакти клініки</h2>
+            <p class="section__lead">
+              Запишіться на консультацію онлайн або зв’яжіться з клінікою зручним для вас способом.
+            </p>
+          </header>
+
+          <div class="contacts-layout">
+            <div class="contacts-info">
+              <div class="contacts-card">
+                <ul class="contacts-list">
+                  <li class="contacts-list__item">
+                    <span class="contacts-list__icon" aria-hidden="true">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/>
+                      </svg>
+                    </span>
+                    <div class="contacts-list__body">
+                      <span class="contacts-list__label">Телефон клініки</span>
+                      <a class="contacts-list__value contacts-list__link" href="tel:+380500500821" data-clinic="phone-link">
+                        <span data-clinic="phone-display">+38 (050) 050-08-21</span>
+                      </a>
+                    </div>
+                  </li>
+
+                  <li class="contacts-list__item">
+                    <span class="contacts-list__icon" aria-hidden="true">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                      </svg>
+                    </span>
+                    <div class="contacts-list__body">
+                      <span class="contacts-list__label">Адреса</span>
+                      <p class="contacts-list__value" data-clinic="address">м. Івано-Франківськ, вул. Галицька, 51а</p>
+                    </div>
+                  </li>
+
+                  <li class="contacts-list__item">
+                    <span class="contacts-list__icon" aria-hidden="true">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M12 7v5l3 2"/>
+                      </svg>
+                    </span>
+                    <div class="contacts-list__body">
+                      <span class="contacts-list__label">Графік роботи</span>
+                      <p class="contacts-list__value" data-clinic="hours-weekdays">Пн–Сб: 09:00–22:00 (без перерви)</p>
+                      <p class="contacts-list__subvalue" data-clinic="hours-sunday">Нд: 09:00–20:00 (без перерви)</p>
+                    </div>
+                  </li>
+
+                  <li class="contacts-list__item">
+                    <span class="contacts-list__icon" aria-hidden="true">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <rect x="2" y="2" width="20" height="20" rx="5"/>
+                        <circle cx="12" cy="12" r="4"/>
+                        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                      </svg>
+                    </span>
+                    <div class="contacts-list__body">
+                      <span class="contacts-list__label">Соціальні мережі</span>
+                      <a
+                        class="contacts-list__value contacts-list__link"
+                        data-clinic="instagram-link"
+                        href="https://www.instagram.com/trust_dental_ua/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Instagram TRUST DENTAL @trust_dental_ua (відкриється у новій вкладці)"
+                      >
+                        <span data-clinic="instagram-handle">@trust_dental_ua</span>
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+
+                <div class="contacts-card__actions">
+                  <a
+                    class="btn btn--outline contacts-action-btn"
+                    data-clinic="maps-link"
+                    href="https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>Відкрити в Google Maps</span>
+                    <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                      <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+                    </svg>
+                  </a>
+                </div>
+
+                <p class="contacts-card__note">
+                  Додаткова інформація: прийом ведеться за попереднім записом. Остаточний план та вартість лікування лікар визначає після огляду.
+                </p>
+              </div>
+
+              <div class="booking-steps-card" aria-labelledby="heading-booking-steps">
+                <h3 id="heading-booking-steps" class="booking-steps-card__title">Як відбувається запис</h3>
+                <ol id="booking-steps-list" class="booking-steps__list">
+                  <li class="booking-steps__item">
+                    <span class="booking-steps__num" aria-hidden="true">01</span>
+                    <span class="booking-steps__text">Залишаєте заявку або телефонуєте.</span>
+                  </li>
+                  <li class="booking-steps__item">
+                    <span class="booking-steps__num" aria-hidden="true">02</span>
+                    <span class="booking-steps__text">Адміністратор уточнює деталі та час.</span>
+                  </li>
+                  <li class="booking-steps__item">
+                    <span class="booking-steps__num" aria-hidden="true">03</span>
+                    <span class="booking-steps__text">Ви отримуєте підтвердження запису.</span>
+                  </li>
+                </ol>
+              </div>
+
+              <div id="contacts-map-container" class="contacts-map-card">
+                <div id="contacts-map-preview" class="contacts-map__preview">
+                  <svg class="contacts-map__grid-svg" viewBox="0 0 480 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+                    <path d="M0 44H480M0 112H480M0 176H480M86 0V220M224 0V220M368 0V220" stroke="var(--map-grid-line)" stroke-width="1"/>
+                    <path d="M-20 118C95 96 165 60 224 62C310 66 410 42 500 28" fill="none" stroke="var(--deco-line)" stroke-width="2"/>
+                    <circle cx="224" cy="62" r="24" fill="var(--deco-fill-1)" stroke="var(--deco-line)" stroke-width="1.2"/>
+                    <circle cx="224" cy="62" r="7" fill="var(--primary)"/>
+                  </svg>
+                  <div class="contacts-map__overlay">
+                    <div class="contacts-map__pin-info">
+                      <span class="contacts-map__badge">Локація клініки</span>
+                      <strong class="contacts-map__name" data-clinic="name">TRUST DENTAL</strong>
+                      <span class="contacts-map__address" data-clinic="address">м. Івано-Франківськ, вул. Галицька, 51а</span>
+                    </div>
+                    <a
+                      class="btn btn--primary contacts-map__btn"
+                      data-clinic="maps-link"
+                      href="https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span>Відкрити в Google Maps</span>
+                      <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="appointment-card" aria-labelledby="appointment-form-title">
+              <div class="appointment-card__head">
+                <h3 id="appointment-form-title" class="appointment-card__title">Форма запису на прийом</h3>
+                <p class="appointment-card__subtitle">
+                  Заповніть коротку форму — адміністратор зв’яжеться з вами у робочий час для узгодження дати.
+                </p>
+              </div>
+
+              <div id="appointment-calc-box" class="appointment-calc-box" hidden aria-live="polite">
+                <div class="appointment-calc-box__head">
+                  <span class="appointment-calc-box__eyebrow">Вибрано в калькуляторі</span>
+                  <button type="button" id="appointment-calc-clear" class="appointment-calc-box__clear">
+                    Прибрати розрахунок
+                  </button>
+                </div>
+                <ul id="appointment-calc-list" class="appointment-calc-box__list"></ul>
+                <div class="appointment-calc-box__total">
+                  <span>Попередня сума:</span>
+                  <strong id="appointment-calc-total">0&nbsp;грн</strong>
+                </div>
+                <p class="appointment-calc-box__note">
+                  Попередній розрахунок орієнтовний та не є остаточною ціною лікування.
+                </p>
+              </div>
+
+              <form id="appointment-form" class="appointment-form" novalidate>
+                <div class="form-row">
+                  <div class="form-field">
+                    <label class="form-field__label" for="appointment-name">
+                      Ваше ім’я <span class="form-field__req" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                      id="appointment-name"
+                      class="form-input"
+                      name="name"
+                      type="text"
+                      autocomplete="name"
+                      maxlength="80"
+                      placeholder="Як до вас звертатися"
+                      required
+                      aria-required="true"
+                      aria-describedby="appointment-name-error"
+                    >
+                    <p id="appointment-name-error" class="form-field__error" role="alert"></p>
+                  </div>
+
+                  <div class="form-field">
+                    <label class="form-field__label" for="appointment-phone">
+                      Номер телефону <span class="form-field__req" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                      id="appointment-phone"
+                      class="form-input"
+                      name="phone"
+                      type="tel"
+                      autocomplete="tel"
+                      inputmode="tel"
+                      maxlength="30"
+                      placeholder="+38 (050) 000-00-00"
+                      required
+                      aria-required="true"
+                      aria-describedby="appointment-phone-error"
+                    >
+                    <p id="appointment-phone-error" class="form-field__error" role="alert"></p>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-field">
+                    <label class="form-field__label" for="appointment-contact-method">Бажаний спосіб зв’язку</label>
+                    <select id="appointment-contact-method" class="form-input form-select" name="contactMethod">
+                      <option value="phone">Телефонний дзвінок</option>
+                      <option value="messenger">Месенджер (Viber / Telegram)</option>
+                      <option value="any">Будь-який зручний спосіб</option>
+                    </select>
+                  </div>
+
+                  <div class="form-field">
+                    <label class="form-field__label" for="appointment-service">Послуга або напрямок</label>
+                    <select id="appointment-service" class="form-input form-select" name="service">
+                      <option value="consultation">Первинна консультація та діагностика</option>
+                      <option value="therapy">Терапія та лікування каналів</option>
+                      <option value="hygiene">Професійна гігієна</option>
+                      <option value="surgery">Атравматична хірургія</option>
+                      <option value="braces">Брекет-системи (ортодонтія)</option>
+                      <option value="implantation">Імплантація</option>
+                      <option value="orthopedics">Ортопедія (коронки та вініри)</option>
+                      <option value="pediatric">Дитяча стоматологія</option>
+                      <option value="calc-bundle">Попередній розрахунок із калькулятора</option>
+                      <option value="other">Інше / уточнити з адміністратором</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label class="form-field__label" for="appointment-preferred-time">Бажана дата або час</label>
+                  <input
+                    id="appointment-preferred-time"
+                    class="form-input"
+                    name="preferredTime"
+                    type="text"
+                    maxlength="80"
+                    placeholder="Наприклад: будні після 16:00 або субота зранку"
+                    aria-describedby="appointment-preferred-time-error"
+                  >
+                  <p id="appointment-preferred-time-error" class="form-field__error" role="alert"></p>
+                </div>
+
+                <div class="form-field">
+                  <div class="form-field__label-row">
+                    <label class="form-field__label" for="appointment-message">Коментар</label>
+                    <span id="appointment-message-count" class="form-field__counter" aria-hidden="true">0 / 600</span>
+                  </div>
+                  <textarea
+                    id="appointment-message"
+                    class="form-input form-textarea"
+                    name="message"
+                    rows="3"
+                    maxlength="600"
+                    placeholder="Коротко опишіть запит або побажання щодо візиту"
+                    aria-describedby="appointment-message-hint appointment-message-error"
+                  ></textarea>
+                  <p id="appointment-message-hint" class="form-field__hint">Необов’язково, до 600 символів.</p>
+                  <p id="appointment-message-error" class="form-field__error" role="alert"></p>
+                </div>
+
+                <div class="form-consent-wrap">
+                  <label class="form-checkbox" for="appointment-consent">
+                    <input
+                      id="appointment-consent"
+                      class="form-checkbox__input"
+                      type="checkbox"
+                      name="consent"
+                      required
+                      aria-required="true"
+                      aria-describedby="appointment-consent-error"
+                    >
+                    <span class="form-checkbox__text">
+                      Погоджуюся на обробку персональних даних для зв’язку щодо запису на прийом.
+                    </span>
+                  </label>
+                  <p id="appointment-consent-error" class="form-field__error" role="alert"></p>
+                  <p id="appointment-privacy-slot" class="form-field__hint">
+                    Сторінка політики конфіденційності готується до публікації; введені дані не зберігаються в браузері.
+                  </p>
+                </div>
+
+                <div class="appointment-form__actions">
+                  <button type="submit" id="appointment-submit" class="btn btn--primary btn--lg appointment-form__submit">
+                    <span id="appointment-submit-label">Записатися на консультацію</span>
+                    <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                      <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <div id="appointment-status" class="form-status" role="status" aria-live="polite" hidden></div>
+              </form>
+            </div>
           </div>
         </div>
       </section>
     </div>
   </main>
 
-  <!-- ======================== FOOTER STUB ======================== -->
-  <footer id="site-footer" class="footer">
-    <div class="container footer__inner">
-      <div class="footer__brand">
-        <span class="footer__name" data-clinic="name">TRUST DENTAL</span>
-        <span class="footer__meta">
-          <span data-clinic="address">м. Івано-Франківськ, вул. Галицька, 51а</span> · Графік: <span data-clinic="hours">Пн–Сб 09:00–22:00, Нд 09:00–20:00</span>
-        </span>
+  <!-- ======================== FOOTER ======================== -->
+  <footer id="site-footer" class="footer site-footer">
+    <svg class="deco deco--footer-wave" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <use href="#deco-wave-b"></use>
+    </svg>
+
+    <div class="container site-footer__inner">
+      <div class="site-footer__top">
+        <div class="site-footer__brand">
+          <a class="site-footer__logo-link" href="#top" aria-label="TRUST DENTAL — на початок сторінки">
+            <picture class="brand__picture brand__picture--light">
+              <img class="site-footer__logo-img" src="img/logo.png" alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" loading="lazy" decoding="async">
+            </picture>
+            <picture class="brand__picture brand__picture--dark">
+              <img class="site-footer__logo-img" src="img/logo-white.png" alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" loading="lazy" decoding="async">
+            </picture>
+          </a>
+          <p class="site-footer__desc">
+            Стоматологічна клініка в Івано-Франківську: діагностика, профілактика, лікування та прозорий попередній розрахунок вартості.
+          </p>
+        </div>
+
+        <nav class="site-footer__nav" aria-label="Навігація у футері">
+          <p class="site-footer__heading">Розділи сайту</p>
+          <ul class="site-footer__nav-list">
+            <li><a class="site-footer__nav-link" href="#services">Послуги</a></li>
+            <li><a class="site-footer__nav-link" href="#advantages">Переваги</a></li>
+            <li><a class="site-footer__nav-link" href="#prices">Прайс</a></li>
+            <li><a class="site-footer__nav-link" href="#doctors">Лікарі</a></li>
+            <li><a class="site-footer__nav-link" href="#works">Роботи</a></li>
+            <li><a class="site-footer__nav-link" href="#reviews">Відгуки</a></li>
+            <li><a class="site-footer__nav-link" href="#contacts">Контакти</a></li>
+          </ul>
+        </nav>
+
+        <div class="site-footer__contacts">
+          <p class="site-footer__heading">Контакти та графік</p>
+          <ul class="site-footer__contacts-list">
+            <li>
+              <a class="site-footer__contact-link" href="tel:+380500500821" data-clinic="phone-link">
+                <span data-clinic="phone-display">+38 (050) 050-08-21</span>
+              </a>
+            </li>
+            <li class="site-footer__contact-text" data-clinic="address">м. Івано-Франківськ, вул. Галицька, 51а</li>
+            <li class="site-footer__contact-text" data-clinic="hours">Пн–Сб 09:00–22:00, Нд 09:00–20:00</li>
+            <li class="site-footer__external">
+              <a
+                class="site-footer__contact-link"
+                data-clinic="maps-link"
+                href="https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Google Maps
+              </a>
+              <span aria-hidden="true">·</span>
+              <a
+                class="site-footer__contact-link"
+                data-clinic="instagram-link"
+                href="https://www.instagram.com/trust_dental_ua/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                @trust_dental_ua
+              </a>
+            </li>
+          </ul>
+          <a class="btn btn--primary btn--sm site-footer__cta" href="#contacts">
+            <span>Записатися на консультацію</span>
+            <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+            </svg>
+          </a>
+        </div>
       </div>
 
-      <div class="footer__links">
-        <a class="footer__link" href="tel:+380500500821" data-clinic="phone-link">
-          <span data-clinic="phone-display">+38 (050) 050-08-21</span>
+      <div class="site-footer__bottom">
+        <p class="site-footer__copy">© TRUST DENTAL, 2026</p>
+        <p id="footer-privacy-slot" class="site-footer__privacy">Політика конфіденційності буде додана окремою сторінкою.</p>
+        <a class="site-footer__to-top" href="#top" aria-label="Повернутися на початок сторінки">
+          <span>На початок сторінки</span>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M10 16V4m0 0-4.5 4.5M10 4l4.5 4.5"/>
+          </svg>
         </a>
-        <a class="footer__link" data-clinic="instagram-link" href="https://www.instagram.com/trust_dental_ua/" target="_blank" rel="noopener noreferrer">@trust_dental_ua</a>
       </div>
     </div>
   </footer>
+
+  <!-- ======================== WORK DETAIL LIGHTBOX ======================== -->
+  <div id="work-modal" class="work-modal" role="dialog" aria-modal="true" aria-labelledby="work-modal-title" aria-describedby="work-modal-desc" hidden>
+    <div id="work-modal-backdrop" class="work-modal__backdrop" aria-hidden="true"></div>
+    <div class="work-modal__dialog" tabindex="-1">
+      <div class="work-modal__head">
+        <span id="work-modal-category" class="work-modal__category"></span>
+        <button type="button" id="work-modal-close" class="work-modal__close" aria-label="Закрити вікно перегляду">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <h3 id="work-modal-title" class="work-modal__title"></h3>
+      <p id="work-modal-desc" class="work-modal__desc"></p>
+
+      <div id="work-modal-media" class="work-modal__comparison"></div>
+      <p id="work-modal-note" class="work-modal__note"></p>
+
+      <div class="work-modal__foot">
+        <div class="work-modal__nav" role="group" aria-label="Навігація між прикладами">
+          <button type="button" id="work-modal-prev" class="btn btn--outline work-modal__nav-btn" aria-label="Попередній приклад">
+            ← Попередня
+          </button>
+          <span id="work-modal-counter" class="work-modal__counter" aria-live="polite"></span>
+          <button type="button" id="work-modal-next" class="btn btn--outline work-modal__nav-btn" aria-label="Наступний приклад">
+            Наступна →
+          </button>
+        </div>
+        <a id="work-modal-cta" class="btn btn--primary work-modal__cta" href="#contacts">
+          <span>Записатися на консультацію</span>
+          <svg class="btn__arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

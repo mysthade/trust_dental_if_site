@@ -11,11 +11,16 @@
   var isDrawerOpen = false;
   var lastFocusedEl = null;
   var closeTimer = null;
+  var isScrollStateBound = false;
+  var isDrawerBound = false;
+  var isScrollSpyBound = false;
 
   function initScrollState() {
+    if (isScrollStateBound) return;
     var header = document.getElementById('site-header');
     var sentinel = document.getElementById('header-sentinel');
     if (!header || !sentinel || !('IntersectionObserver' in window)) return;
+    isScrollStateBound = true;
 
     var observer = new window.IntersectionObserver(
       function (entries) {
@@ -30,11 +35,13 @@
   }
 
   function initDrawer() {
+    if (isDrawerBound) return;
     var burgerBtn = document.getElementById('burger-btn');
     var drawer = document.getElementById('mobile-drawer');
     var backdrop = document.getElementById('drawer-backdrop');
     var closeBtn = document.getElementById('drawer-close');
     if (!burgerBtn || !drawer || !backdrop) return;
+    isDrawerBound = true;
 
     var inertTargets = [
       document.querySelector('.skip-link'),
@@ -211,10 +218,11 @@
   }
 
   function initScrollSpy() {
-    if (!('IntersectionObserver' in window)) return;
+    if (isScrollSpyBound || !('IntersectionObserver' in window)) return;
 
     var navLinks = document.querySelectorAll('[data-nav-target]');
     if (!navLinks.length) return;
+    isScrollSpyBound = true;
 
     var sectionIds = [];
     var seen = Object.create(null);

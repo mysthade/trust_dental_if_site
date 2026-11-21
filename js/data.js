@@ -27,9 +27,11 @@
     /* TODO: підтвердити у власника точну кількість років клінічного досвіду лікаря та замінити '[X]' на число (наприклад, 10) */
     EXPERIENCE_YEARS: '[X]',
     DIRECTIONS_COUNT: 9,
-    /* TODO: підтвердити у власника та замінити пошуковий URL на пряме посилання профілю клініки у Google Maps (maps.app.goo.gl/...) */
+    /* Офіційний профіль клініки TRUST DENTAL у Google Business Profile (Place ID: ChIJ9QI8s0nG1EARlyS0q9U9PV0).
+       Примітка: URL збережено з офіційного посилання; за потреби уточніть пряму коротку адресу maps.app.goo.gl через Place ID Finder */
+    GOOGLE_PLACE_ID: 'ChIJ9QI8s0nG1EARlyS0q9U9PV0',
     GOOGLE_MAPS_URL:
-      'https://www.google.com/maps/search/?api=1&query=TRUST+DENTAL+%D0%B2%D1%83%D0%BB.+%D0%93%D0%B0%D0%BB%D0%B8%D1%86%D1%8C%D0%BA%D0%B0+51%D0%B0+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA',
+      'https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu',
     INSTAGRAM_HANDLE: '@trust_dental_ua',
     INSTAGRAM_URL: 'https://www.instagram.com/trust_dental_ua/'
   });
@@ -312,6 +314,225 @@
     })
   ]);
 
+  /* --------------------------------------------------------------------------
+     Works Filter Categories (7 base directions)
+     -------------------------------------------------------------------------- */
+  TD.WORK_FILTERS = Object.freeze([
+    Object.freeze({ id: 'all', label: 'Усі' }),
+    Object.freeze({ id: 'therapy', label: 'Терапія' }),
+    Object.freeze({ id: 'surgery', label: 'Хірургія' }),
+    Object.freeze({ id: 'implantation', label: 'Імплантація' }),
+    Object.freeze({ id: 'orthopedics', label: 'Ортопедія' }),
+    Object.freeze({ id: 'orthodontics', label: 'Ортодонтія' }),
+    Object.freeze({ id: 'hygiene', label: 'Гігієна' })
+  ]);
+
+  /* --------------------------------------------------------------------------
+     Clinical Works Showcase (6 neutral template cases)
+     Щоб підключити реальні фото:
+       1. Покладіть файли у img/works/ (основний формат .webp, за потреби .jpg/.png у *Fallback).
+       2. Оновіть шляхи coverImage / beforeImage / afterImage, title, description і note.
+       3. Змініть status з 'placeholder' на 'ready'.
+     -------------------------------------------------------------------------- */
+  TD.WORKS = Object.freeze([
+    Object.freeze({
+      id: 'case-01',
+      category: 'therapy',
+      categoryLabel: 'Терапія',
+      title: 'Відновлення анатомічної форми зуба',
+      description: 'Приклад оформлення клінічного випадку: пошарова реставрація дефекту коронкової частини зуба.',
+      coverImage: 'img/works/case-01-cover.webp',
+      coverFallback: '',
+      beforeImage: 'img/works/case-01-before.webp',
+      beforeFallback: '',
+      afterImage: 'img/works/case-01-after.webp',
+      afterFallback: '',
+      coverAlt: 'Приклад лікування: відновлення анатомічної форми зуба',
+      beforeAlt: 'Стан до лікування — випадок 1',
+      afterAlt: 'Стан після лікування — випадок 1',
+      note: 'Інформація про методику, матеріали та клінічні етапи уточнюється лікарем.',
+      status: 'placeholder'
+    }),
+    Object.freeze({
+      id: 'case-02',
+      category: 'therapy',
+      categoryLabel: 'Терапія',
+      title: 'Ендодонтичне лікування та реставрація',
+      description: 'Приклад оформлення клінічного випадку: обробка кореневих каналів і герметичне відновлення коронки.',
+      coverImage: 'img/works/case-02-cover.webp',
+      coverFallback: '',
+      beforeImage: 'img/works/case-02-before.webp',
+      beforeFallback: '',
+      afterImage: 'img/works/case-02-after.webp',
+      afterFallback: '',
+      coverAlt: 'Приклад лікування: ендодонтичне лікування та реставрація',
+      beforeAlt: 'Стан до лікування — випадок 2',
+      afterAlt: 'Стан після лікування — випадок 2',
+      note: 'Інформація про методику, матеріали та клінічні етапи уточнюється лікарем.',
+      status: 'placeholder'
+    }),
+    Object.freeze({
+      id: 'case-03',
+      category: 'surgery',
+      categoryLabel: 'Хірургія',
+      title: 'Ультразвукове видалення зуба',
+      description: 'Приклад оформлення клінічного випадку: п’єзохірургічний підхід із делікатним ставленням до навколишніх тканин.',
+      coverImage: 'img/works/case-03-cover.webp',
+      coverFallback: '',
+      beforeImage: 'img/works/case-03-before.webp',
+      beforeFallback: '',
+      afterImage: 'img/works/case-03-after.webp',
+      afterFallback: '',
+      coverAlt: 'Приклад лікування: ультразвукове видалення зуба',
+      beforeAlt: 'Стан до хірургічного етапу — випадок 3',
+      afterAlt: 'Стан після хірургічного етапу — випадок 3',
+      note: 'Інформація про методику та клінічні етапи уточнюється лікарем.',
+      status: 'placeholder'
+    }),
+    Object.freeze({
+      id: 'case-04',
+      category: 'orthopedics',
+      categoryLabel: 'Ортопедія',
+      title: 'Ортопедичне відновлення коронкою',
+      description: 'Приклад оформлення клінічного випадку: відновлення цілісності зуба та контактного пункту безметалевою коронкою.',
+      coverImage: 'img/works/case-04-cover.webp',
+      coverFallback: '',
+      beforeImage: 'img/works/case-04-before.webp',
+      beforeFallback: '',
+      afterImage: 'img/works/case-04-after.webp',
+      afterFallback: '',
+      coverAlt: 'Приклад лікування: ортопедичне відновлення коронкою',
+      beforeAlt: 'Стан до протезування — випадок 4',
+      afterAlt: 'Стан після фіксації конструкції — випадок 4',
+      note: 'Інформація про методику, конструкцію та етапи уточнюється лікарем.',
+      status: 'placeholder'
+    }),
+    Object.freeze({
+      id: 'case-05',
+      category: 'orthodontics',
+      categoryLabel: 'Ортодонтія',
+      title: 'Ортодонтична корекція прикусу',
+      description: 'Приклад оформлення клінічного випадку: поетапне вирівнювання положення зубів із використанням брекет-системи.',
+      coverImage: 'img/works/case-05-cover.webp',
+      coverFallback: '',
+      beforeImage: 'img/works/case-05-before.webp',
+      beforeFallback: '',
+      afterImage: 'img/works/case-05-after.webp',
+      afterFallback: '',
+      coverAlt: 'Приклад лікування: ортодонтична корекція прикусу',
+      beforeAlt: 'Стан зубного ряду до лікування — випадок 5',
+      afterAlt: 'Стан зубного ряду після етапу корекції — випадок 5',
+      note: 'Тривалість лікування та клінічний протокол уточнюються лікарем.',
+      status: 'placeholder'
+    }),
+    Object.freeze({
+      id: 'case-06',
+      category: 'hygiene',
+      categoryLabel: 'Гігієна',
+      title: 'Професійна гігієна порожнини рота',
+      description: 'Приклад оформлення клінічного випадку: очищення м’яких і мінералізованих відкладень та полірування емалі.',
+      coverImage: 'img/works/case-06-cover.webp',
+      coverFallback: '',
+      beforeImage: 'img/works/case-06-before.webp',
+      beforeFallback: '',
+      afterImage: 'img/works/case-06-after.webp',
+      afterFallback: '',
+      coverAlt: 'Приклад лікування: професійна гігієна порожнини рота',
+      beforeAlt: 'Стан до професійної гігієни — випадок 6',
+      afterAlt: 'Стан після професійної гігієни — випадок 6',
+      note: 'Рекомендовану періодичність профілактичних оглядів визначає лікар.',
+      status: 'placeholder'
+    })
+  ]);
+
+  /* --------------------------------------------------------------------------
+     Google Business Profile Reviews (#reviews)
+     Офіційний профіль: TRUST DENTAL (Google Place ID: ChIJ9QI8s0nG1EARlyS0q9U9PV0)
+     ВАЖЛИВО:
+       1. API-ключі Google Places не можна додавати у frontend-код (index.html / CSS / JS).
+       2. Для автоматичного живого імпорту вкажіть URL власного backend/serverless endpoint
+          у TD.REVIEWS_META.endpoint, який повертає JSON формату:
+          {
+            "source": "Google",
+            "placeId": "ChIJ9QI8s0nG1EARlyS0q9U9PV0",
+            "rating": 5,
+            "userRatingCount": 73,
+            "reviews": [
+              {
+                "id": "google-review-unique-id",
+                "author": "Ім’я автора з Google",
+                "authorInitials": "АП",
+                "authorPhoto": "",
+                "rating": 5,
+                "relativeDate": "місяць тому",
+                "publishedAt": "",
+                "text": "Дослівний текст відгуку з Google",
+                "ownerReply": "",
+                "googleUrl": "https://www.google.com/maps/place/..."
+              }
+            ]
+          }
+       3. Або додавайте лише перевірені дослівні відгуки з Google до TD.REVIEWS (verified: true).
+       4. Пряме посилання профілю клініки зберігається у TD.CLINIC.GOOGLE_MAPS_URL (рядок 33).
+     -------------------------------------------------------------------------- */
+  TD.REVIEWS_META = Object.freeze({
+    sourceLabel: 'Google',
+    sourceName: 'Google Business Profile',
+    placeId: TD.CLINIC.GOOGLE_PLACE_ID,
+    googleUrl: TD.CLINIC.GOOGLE_MAPS_URL,
+    rating: null,
+    userRatingCount: null,
+    /* Показувати числовий рейтинг/кількість у #reviews-summary лише коли отримано підтверджені дані Google */
+    summaryVerified: false,
+    autoplayDelayMs: 6000,
+    resumeDelayMs: 9000,
+    state: 'ready',
+    errorMessage: '',
+    endpoint: '',
+    sourceNote:
+      'Відображаються перевірені відгуки пацієнтів із офіційного профілю клініки у Google Business Profile.'
+  });
+
+  TD.REVIEWS = Object.freeze([]);
+
+  /* --------------------------------------------------------------------------
+     Contacts, Appointment Form Config & Map/Privacy Slots (#contacts, #site-footer)
+     ВАЖЛИВО:
+       - Поки endpoint порожній, форма працює у режимі локальної перевірки
+         (не імітує серверну доставку і не зберігає ПД у localStorage/sessionStorage).
+       - Для реального прийому заявок вкажіть підтверджений backend/CRM/webhook URL у endpoint.
+       - Для карти iframe додайте офіційний embed URL у mapEmbedUrl (https://www.google.com/maps/embed?...).
+       - Для політики конфіденційності додайте реальний URL сторінки у privacyPolicyUrl.
+     -------------------------------------------------------------------------- */
+  TD.APPOINTMENT_SERVICES = Object.freeze([
+    Object.freeze({ id: 'consultation', label: 'Первинна консультація та діагностика' }),
+    Object.freeze({ id: 'therapy', label: 'Терапія та лікування каналів' }),
+    Object.freeze({ id: 'hygiene', label: 'Професійна гігієна' }),
+    Object.freeze({ id: 'surgery', label: 'Атравматична хірургія' }),
+    Object.freeze({ id: 'braces', label: 'Брекет-системи (ортодонтія)' }),
+    Object.freeze({ id: 'implantation', label: 'Імплантація' }),
+    Object.freeze({ id: 'orthopedics', label: 'Ортопедія (коронки та вініри)' }),
+    Object.freeze({ id: 'pediatric', label: 'Дитяча стоматологія' }),
+    Object.freeze({ id: 'calc-bundle', label: 'Попередній розрахунок із калькулятора' }),
+    Object.freeze({ id: 'other', label: 'Інше / уточнити з адміністратором' })
+  ]);
+
+  TD.APPOINTMENT_CONFIG = Object.freeze({
+    endpoint: '',
+    privacyPolicyUrl: '',
+    mapEmbedUrl: '',
+    contactMethods: Object.freeze([
+      Object.freeze({ id: 'phone', label: 'Телефонний дзвінок' }),
+      Object.freeze({ id: 'messenger', label: 'Месенджер (Viber / Telegram)' }),
+      Object.freeze({ id: 'any', label: 'Будь-який зручний спосіб' })
+    ]),
+    bookingSteps: Object.freeze([
+      'Залишаєте заявку або телефонуєте.',
+      'Адміністратор уточнює деталі та час.',
+      'Ви отримуєте підтвердження запису.'
+    ])
+  });
+
   /**
    * Format integer with non-breaking space thousands separator: 2200 -> "2 200"
    */
@@ -358,6 +579,16 @@
       address: function (el) { el.textContent = c.ADDRESS_FULL; },
       'address-short': function (el) { el.textContent = c.ADDRESS; },
       hours: function (el) { el.textContent = c.HOURS; },
+      'hours-weekdays': function (el) {
+        if (c.HOURS_DETAIL && c.HOURS_DETAIL.WEEKDAYS_SAT) {
+          el.textContent = c.HOURS_DETAIL.WEEKDAYS_SAT;
+        }
+      },
+      'hours-sunday': function (el) {
+        if (c.HOURS_DETAIL && c.HOURS_DETAIL.SUNDAY) {
+          el.textContent = c.HOURS_DETAIL.SUNDAY;
+        }
+      },
       'phone-display': function (el) { el.textContent = c.PHONE_DISPLAY; },
       'phone-link': function (el) {
         el.setAttribute('href', c.PHONE_HREF);
@@ -372,9 +603,17 @@
       'maps-link': function (el) {
         el.setAttribute('href', c.GOOGLE_MAPS_URL);
       },
+      'instagram-handle': function (el) {
+        el.textContent = c.INSTAGRAM_HANDLE;
+      },
       'instagram-link': function (el) {
         el.setAttribute('href', c.INSTAGRAM_URL);
-        el.textContent = c.INSTAGRAM_HANDLE;
+        var inner = el.querySelector('[data-clinic="instagram-handle"]');
+        if (inner) {
+          inner.textContent = c.INSTAGRAM_HANDLE;
+        } else if (el.children.length === 0) {
+          el.textContent = c.INSTAGRAM_HANDLE;
+        }
       },
       experience: function (el) {
         var val = String(c.EXPERIENCE_YEARS);

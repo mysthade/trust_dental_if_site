@@ -5,6 +5,7 @@
   'use strict';
 
   var TD = (window.TD = window.TD || {});
+  var isInitialized = false;
 
   function scheduleIdle(fn) {
     if (typeof window.requestIdleCallback === 'function') {
@@ -35,6 +36,9 @@
   }
 
   function init() {
+    if (isInitialized) return;
+    isInitialized = true;
+
     if (typeof TD.hydrateClinicData === 'function') {
       TD.hydrateClinicData();
     }

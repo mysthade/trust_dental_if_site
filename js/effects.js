@@ -6,6 +6,7 @@
 
   var TD = (window.TD = window.TD || {});
   var COUNTER_DURATION_MS = 1000;
+  var isInitialized = false;
 
   function prefersReducedMotion() {
     try {
@@ -69,8 +70,10 @@
   }
 
   function initCounters() {
+    if (isInitialized) return;
     var statsContainer = document.getElementById('stats-card');
     if (!statsContainer) return;
+    isInitialized = true;
 
     /* Respect reduced motion: leave rendered final values as-is */
     if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
