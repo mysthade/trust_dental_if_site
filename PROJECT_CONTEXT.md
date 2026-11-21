@@ -13,7 +13,7 @@
   1. [js/data.js](file:///c:/Users/nagib/Desktop/стоматолог/js/data.js) — `window.TD` Single Source of Truth (`TD.CLINIC`, `TD.NAV_ITEMS`, `TD.state`, `TD.SERVICES`, `TD.PRICE_FILTERS`, `TD.PRICES`, `TD.CALC_ITEMS`, `TD.hydrateClinicData`, хелпери).
   2. [js/theme.js](file:///c:/Users/nagib/Desktop/стоматолог/js/theme.js) — світла/темна тема (`TD.theme`), синхронізація `<meta data-theme-color>`.
   3. [js/header.js](file:///c:/Users/nagib/Desktop/стоматолог/js/header.js) — липка шапка через `#header-sentinel`, мобільний `.drawer` з focus-trap, scroll spy (`TD.header`).
-  4. [js/effects.js](file:///c:/Users/nagib/Desktop/стоматолог/js/effects.js) — анімація лічильників із повагою до `prefers-reduced-motion` (`TD.effects`).
+  4. [js/effects.js](file:///c:/Users/nagib/Desktop/стоматолог/js/effects.js) — анімація лічильників і прогресивне однократне появлення блоків при скролі через `IntersectionObserver` з повагою до `prefers-reduced-motion` (`TD.effects`: `initCounters`, `initReveal`, `revealNow`).
   5. [js/render.js](file:///c:/Users/nagib/Desktop/стоматолог/js/render.js) — рендер карток послуг (разом із `createServiceMedia` — [L55](file:///c:/Users/nagib/Desktop/стоматолог/js/render.js#L55)) та фільтрованого прайсу (`TD.render`).
   6. [js/calculator.js](file:///c:/Users/nagib/Desktop/стоматолог/js/calculator.js) — інтерактивний калькулятор вартості та подія `CustomEvent('td:calc-select')` у `TD.state.calcSelection` (`TD.calculator`).
   7. [js/main.js](file:///c:/Users/nagib/Desktop/стоматолог/js/main.js) — точка входу, оркестрація ініціалізації модулів (`TD.main`).
@@ -251,9 +251,55 @@ Why: статичний сайт не має реального backend-прий
 Apply: підключити реальний backend/serverless endpoint до `TD.APPOINTMENT_CONFIG.endpoint`, за потреби додати перевірені `TD.APPOINTMENT_CONFIG.mapEmbedUrl` та `TD.APPOINTMENT_CONFIG.privacyPolicyUrl`.
 ```
 
+```md
+---
+name: smooth-motion-and-zero-cls-hardening
+type: decision
+status: active
+---
+Виконано системну стабілізацію макета й упроваджено стриману монохромну динаміку на весь сайт ([css/style.css](file:///c:/Users/nagib/Desktop/стоматолог/css/style.css), [js/effects.js](file:///c:/Users/nagib/Desktop/стоматолог/js/effects.js), [js/main.js](file:///c:/Users/nagib/Desktop/стоматолог/js/main.js), [js/render.js](file:///c:/Users/nagib/Desktop/стоматолог/js/render.js), [index.html](file:///c:/Users/nagib/Desktop/стоматолог/index.html)):
+- Синхронізовано пре-JS `:empty` висоти (`.services-grid:empty`, `.price-filters:empty`, `.price-list:empty`, `.calc-list:empty`, `.works-filters:empty`, `.works-grid:empty`, `.reviews-summary:empty`) по всіх брейкпоїнтах, додано `min-height: 1.45em` для `.price-status`/`.works-status` та обгортку `#reviews-stage` (`min-height: 226px` / `288px` mobile), що усунуло стрибки при сповільненому завантаженні та reload серед сторінки.
+- Замінено заборонений `transition: width` на `.reviews-slider__dot::before` на GPU `transform: scaleX(0.375)` → `scaleX(1)`.
+- Усі `:hover` ефекти (кнопки, навігація, картки послуг/переваг/лікарів/робіт/відгуків, фільтри, степер, посилання контактів і футера) ізольовано в `@media (hover: hover) and (pointer: fine)`; розширено список елементів плавної зміни теми `html.is-theme-switching` (включно з `.site-footer`, `.stats-card`, `.contacts-list__icon`, `.booking-steps__num`).
+- Додано однократну прогресивну появу секцій нижче hero (`TD.effects.initReveal` у `TD.main.initStage2Modules()`): приховуються (`.td-reveal-pending`) лише елементи нижче поточного вікна (`rect.top >= vh * 0.96`), використовуються тільки `opacity` і `transform: translateY`, з `batchIndex` затримкою ≤ 120ms, очищенням `.is-revealing` після `transitionend` та миттєвим пасивним `rAF`-sweep при швидкому скролі/якірному переході (`removeEventListener` після відкриття всіх елементів).
+
+Why: виключає sticky-hover на сенсорних пристроях, затримку наведення після reveal, стрибки висоти на 3G/reload і гарантує 100% видимість контенту без JS або при `prefers-reduced-motion: reduce`.
+
+Apply: для нових карток і блоків нижче першого екрана зберігати підхід «спершу резервування геометрії й видимий базовий стан у CSS, потім прогресивний `TD.effects.initReveal` на `opacity`/`transform`».
+```
+
+```md
+---
+name: mobile-drawer-floating-panel
+type: decision
+status: active
+---
+Оновлено `#mobile-drawer` ([index.html](file:///c:/Users/nagib/Desktop/стоматолог/index.html#L332-L449), блок `6` [css/style.css](file:///c:/Users/nagib/Desktop/стоматолог/css/style.css#L747-L1060)) як компактне плаваюче діалогове вікно замість порожньої повноекранної смуги:
+- Шапка `.drawer__head` використовує світлий/темний адаптивний логотип (`img/logo.png`/`img/logo-white.png`), прихований заголовок `#drawer-title` (`aria-labelledby="drawer-title"`, гідрований через `TD.CLINIC.NAME`), тонкий декоративний SVG `.drawer__deco` (`aria-hidden="true"`, прихований у `forced-colors`) і кнопку закриття `#drawer-close` (`44×44px`).
+- Навігація містить 7 пунктів (`.drawer__link`, ≥44px) з монохромними іконками й шевронами; внизу `.drawer__contacts-card` виводить адресу, графік роботи, телефон і акцентну кнопку «Записатися на консультацію».
+- По висоті вікно прилягає до вмісту (`bottom: auto; max-height: calc(100dvh - 20px)`), а в landscape (`max-width: 979px` і `max-height: 560px`) перемикається на 2-колонкову сітку `.drawer__list` та компактну flex-панель контактів, не виходячи за межі екрана; фокус-трап, `Esc`, клік по `.drawer-backdrop`, повернення фокусу на `#burger-btn` і `inert` у `TD.header` ([js/header.js](file:///c:/Users/nagib/Desktop/стоматолог/js/header.js)) збережено.
+
+Why: виключає велику порожню вертикальну зону на високих екранах, обрізання нижньої кнопки/контактів у landscape і зберігає єдину монохромну стилістику та A11y-контракт сайту.
+
+Apply: під час змін `.drawer*` тримати лише `transform`/`opacity` без `transition: all`/`backdrop-filter` і зберігати адаптацію під `max-height: 560px`.
+```
+
 ---
 
-## 5. Правила запобігання Layout Shift, Flicker та дублювання `[PERF]` `[ARCH]`
+## 5. Правила плавності, анімацій, стабільного рендерингу та запобігання Layout Shift `[PERF]` `[ARCH]`
+
+- **Архітектурні правила плавності та performance**:
+  - Усі переходи й поява елементів виконуються на композитних властивостях (`opacity`, `transform: translateY/translateX/scale`) без сторонніх бібліотек, CDN чи безперервних циклів `setInterval`;
+  - `scroll-behavior: smooth` поєднується зі `scroll-margin-top: calc(var(--header-h) + 16px)` на секціях (`.section`, `.advantages-section`) і скидається в `auto` при `prefers-reduced-motion`;
+  - перемикання теми (`html.is-theme-switching`) анімує лише колірні властивості (`background-color`, `color`, `border-color`, `box-shadow`, 300ms); `.header.is-scrolled` змінює фон/бордер/тінь без зміни висоти (`72px`); пасивний `rAF`-sweep у `TD.effects.initReveal()` автоматично знімає слухачів одразу після відкриття всіх елементів.
+- **Правила анімацій, hover і focus**:
+  - однократна поява `[data-reveal]` (`opacity` + `translateY(10–12px)` для `head`/`card`, чистий `opacity` для `deco`, малювання `.section__eyebrow::before` через `scaleX(0→1)`) із затримкою `<= 120ms`, очищенням `.is-revealing` після `transitionend` та миттєвим відкриттям елементів, уже присутніх або пройдених у в’юпорті;
+  - активні стани карток (`translateY(-2px)`, тінь, бордер), іконочних квадратів `.advantage-card__icon` (`scale(1.03)`), `.reviews-slider__dot::before` (`scaleX(0.375→1)`, без `transition: width`) і фільтрів/калькулятора не змінюють геометрію;
+  - усі `:hover` правила обгорнуті в `@media (hover: hover) and (pointer: fine)`; `:focus-visible` та `:active` залишаються активними незалежно від типу вводу.
+- **Обмеження щодо `prefers-reduced-motion` та `forced-colors`**:
+  - у `@media (prefers-reduced-motion: reduce)` (`css/style.css` секція 13): `animation-duration: 0.001ms !important`, `animation-iteration-count: 1 !important`, `transition-duration: 0.001ms !important`, `scroll-behavior: auto !important`, і примусові `opacity: 1 !important; transform: none !important; transition: none !important;` для `[data-reveal]`, `.td-reveal-pending`, `.section__eyebrow::before`; JS-модулі слухають `prefers-reduced-motion` (`TD.effects.revealNow()` миттєво відкриває контент);
+  - `@media (forced-colors: active)` приховує `.deco` (`display: none`) та зберігає чіткі рамки `CanvasText` / `Highlight`.
+- **Додаткові інваріанти стабільного рендерингу й запобігання layout shift**:
 
 - **Зображення та медіа**: кожне нове зображення повинне мати явні `width` та `height` або фіксований `aspect-ratio`; контейнер `.doctor-card__media` (`16 / 10`), `.work-card__slot` (`4 / 3`), `.review-card__avatar` (`46×46`), `.service-card__media` (`160x160`) і `.brand__img` (`aspect-ratio: 373 / 84`) зобов'язані резервувати розмір до завантаження; для критичних фото (hero, logo) застосовувати `decoding="sync"`, для другорядних нижче фолда — `loading="lazy"`; fallback (`.service-card__fallback`, `.doctor-card__fallback`, `.work-card__fallback`, `.review-card__avatar.is-fallback`) тримати в роздільному відображенні (`display: none` поза відповідним станом); `<link rel="preload" imagesizes>` завжди синхронізувати байт-у-байт із `<source sizes>` і `srcset`.
 - **Critical CSS і `css/style.css`**: будь-які зміни геометрії `.header`, `.brand__img`, `.burger`, `.hero`, `.hero__media*`, `.deco--hero-arc`, `.deco--stats-wave`, `.stats-section` і брейкпоїнтів до `979px` / `max-height: 520px` вносити одночасно в inline `<style>` ([index.html](file:///c:/Users/nagib/Desktop/стоматолог/index.html)) і [css/style.css](file:///c:/Users/nagib/Desktop/стоматолог/css/style.css); не використовувати суперечливий `content-visibility: auto` на секціях (зберігати `content-visibility: visible`).

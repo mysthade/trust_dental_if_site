@@ -22,6 +22,9 @@
     if (TD.calculator && typeof TD.calculator.init === 'function') {
       TD.calculator.init();
     }
+    if (TD.effects && typeof TD.effects.initReveal === 'function') {
+      TD.effects.initReveal();
+    }
   }
 
   function initNonCritical() {

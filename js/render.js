@@ -633,7 +633,7 @@
     }
   }
 
-  function renderWorksGrid() {
+  function renderWorksGrid(animate) {
     var grid = document.getElementById('works-grid');
     var empty = document.getElementById('works-empty');
     if (!grid) return;
@@ -648,15 +648,30 @@
       return;
     }
 
+    var shouldAnimate = Boolean(animate) && !prefersReducedMotion();
     var frag = document.createDocumentFragment();
+    var cards = [];
     for (var i = 0; i < list.length; i++) {
-      frag.appendChild(createWorkCard(list[i]));
+      var card = createWorkCard(list[i]);
+      if (shouldAnimate) {
+        card.classList.add('is-entering');
+      }
+      cards.push(card);
+      frag.appendChild(card);
     }
 
     grid.textContent = '';
     grid.hidden = false;
     grid.appendChild(frag);
     if (empty) empty.hidden = true;
+
+    if (shouldAnimate && cards.length) {
+      window.requestAnimationFrame(function () {
+        for (var j = 0; j < cards.length; j++) {
+          cards[j].classList.remove('is-entering');
+        }
+      });
+    }
 
     updateWorksStatus(list.length, activeWorkCategory);
 
@@ -693,7 +708,7 @@
       filterBtns[b].setAttribute('aria-pressed', isMatch ? 'true' : 'false');
     }
 
-    renderWorksGrid();
+    renderWorksGrid(true);
   }
 
   /* ------------------------------------------------------------------------
