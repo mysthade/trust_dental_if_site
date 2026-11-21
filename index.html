@@ -1096,23 +1096,58 @@
         </svg>
 
         <div class="container works-section__container">
-          <div class="section__head works-section__head">
+          <header class="section__head works-section__head">
             <span class="section__eyebrow">Роботи</span>
             <h2 id="heading-works" class="section__title">Приклади лікування</h2>
             <p class="section__lead">
-              Огляньте структуру клінічних випадків у форматі «До» та «Після» або оберіть потрібний напрямок.
+              Перегляньте приклади клінічних випадків у форматі «До» та «Після».
             </p>
-          </div>
+          </header>
 
-          <div id="works-filters" class="works-filters" role="group" aria-label="Фільтр прикладів лікування"></div>
-          <p id="works-status" class="works-status" aria-live="polite"></p>
+          <div
+            id="works-carousel"
+            class="works-carousel"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Приклади лікування"
+          >
+            <div id="works-viewport" class="works-carousel__viewport">
+              <div id="works-track" class="works-carousel__track"></div>
+            </div>
 
-          <div id="works-grid" class="works-grid"></div>
-          <div id="works-empty" class="works-empty" hidden>
-            <p class="works-empty__text">Приклади для цієї категорії будуть додані пізніше.</p>
-            <button type="button" id="works-reset-filter" class="btn btn--outline works-empty__btn">
-              Показати всі роботи
-            </button>
+            <div class="works-carousel__controls">
+              <button
+                type="button"
+                id="works-prev"
+                class="works-carousel__btn works-carousel__prev"
+                aria-label="Попередній приклад"
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                  <use href="#td-icon-arrow-left"></use>
+                </svg>
+              </button>
+
+              <div class="works-carousel__indicators">
+                <div
+                  id="works-dots"
+                  class="works-carousel__dots"
+                  role="tablist"
+                  aria-label="Вибір прикладу лікування"
+                ></div>
+                <span id="works-counter" class="works-carousel__counter" aria-live="polite">1 / 3</span>
+              </div>
+
+              <button
+                type="button"
+                id="works-next"
+                class="works-carousel__btn works-carousel__next"
+                aria-label="Наступний приклад"
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                  <use href="#td-icon-arrow"></use>
+                </svg>
+              </button>
+            </div>
           </div>
 
           <noscript><p class="section__note">Увімкніть JavaScript для перегляду прикладів лікування.</p></noscript>

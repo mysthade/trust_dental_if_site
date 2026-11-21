@@ -8,7 +8,6 @@
   var TD = (window.TD = window.TD || {});
   var SVG_NS = 'http://www.w3.org/2000/svg';
   var isInitialized = false;
-  var activeWorkCategory = 'all';
   var activeModalWorkId = null;
   var lastModalTriggerEl = null;
   var modalCloseTimer = null;
@@ -105,6 +104,7 @@
   }
 
   var lastAddedServiceTitle = '';
+  var expandedServiceIds = Object.create(null);
 
   function syncServiceCardsWithCalculator(addedTitle) {
     if (typeof addedTitle === 'string') {
@@ -227,11 +227,71 @@
           priceWrap.appendChild(priceMeta);
         }
       } else {
+        var consultPrice = document.createElement('span');
+        consultPrice.className = 'service-card__price service-card__price--consult';
+        consultPrice.textContent = 'Уточнити вартість';
+        priceWrap.appendChild(consultPrice);
+
         var priceNote = document.createElement('span');
-        priceNote.className = 'service-card__price-note';
-        priceNote.textContent = 'Ця послуга потребує індивідуального розрахунку';
+        priceNote.className = 'service-card__price-meta service-card__price-note';
+        priceNote.textContent = 'індивідуально після огляду';
         priceWrap.appendChild(priceNote);
       }
+
+      /* Expandable block: "Що входить у вартість" */
+      var isIncludesOpen = Boolean(expandedServiceIds[svc.id]);
+      var includesWrap = document.createElement('div');
+      includesWrap.className = 'service-card__includes' + (isIncludesOpen ? ' is-open' : '');
+
+      var panelId = 'service-includes-' + svc.id;
+      var includesBtn = document.createElement('button');
+      includesBtn.type = 'button';
+      includesBtn.className = 'service-card__includes-btn';
+      includesBtn.setAttribute('data-service-includes-toggle', svc.id);
+      includesBtn.setAttribute('aria-expanded', isIncludesOpen ? 'true' : 'false');
+      includesBtn.setAttribute('aria-controls', panelId);
+
+      var includesLabel = document.createElement('span');
+      includesLabel.className = 'service-card__includes-label';
+      includesLabel.textContent = 'Що входить у вартість';
+
+      var includesIcon = createSvgUse('td-icon-chevron-right', 'service-card__includes-icon');
+      includesIcon.setAttribute('viewBox', '0 0 20 20');
+
+      includesBtn.appendChild(includesLabel);
+      includesBtn.appendChild(includesIcon);
+
+      var includesPanel = document.createElement('div');
+      includesPanel.id = panelId;
+      includesPanel.className = 'service-card__includes-panel';
+      includesPanel.setAttribute('role', 'region');
+      includesPanel.setAttribute('aria-label', 'Що входить у вартість: ' + svc.title);
+      includesPanel.setAttribute('aria-hidden', isIncludesOpen ? 'false' : 'true');
+
+      var includesInner = document.createElement('div');
+      includesInner.className = 'service-card__includes-inner';
+
+      if (Array.isArray(svc.includedItems) && svc.includedItems.length > 0) {
+        var includesList = document.createElement('ul');
+        includesList.className = 'service-card__includes-list';
+        for (var m = 0; m < svc.includedItems.length; m++) {
+          var li = document.createElement('li');
+          li.className = 'service-card__includes-item';
+          li.textContent = svc.includedItems[m];
+          includesList.appendChild(li);
+        }
+        includesInner.appendChild(includesList);
+      } else {
+        var fallbackNote = document.createElement('p');
+        fallbackNote.className = 'service-card__includes-note';
+        fallbackNote.textContent =
+          svc.includedFallback || 'Склад послуги уточнюється лікарем після огляду.';
+        includesInner.appendChild(fallbackNote);
+      }
+
+      includesPanel.appendChild(includesInner);
+      includesWrap.appendChild(includesBtn);
+      includesWrap.appendChild(includesPanel);
 
       var actionBtn = document.createElement('button');
       actionBtn.type = 'button';
@@ -269,6 +329,7 @@
       actionBtn.appendChild(labelSpan);
 
       footer.appendChild(priceWrap);
+      footer.appendChild(includesWrap);
       footer.appendChild(actionBtn);
 
       card.appendChild(createServiceMedia(svc));
@@ -288,6 +349,25 @@
     if (!bindRoot.dataset.serviceCalcBound) {
       bindRoot.dataset.serviceCalcBound = '1';
       bindRoot.addEventListener('click', function (e) {
+        var includesToggle = e.target.closest('[data-service-includes-toggle]');
+        if (includesToggle) {
+          var toggleSvcId = includesToggle.getAttribute('data-service-includes-toggle');
+          var wrapEl = includesToggle.closest('.service-card__includes');
+          var panelEl = toggleSvcId
+            ? document.getElementById('service-includes-' + toggleSvcId)
+            : null;
+          if (toggleSvcId && wrapEl) {
+            var nextOpen = !wrapEl.classList.contains('is-open');
+            expandedServiceIds[toggleSvcId] = nextOpen;
+            wrapEl.classList.toggle('is-open', nextOpen);
+            includesToggle.setAttribute('aria-expanded', nextOpen ? 'true' : 'false');
+            if (panelEl) {
+              panelEl.setAttribute('aria-hidden', nextOpen ? 'false' : 'true');
+            }
+          }
+          return;
+        }
+
         var addBtn = e.target.closest('.service-card__add-to-calc[data-calc-item-id]');
         if (addBtn && !addBtn.disabled) {
           var calcId = addBtn.getAttribute('data-calc-item-id');
@@ -352,30 +432,8 @@
   }
 
   /* ------------------------------------------------------------------------
-     2. Roving Pill Key Navigation & Doctor Media Fallbacks
+     2. Doctor Media Fallbacks
      ------------------------------------------------------------------------ */
-  function bindRovingPillKeys(container, selector) {
-    /* Arrow-key convenience alongside standard Tab navigation */
-    container.addEventListener('keydown', function (e) {
-      var key = e.key;
-      if (key !== 'ArrowRight' && key !== 'ArrowLeft' && key !== 'Home' && key !== 'End') {
-        return;
-      }
-      var buttons = container.querySelectorAll(selector);
-      if (!buttons.length) return;
-      var idx = Array.prototype.indexOf.call(buttons, document.activeElement);
-      if (idx === -1) return;
-
-      e.preventDefault();
-      var nextIdx = idx;
-      if (key === 'ArrowRight') nextIdx = (idx + 1) % buttons.length;
-      else if (key === 'ArrowLeft') nextIdx = (idx - 1 + buttons.length) % buttons.length;
-      else if (key === 'Home') nextIdx = 0;
-      else if (key === 'End') nextIdx = buttons.length - 1;
-      buttons[nextIdx].focus();
-    });
-  }
-
   function initDoctorMediaFallbacks() {
     var images = document.querySelectorAll('.doctor-card__img');
     for (var i = 0; i < images.length; i++) {
@@ -412,25 +470,15 @@
   }
 
   /* ------------------------------------------------------------------------
-     4. Clinical Works Showcase (#works-filters, #works-grid, #work-modal)
+     4. Clinical Works Carousel (#works-carousel, #works-track, #work-modal)
      ------------------------------------------------------------------------ */
-  function getWorkFilterLabel(catId) {
-    if (!catId || !Array.isArray(TD.WORK_FILTERS)) return '';
-    for (var i = 0; i < TD.WORK_FILTERS.length; i++) {
-      if (TD.WORK_FILTERS[i].id === catId) return TD.WORK_FILTERS[i].label;
-    }
-    return '';
-  }
-
-  function getFilteredWorks(catId) {
-    if (!Array.isArray(TD.WORKS)) return [];
-    if (!catId || catId === 'all') return TD.WORKS.slice();
-    var out = [];
-    for (var i = 0; i < TD.WORKS.length; i++) {
-      if (TD.WORKS[i].category === catId) out.push(TD.WORKS[i]);
-    }
-    return out;
-  }
+  var worksCarouselState = {
+    currentIndex: 0,
+    totalSlides: 0,
+    touchStartX: 0,
+    touchStartY: 0,
+    isSwiping: false
+  };
 
   function findWorkById(id) {
     if (!id || !Array.isArray(TD.WORKS)) return null;
@@ -440,12 +488,12 @@
     return null;
   }
 
-  function createWorkFigure(item, kind, isModal) {
+  function createWorkFigure(item, kind, isEager) {
     var fig = document.createElement('figure');
-    fig.className = 'work-card__figure';
+    fig.className = 'work-slide__figure work-card__figure';
 
     var slot = document.createElement('div');
-    slot.className = 'work-card__slot';
+    slot.className = 'work-slide__media work-card__slot';
 
     var src = '';
     var fallbackSrc = '';
@@ -461,20 +509,13 @@
       captionLabel = 'До';
       iconId = 'td-work-before';
       hintLabel = 'Фото «до»';
-    } else if (kind === 'after') {
+    } else {
       src = item.afterImage || '';
       fallbackSrc = item.afterFallback || '';
       altText = item.afterAlt || ('Стан після лікування: ' + item.title);
       captionLabel = 'Після';
       iconId = 'td-work-after';
       hintLabel = 'Фото «після»';
-    } else {
-      src = item.coverImage || '';
-      fallbackSrc = item.coverFallback || '';
-      altText = item.coverAlt || ('Приклад лікування: ' + item.title);
-      captionLabel = 'Клінічний випадок';
-      iconId = 'td-work-after';
-      hintLabel = 'Приклад лікування';
     }
 
     var fallback = document.createElement('div');
@@ -506,7 +547,7 @@
       img.src = (isWebp && fallbackSrc) ? fallbackSrc : src;
       img.width = 720;
       img.height = 540;
-      img.loading = isModal ? 'eager' : 'lazy';
+      img.loading = isEager ? 'eager' : 'lazy';
       img.decoding = 'async';
       img.alt = altText;
 
@@ -537,11 +578,12 @@
     } else {
       slot.classList.add('is-fallback');
       slot.setAttribute('role', 'img');
-      slot.setAttribute('aria-label', altText + ' (очікує завантаження фото)');
+      slot.setAttribute('aria-label', altText + ' (нейтральний макет прикладу)');
     }
 
     var caption = document.createElement('figcaption');
-    caption.className = 'work-card__caption' + (kind === 'after' ? ' is-after' : '');
+    caption.className =
+      'work-slide__caption work-card__caption' + (kind === 'after' ? ' is-after' : '');
     caption.textContent = captionLabel;
 
     fig.appendChild(slot);
@@ -549,169 +591,281 @@
     return fig;
   }
 
-  function createWorkCard(item) {
-    var card = document.createElement('article');
-    card.className = 'work-card';
-    card.setAttribute('data-work-id', item.id);
-    card.setAttribute('data-category', item.category || '');
+  function createWorkSlide(item, index, total) {
+    var slide = document.createElement('article');
+    slide.id = 'work-slide-' + item.id;
+    slide.className = 'work-slide work-card';
+    slide.setAttribute('role', 'group');
+    slide.setAttribute('aria-roledescription', 'slide');
+    slide.setAttribute('aria-label', (index + 1) + ' із ' + total + ': ' + item.title);
+    slide.setAttribute('data-work-id', item.id);
+    slide.setAttribute('data-category', item.category || '');
+    slide.setAttribute('data-slide-index', String(index));
 
     var trigger = document.createElement('button');
     trigger.type = 'button';
-    trigger.className = 'work-card__trigger';
+    trigger.className = 'work-slide__trigger work-card__trigger';
     trigger.setAttribute('data-work-open', item.id);
-    trigger.setAttribute('aria-label', 'Переглянути приклад лікування: ' + item.title);
+    trigger.setAttribute(
+      'aria-label',
+      'Відкрити порівняння «До і Після» у збільшеному вигляді: ' + item.title
+    );
 
-    var hasPair = Boolean(item.beforeImage && item.afterImage);
-    if (hasPair) {
-      var comp = document.createElement('div');
-      comp.className = 'work-card__comparison';
-      comp.appendChild(createWorkFigure(item, 'before', false));
-      comp.appendChild(createWorkFigure(item, 'after', false));
-      trigger.appendChild(comp);
-    } else {
-      var single = document.createElement('div');
-      single.className = 'work-card__media';
-      single.appendChild(createWorkFigure(item, 'cover', false));
-      trigger.appendChild(single);
-    }
+    var isFirst = index === 0;
+    var comp = document.createElement('div');
+    comp.className = 'work-slide__comparison work-card__comparison';
+    comp.appendChild(createWorkFigure(item, 'before', isFirst));
+    comp.appendChild(createWorkFigure(item, 'after', isFirst));
+    trigger.appendChild(comp);
 
-    var body = document.createElement('div');
-    body.className = 'work-card__body';
+    var content = document.createElement('div');
+    content.className = 'work-slide__content work-card__body';
+
+    var info = document.createElement('div');
+    info.className = 'work-slide__info';
+
+    var meta = document.createElement('div');
+    meta.className = 'work-slide__meta';
 
     var cat = document.createElement('span');
-    cat.className = 'work-card__category';
-    cat.textContent = item.categoryLabel || getWorkFilterLabel(item.category);
+    cat.className = 'work-slide__category work-card__category';
+    cat.textContent = item.categoryLabel || 'Клінічний приклад';
+
+    var stepBadge = document.createElement('span');
+    stepBadge.className = 'work-slide__step';
+    stepBadge.textContent = 'Приклад ' + (index + 1) + ' із ' + total;
+
+    meta.appendChild(cat);
+    meta.appendChild(stepBadge);
 
     var title = document.createElement('h3');
-    title.className = 'work-card__title';
+    title.className = 'work-slide__title work-card__title';
     title.textContent = item.title;
 
     var desc = document.createElement('p');
-    desc.className = 'work-card__description';
+    desc.className = 'work-slide__description work-card__description';
     desc.textContent = item.description;
+
+    info.appendChild(meta);
+    info.appendChild(title);
+    info.appendChild(desc);
 
     var ctaBtn = document.createElement('button');
     ctaBtn.type = 'button';
-    ctaBtn.className = 'btn btn--outline work-card__link';
+    ctaBtn.className = 'btn btn--outline work-slide__open work-card__link';
     ctaBtn.setAttribute('data-work-open', item.id);
-    ctaBtn.setAttribute('aria-label', 'Переглянути приклад: ' + item.title);
+    ctaBtn.setAttribute('aria-label', 'Переглянути приклад детальніше: ' + item.title);
 
     var ctaLabel = document.createElement('span');
     ctaLabel.textContent = 'Переглянути приклад';
     ctaBtn.appendChild(ctaLabel);
     ctaBtn.appendChild(createArrowSvg('btn__arrow'));
 
-    body.appendChild(cat);
-    body.appendChild(title);
-    body.appendChild(desc);
-    body.appendChild(ctaBtn);
+    content.appendChild(info);
+    content.appendChild(ctaBtn);
 
-    card.appendChild(trigger);
-    card.appendChild(body);
-    return card;
+    slide.appendChild(trigger);
+    slide.appendChild(content);
+    return slide;
   }
 
-  function updateWorksStatus(count, categoryId) {
-    var status = document.getElementById('works-status');
-    if (!status || !Array.isArray(TD.WORKS)) return;
-    var label = getWorkFilterLabel(categoryId) || 'Усі';
-    if (count === 0) {
-      status.textContent =
-        'Категорія «' + label + '»: приклади для цієї категорії будуть додані пізніше.';
-      return;
+  function syncWorksCarouselUI() {
+    var track = document.getElementById('works-track');
+    var dotsWrap = document.getElementById('works-dots');
+    var counterEl = document.getElementById('works-counter');
+    var prevBtn = document.getElementById('works-prev');
+    var nextBtn = document.getElementById('works-next');
+    if (!track) return;
+
+    var total = worksCarouselState.totalSlides;
+    var idx = worksCarouselState.currentIndex;
+    if (total <= 0) return;
+
+    track.style.transform = 'translate3d(' + (-idx * 100) + '%, 0, 0)';
+
+    var slides = track.querySelectorAll('.work-slide');
+    for (var i = 0; i < slides.length; i++) {
+      var isActive = i === idx;
+      slides[i].classList.toggle('is-active', isActive);
+      slides[i].setAttribute('aria-hidden', isActive ? 'false' : 'true');
+      slides[i].inert = !isActive;
+      var slideBtns = slides[i].querySelectorAll('button, a[href]');
+      for (var b = 0; b < slideBtns.length; b++) {
+        slideBtns[b].tabIndex = isActive ? 0 : -1;
+      }
     }
-    var word = TD.pluralizeUk(count, 'приклад', 'приклади', 'прикладів');
-    status.textContent =
-      'Категорія «' + label + '»: ' + count + ' ' + word + ' із ' + TD.WORKS.length;
+
+    if (dotsWrap) {
+      var dots = dotsWrap.querySelectorAll('.works-carousel__dot');
+      for (var d = 0; d < dots.length; d++) {
+        var isDotActive = d === idx;
+        dots[d].classList.toggle('is-active', isDotActive);
+        dots[d].setAttribute('aria-selected', isDotActive ? 'true' : 'false');
+        dots[d].tabIndex = isDotActive ? 0 : -1;
+      }
+    }
+
+    if (counterEl) {
+      counterEl.textContent = (idx + 1) + ' / ' + total;
+    }
+
+    var disableNav = total <= 1;
+    if (prevBtn) prevBtn.disabled = disableNav;
+    if (nextBtn) nextBtn.disabled = disableNav;
   }
 
-  function renderWorkFilters() {
-    var container = document.getElementById('works-filters');
-    if (!container || !Array.isArray(TD.WORK_FILTERS)) return;
+  function goToWorkSlide(targetIndex) {
+    var total = worksCarouselState.totalSlides;
+    if (total <= 0) return;
+    var normalized = ((targetIndex % total) + total) % total;
+    worksCarouselState.currentIndex = normalized;
+    syncWorksCarouselUI();
+  }
 
-    var frag = document.createDocumentFragment();
-    for (var i = 0; i < TD.WORK_FILTERS.length; i++) {
-      var filter = TD.WORK_FILTERS[i];
-      var isActive = filter.id === activeWorkCategory;
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'filter-pill' + (isActive ? ' is-active' : '');
-      btn.setAttribute('data-work-filter', filter.id);
-      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-      btn.textContent = filter.label;
-      frag.appendChild(btn);
+  function renderWorksCarousel() {
+    var carousel = document.getElementById('works-carousel');
+    var viewport = document.getElementById('works-viewport');
+    var track = document.getElementById('works-track');
+    var dotsWrap = document.getElementById('works-dots');
+    var prevBtn = document.getElementById('works-prev');
+    var nextBtn = document.getElementById('works-next');
+    if (!track || !Array.isArray(TD.WORKS)) return;
+
+    var list = TD.WORKS.slice(0, 3);
+    worksCarouselState.totalSlides = list.length;
+    if (worksCarouselState.currentIndex >= list.length) {
+      worksCarouselState.currentIndex = 0;
     }
 
-    container.textContent = '';
-    container.appendChild(frag);
+    var trackFrag = document.createDocumentFragment();
+    var dotsFrag = document.createDocumentFragment();
 
-    if (!container.dataset.workFilterBound) {
-      container.dataset.workFilterBound = '1';
-      container.addEventListener('click', function (e) {
-        var btn = e.target.closest('[data-work-filter]');
-        if (!btn) return;
-        var cat = btn.getAttribute('data-work-filter');
-        if (cat && cat !== activeWorkCategory) {
-          applyWorkFilter(cat);
+    for (var i = 0; i < list.length; i++) {
+      var item = list[i];
+      trackFrag.appendChild(createWorkSlide(item, i, list.length));
+
+      if (dotsWrap) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.id = 'works-dot-' + i;
+        dot.className = 'works-carousel__dot';
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('data-work-dot', String(i));
+        dot.setAttribute('aria-controls', 'work-slide-' + item.id);
+        dot.setAttribute('aria-selected', i === worksCarouselState.currentIndex ? 'true' : 'false');
+        dot.setAttribute(
+          'aria-label',
+          'Приклад ' + (i + 1) + ': ' + (item.categoryLabel ? item.categoryLabel + ' — ' : '') + item.title
+        );
+        dotsFrag.appendChild(dot);
+      }
+    }
+
+    track.textContent = '';
+    track.appendChild(trackFrag);
+
+    if (dotsWrap) {
+      dotsWrap.textContent = '';
+      dotsWrap.appendChild(dotsFrag);
+    }
+
+    syncWorksCarouselUI();
+
+    if (prevBtn && !prevBtn.dataset.worksPrevBound) {
+      prevBtn.dataset.worksPrevBound = '1';
+      prevBtn.addEventListener('click', function () {
+        goToWorkSlide(worksCarouselState.currentIndex - 1);
+      });
+    }
+
+    if (nextBtn && !nextBtn.dataset.worksNextBound) {
+      nextBtn.dataset.worksNextBound = '1';
+      nextBtn.addEventListener('click', function () {
+        goToWorkSlide(worksCarouselState.currentIndex + 1);
+      });
+    }
+
+    if (dotsWrap && !dotsWrap.dataset.worksDotsBound) {
+      dotsWrap.dataset.worksDotsBound = '1';
+      dotsWrap.addEventListener('click', function (e) {
+        var dotBtn = e.target.closest('[data-work-dot]');
+        if (!dotBtn) return;
+        var idx = parseInt(dotBtn.getAttribute('data-work-dot'), 10);
+        if (!isNaN(idx)) {
+          goToWorkSlide(idx);
         }
       });
 
-      bindRovingPillKeys(container, '[data-work-filter]');
-    }
-  }
-
-  function renderWorksGrid(animate) {
-    var grid = document.getElementById('works-grid');
-    var empty = document.getElementById('works-empty');
-    if (!grid) return;
-
-    var list = getFilteredWorks(activeWorkCategory);
-
-    if (!list.length) {
-      grid.textContent = '';
-      grid.hidden = true;
-      if (empty) empty.hidden = false;
-      updateWorksStatus(0, activeWorkCategory);
-      return;
-    }
-
-    var shouldAnimate = Boolean(animate) && !prefersReducedMotion();
-    var frag = document.createDocumentFragment();
-    var cards = [];
-    for (var i = 0; i < list.length; i++) {
-      var card = createWorkCard(list[i]);
-      card.setAttribute('data-reveal', 'card');
-      card.classList.add('is-visible', 'is-revealed');
-      if (shouldAnimate) {
-        card.classList.add('is-entering');
-      }
-      cards.push(card);
-      frag.appendChild(card);
-    }
-
-    grid.textContent = '';
-    grid.hidden = false;
-    grid.appendChild(frag);
-    if (empty) empty.hidden = true;
-
-    if (shouldAnimate && cards.length) {
-      var clearEnteringCards = function () {
-        for (var j = 0; j < cards.length; j++) {
-          cards[j].classList.remove('is-entering');
+      dotsWrap.addEventListener('keydown', function (e) {
+        var key = e.key;
+        if (key !== 'ArrowRight' && key !== 'ArrowLeft' && key !== 'Home' && key !== 'End') {
+          return;
         }
-      };
-      if (document.hidden || typeof window.requestAnimationFrame !== 'function') {
-        window.setTimeout(clearEnteringCards, 16);
-      } else {
-        window.requestAnimationFrame(clearEnteringCards);
-      }
+        var dots = dotsWrap.querySelectorAll('.works-carousel__dot');
+        if (!dots.length) return;
+        e.preventDefault();
+        var cur = worksCarouselState.currentIndex;
+        var nextIdx = cur;
+        if (key === 'ArrowRight') nextIdx = (cur + 1) % dots.length;
+        else if (key === 'ArrowLeft') nextIdx = (cur - 1 + dots.length) % dots.length;
+        else if (key === 'Home') nextIdx = 0;
+        else if (key === 'End') nextIdx = dots.length - 1;
+        goToWorkSlide(nextIdx);
+        if (dots[nextIdx]) dots[nextIdx].focus();
+      });
     }
 
-    updateWorksStatus(list.length, activeWorkCategory);
+    if (carousel && !carousel.dataset.worksKeyBound) {
+      carousel.dataset.worksKeyBound = '1';
+      carousel.addEventListener('keydown', function (e) {
+        if (dotsWrap && dotsWrap.contains(e.target)) return;
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          goToWorkSlide(worksCarouselState.currentIndex - 1);
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          goToWorkSlide(worksCarouselState.currentIndex + 1);
+        }
+      });
+    }
 
-    if (!grid.dataset.workModalBound) {
-      grid.dataset.workModalBound = '1';
-      grid.addEventListener('click', function (e) {
+    if (viewport && !viewport.dataset.worksSwipeBound) {
+      viewport.dataset.worksSwipeBound = '1';
+      viewport.addEventListener(
+        'touchstart',
+        function (e) {
+          if (!e.touches || e.touches.length !== 1) return;
+          worksCarouselState.touchStartX = e.touches[0].clientX;
+          worksCarouselState.touchStartY = e.touches[0].clientY;
+          worksCarouselState.isSwiping = true;
+        },
+        { passive: true }
+      );
+
+      viewport.addEventListener(
+        'touchend',
+        function (e) {
+          if (!worksCarouselState.isSwiping || !e.changedTouches || !e.changedTouches.length) {
+            return;
+          }
+          worksCarouselState.isSwiping = false;
+          var dx = e.changedTouches[0].clientX - worksCarouselState.touchStartX;
+          var dy = e.changedTouches[0].clientY - worksCarouselState.touchStartY;
+          if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+            if (dx < 0) {
+              goToWorkSlide(worksCarouselState.currentIndex + 1);
+            } else {
+              goToWorkSlide(worksCarouselState.currentIndex - 1);
+            }
+          }
+        },
+        { passive: true }
+      );
+    }
+
+    if (!track.dataset.workModalBound) {
+      track.dataset.workModalBound = '1';
+      track.addEventListener('click', function (e) {
         var trigger = e.target.closest('[data-work-open]');
         if (!trigger) return;
         var workId = trigger.getAttribute('data-work-open');
@@ -720,29 +874,6 @@
         }
       });
     }
-  }
-
-  function applyWorkFilter(categoryId) {
-    var valid = false;
-    if (Array.isArray(TD.WORK_FILTERS)) {
-      for (var i = 0; i < TD.WORK_FILTERS.length; i++) {
-        if (TD.WORK_FILTERS[i].id === categoryId) {
-          valid = true;
-          break;
-        }
-      }
-    }
-    var target = valid ? categoryId : 'all';
-    activeWorkCategory = target;
-
-    var filterBtns = document.querySelectorAll('#works-filters [data-work-filter]');
-    for (var b = 0; b < filterBtns.length; b++) {
-      var isMatch = filterBtns[b].getAttribute('data-work-filter') === target;
-      filterBtns[b].classList.toggle('is-active', isMatch);
-      filterBtns[b].setAttribute('aria-pressed', isMatch ? 'true' : 'false');
-    }
-
-    renderWorksGrid(true);
   }
 
   /* ------------------------------------------------------------------------
@@ -761,9 +892,7 @@
   }
 
   function getModalList() {
-    var filtered = getFilteredWorks(activeWorkCategory);
-    if (filtered.length) return filtered;
-    return Array.isArray(TD.WORKS) ? TD.WORKS.slice() : [];
+    return Array.isArray(TD.WORKS) ? TD.WORKS.slice(0, 3) : [];
   }
 
   function renderWorkModalContent(item) {
@@ -776,20 +905,15 @@
     var prevBtn = document.getElementById('work-modal-prev');
     var nextBtn = document.getElementById('work-modal-next');
 
-    if (catEl) catEl.textContent = item.categoryLabel || getWorkFilterLabel(item.category);
+    if (catEl) catEl.textContent = item.categoryLabel || 'Клінічний приклад';
     if (titleEl) titleEl.textContent = item.title;
     if (descEl) descEl.textContent = item.description;
 
     if (mediaEl) {
       var frag = document.createDocumentFragment();
-      if (item.beforeImage && item.afterImage) {
-        mediaEl.classList.remove('is-single');
-        frag.appendChild(createWorkFigure(item, 'before', true));
-        frag.appendChild(createWorkFigure(item, 'after', true));
-      } else {
-        mediaEl.classList.add('is-single');
-        frag.appendChild(createWorkFigure(item, 'cover', true));
-      }
+      mediaEl.classList.remove('is-single');
+      frag.appendChild(createWorkFigure(item, 'before', true));
+      frag.appendChild(createWorkFigure(item, 'after', true));
       mediaEl.textContent = '';
       mediaEl.appendChild(frag);
     }
@@ -828,6 +952,7 @@
     var nextIdx = (idx + delta + list.length) % list.length;
     var nextItem = list[nextIdx];
     activeModalWorkId = nextItem.id;
+    goToWorkSlide(nextIdx);
     renderWorkModalContent(nextItem);
   }
 
@@ -945,15 +1070,6 @@
 
   function bindWorkModal() {
     var modal = document.getElementById('work-modal');
-    var resetEmptyBtn = document.getElementById('works-reset-filter');
-
-    if (resetEmptyBtn && !resetEmptyBtn.dataset.worksResetBound) {
-      resetEmptyBtn.dataset.worksResetBound = '1';
-      resetEmptyBtn.addEventListener('click', function () {
-        applyWorkFilter('all');
-      });
-    }
-
     if (!modal || modal.dataset.modalBound) return;
     modal.dataset.modalBound = '1';
 
@@ -2865,8 +2981,7 @@
     if (isInitialized) return;
     isInitialized = true;
     renderServices();
-    renderWorkFilters();
-    renderWorksGrid();
+    renderWorksCarousel();
     bindWorkModal();
     renderReviews();
     initContactsSection();
@@ -2882,12 +2997,15 @@
 
   TD.render = {
     init: init,
-    setWorkFilter: function (cat) {
+    goToWorkSlide: function (index) {
       if (!isInitialized) init();
-      applyWorkFilter(cat);
+      goToWorkSlide(index);
     },
-    getActiveWorkFilter: function () {
-      return activeWorkCategory;
+    getWorksCarouselState: function () {
+      return {
+        currentIndex: worksCarouselState.currentIndex,
+        totalSlides: worksCarouselState.totalSlides
+      };
     },
     setReviewsState: function (stateName, list, metaOverride) {
       if (!isInitialized) init();

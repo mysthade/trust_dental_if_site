@@ -94,6 +94,8 @@
 
   /* --------------------------------------------------------------------------
      Services (8 items) — strictly owner facts or confirmation placeholders
+     TODO: Заповнити includedItems для послуг із порожнім масивом після
+           фінального підтвердження складу процедур власником клініки.
      -------------------------------------------------------------------------- */
   TD.SERVICES = Object.freeze([
     Object.freeze({
@@ -103,7 +105,14 @@
       icon: 'td-icon-therapy',
       iconImg: 'img/services/therapy',
       category: 'therapy',
-      calcItemId: 'calc-caries'
+      calcItemId: 'calc-caries',
+      includedItems: Object.freeze([
+        'Ізоляція робочого поля кофердамом',
+        'Препарування та лікування карієсу зуба',
+        'Відновлення анатомічної форми (реставрація)',
+        'Обробка кореневих каналів за показаннями'
+      ]),
+      includedFallback: ''
     }),
     Object.freeze({
       id: 'hygiene',
@@ -112,7 +121,10 @@
       icon: 'td-icon-hygiene',
       iconImg: 'img/services/hygiene',
       category: 'hygiene',
-      calcItemId: 'calc-hygiene'
+      calcItemId: 'calc-hygiene',
+      /* TODO: Підтвердити у власника точний перелік етапів гігієни (40 хв) */
+      includedItems: Object.freeze([]),
+      includedFallback: 'Тривалість процедури — 40 хв. Склад послуги уточнюється лікарем.'
     }),
     Object.freeze({
       id: 'surgery',
@@ -121,7 +133,14 @@
       icon: 'td-icon-surgery',
       iconImg: 'img/services/surgery',
       category: 'surgery',
-      calcItemId: 'calc-extraction'
+      calcItemId: 'calc-extraction',
+      includedItems: Object.freeze([
+        'Огляд ділянки втручання перед процедурою',
+        'Ультразвукове (п’єзохірургічне) видалення зуба',
+        'Контроль гемостазу та обробка лунки',
+        'Рекомендації лікаря щодо догляду після видалення'
+      ]),
+      includedFallback: ''
     }),
     Object.freeze({
       id: 'braces',
@@ -130,7 +149,10 @@
       icon: 'td-icon-braces',
       iconImg: 'img/services/braces',
       category: 'braces',
-      calcItemId: 'calc-braces'
+      calcItemId: 'calc-braces',
+      /* TODO: Підтвердити у власника точний склад ортодонтичного етапу (за 1 щелепу) */
+      includedItems: Object.freeze([]),
+      includedFallback: 'Розрахунок вказано за 1 щелепу. Склад послуги уточнюється лікарем.'
     }),
     Object.freeze({
       id: 'implantation',
@@ -139,7 +161,10 @@
       icon: 'td-icon-implantation',
       iconImg: 'img/services/implant',
       category: null,
-      calcItemId: 'calc-implant'
+      calcItemId: 'calc-implant',
+      /* TODO: Підтвердити у власника точний склад хірургічного етапу імплантації */
+      includedItems: Object.freeze([]),
+      includedFallback: 'Вказано вартість хірургічного етапу за 1 зуб. Склад послуги уточнюється лікарем.'
     }),
     Object.freeze({
       id: 'orthopedics',
@@ -148,7 +173,10 @@
       icon: 'td-icon-orthopedics',
       iconImg: 'img/services/orthopedics',
       category: 'orthopedics',
-      calcItemId: 'calc-crown'
+      calcItemId: 'calc-crown',
+      /* TODO: Підтвердити у власника точний склад ортопедичного етапу (за 1 зуб) */
+      includedItems: Object.freeze([]),
+      includedFallback: 'Цирконієві коронки та вініри (за 1 зуб). Склад послуги уточнюється лікарем.'
     }),
     Object.freeze({
       id: 'pediatric',
@@ -157,7 +185,10 @@
       icon: 'td-icon-pediatric',
       iconImg: 'img/services/pediatric',
       category: null,
-      calcItemId: null
+      calcItemId: null,
+      /* TODO: Підтвердити у власника перелік та вартість дитячих процедур */
+      includedItems: Object.freeze([]),
+      includedFallback: 'Склад послуги та план лікування визначаються лікарем після огляду.'
     }),
     Object.freeze({
       id: 'diagnostics',
@@ -166,7 +197,13 @@
       icon: 'td-icon-diagnostics',
       iconImg: 'img/services/diagnostics',
       category: null,
-      calcItemId: 'calc-consultation'
+      calcItemId: 'calc-consultation',
+      includedItems: Object.freeze([
+        'Первинний огляд та консультація стоматолога',
+        'Прицільна рентген-діагностика на візіографі',
+        'Складання попереднього плану лікування'
+      ]),
+      includedFallback: ''
     })
   ]);
 
@@ -265,23 +302,13 @@
   ]);
 
   /* --------------------------------------------------------------------------
-     Works Filter Categories (7 base directions)
-     -------------------------------------------------------------------------- */
-  TD.WORK_FILTERS = Object.freeze([
-    Object.freeze({ id: 'all', label: 'Усі' }),
-    Object.freeze({ id: 'therapy', label: 'Терапія' }),
-    Object.freeze({ id: 'surgery', label: 'Хірургія' }),
-    Object.freeze({ id: 'implantation', label: 'Імплантація' }),
-    Object.freeze({ id: 'orthopedics', label: 'Ортопедія' }),
-    Object.freeze({ id: 'orthodontics', label: 'Ортодонтія' }),
-    Object.freeze({ id: 'hygiene', label: 'Гігієна' })
-  ]);
-
-  /* --------------------------------------------------------------------------
-     Clinical Works Showcase (6 neutral template cases)
+     Clinical Works Showcase (3 curated "Before / After" template cases)
      Щоб підключити реальні фото:
-       1. Покладіть файли у img/works/ (основний формат .webp, за потреби .jpg/.png у *Fallback).
-       2. Оновіть шляхи coverImage / beforeImage / afterImage, title, description і note.
+       1. Покладіть файли у img/works/:
+          - img/works/case-01-before.webp та img/works/case-01-after.webp
+          - img/works/case-02-before.webp та img/works/case-02-after.webp
+          - img/works/case-03-before.webp та img/works/case-03-after.webp
+       2. Оновіть за потреби title, description і note.
        3. Змініть status з 'placeholder' на 'ready'.
      -------------------------------------------------------------------------- */
   TD.WORKS = Object.freeze([
@@ -289,108 +316,45 @@
       id: 'case-01',
       category: 'therapy',
       categoryLabel: 'Терапія',
-      title: 'Відновлення анатомічної форми зуба',
-      description: 'Приклад оформлення клінічного випадку: пошарова реставрація дефекту коронкової частини зуба.',
-      coverImage: 'img/works/case-01-cover.webp',
-      coverFallback: '',
+      title: 'Реставрація зуба',
+      description: 'Приклад оформлення клінічного випадку: пошарова реставрація анатомічної форми коронкової частини зуба.',
       beforeImage: 'img/works/case-01-before.webp',
       beforeFallback: '',
       afterImage: 'img/works/case-01-after.webp',
       afterFallback: '',
-      coverAlt: 'Приклад лікування: відновлення анатомічної форми зуба',
-      beforeAlt: 'Стан до лікування — випадок 1',
-      afterAlt: 'Стан після лікування — випадок 1',
+      beforeAlt: 'Стан зуба до лікування — випадок 1',
+      afterAlt: 'Стан зуба після лікування — випадок 1',
       note: 'Інформація про методику, матеріали та клінічні етапи уточнюється лікарем.',
       status: 'placeholder'
     }),
     Object.freeze({
       id: 'case-02',
-      category: 'therapy',
-      categoryLabel: 'Терапія',
-      title: 'Ендодонтичне лікування та реставрація',
-      description: 'Приклад оформлення клінічного випадку: обробка кореневих каналів і герметичне відновлення коронки.',
-      coverImage: 'img/works/case-02-cover.webp',
-      coverFallback: '',
+      category: 'orthopedics',
+      categoryLabel: 'Ортопедія',
+      title: 'Відновлення форми зуба коронкою',
+      description: 'Приклад оформлення клінічного випадку: ортопедичне відновлення цілісності зуба та контактного пункту безметалевою коронкою.',
       beforeImage: 'img/works/case-02-before.webp',
       beforeFallback: '',
       afterImage: 'img/works/case-02-after.webp',
       afterFallback: '',
-      coverAlt: 'Приклад лікування: ендодонтичне лікування та реставрація',
-      beforeAlt: 'Стан до лікування — випадок 2',
-      afterAlt: 'Стан після лікування — випадок 2',
-      note: 'Інформація про методику, матеріали та клінічні етапи уточнюється лікарем.',
+      beforeAlt: 'Стан зуба до лікування — випадок 2',
+      afterAlt: 'Стан зуба після лікування — випадок 2',
+      note: 'Інформація про методику, конструкцію та клінічні етапи уточнюється лікарем.',
       status: 'placeholder'
     }),
     Object.freeze({
       id: 'case-03',
-      category: 'surgery',
-      categoryLabel: 'Хірургія',
-      title: 'Ультразвукове видалення зуба',
-      description: 'Приклад оформлення клінічного випадку: п’єзохірургічний підхід із делікатним ставленням до навколишніх тканин.',
-      coverImage: 'img/works/case-03-cover.webp',
-      coverFallback: '',
+      category: 'orthodontics',
+      categoryLabel: 'Ортодонтія',
+      title: 'Корекція положення зубів',
+      description: 'Приклад оформлення клінічного випадку: поетапне вирівнювання положення зубів із використанням брекет-системи.',
       beforeImage: 'img/works/case-03-before.webp',
       beforeFallback: '',
       afterImage: 'img/works/case-03-after.webp',
       afterFallback: '',
-      coverAlt: 'Приклад лікування: ультразвукове видалення зуба',
-      beforeAlt: 'Стан до хірургічного етапу — випадок 3',
-      afterAlt: 'Стан після хірургічного етапу — випадок 3',
-      note: 'Інформація про методику та клінічні етапи уточнюється лікарем.',
-      status: 'placeholder'
-    }),
-    Object.freeze({
-      id: 'case-04',
-      category: 'orthopedics',
-      categoryLabel: 'Ортопедія',
-      title: 'Ортопедичне відновлення коронкою',
-      description: 'Приклад оформлення клінічного випадку: відновлення цілісності зуба та контактного пункту безметалевою коронкою.',
-      coverImage: 'img/works/case-04-cover.webp',
-      coverFallback: '',
-      beforeImage: 'img/works/case-04-before.webp',
-      beforeFallback: '',
-      afterImage: 'img/works/case-04-after.webp',
-      afterFallback: '',
-      coverAlt: 'Приклад лікування: ортопедичне відновлення коронкою',
-      beforeAlt: 'Стан до протезування — випадок 4',
-      afterAlt: 'Стан після фіксації конструкції — випадок 4',
-      note: 'Інформація про методику, конструкцію та етапи уточнюється лікарем.',
-      status: 'placeholder'
-    }),
-    Object.freeze({
-      id: 'case-05',
-      category: 'orthodontics',
-      categoryLabel: 'Ортодонтія',
-      title: 'Ортодонтична корекція прикусу',
-      description: 'Приклад оформлення клінічного випадку: поетапне вирівнювання положення зубів із використанням брекет-системи.',
-      coverImage: 'img/works/case-05-cover.webp',
-      coverFallback: '',
-      beforeImage: 'img/works/case-05-before.webp',
-      beforeFallback: '',
-      afterImage: 'img/works/case-05-after.webp',
-      afterFallback: '',
-      coverAlt: 'Приклад лікування: ортодонтична корекція прикусу',
-      beforeAlt: 'Стан зубного ряду до лікування — випадок 5',
-      afterAlt: 'Стан зубного ряду після етапу корекції — випадок 5',
+      beforeAlt: 'Стан зубів до лікування — випадок 3',
+      afterAlt: 'Стан зубів після лікування — випадок 3',
       note: 'Тривалість лікування та клінічний протокол уточнюються лікарем.',
-      status: 'placeholder'
-    }),
-    Object.freeze({
-      id: 'case-06',
-      category: 'hygiene',
-      categoryLabel: 'Гігієна',
-      title: 'Професійна гігієна порожнини рота',
-      description: 'Приклад оформлення клінічного випадку: очищення м’яких і мінералізованих відкладень та полірування емалі.',
-      coverImage: 'img/works/case-06-cover.webp',
-      coverFallback: '',
-      beforeImage: 'img/works/case-06-before.webp',
-      beforeFallback: '',
-      afterImage: 'img/works/case-06-after.webp',
-      afterFallback: '',
-      coverAlt: 'Приклад лікування: професійна гігієна порожнини рота',
-      beforeAlt: 'Стан до професійної гігієни — випадок 6',
-      afterAlt: 'Стан після професійної гігієни — випадок 6',
-      note: 'Рекомендовану періодичність профілактичних оглядів визначає лікар.',
       status: 'placeholder'
     })
   ]);
