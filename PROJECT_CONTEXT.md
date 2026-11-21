@@ -118,11 +118,11 @@ name: prices-and-calculator-composition
 type: decision
 status: active
 ---
-Для `#prices` та `#calculator` ([index.html:663-733](file:///c:/Users/nagib/Desktop/стоматолог/index.html#L663-L733), [css/style.css:119](file:///c:/Users/nagib/Desktop/стоматолог/css/style.css#L119), [css/style.css:1635](file:///c:/Users/nagib/Desktop/стоматолог/css/style.css#L1635)) впроваджено єдину фонову систему: тональний фон `.section--prices` (`--prices-section-bg`), верхня стрічка `.deco--prices-ribbon` (`#deco-ribbon`, `260px` desktop → `210px` `<=979px` → `150px` з `opacity: 0.65` `<=719px`), зміщена ліва дуга `.deco--prices-arc` і нижня `.deco--prices-wave`; блок `.calc-block` оформлено окремою тональною сценою `--calc-stage-bg` на `>=640px` (без подвійної рамки на `<=639px`), із розширеною touch-зоною чекбокса (`::before`, `inset: -10px`), прокруткою списку `.calc-summary__list` при `max-height: 820px` на desktop, та стеком степера під назвою послуги на `<=639px`.
+Для `#prices` та `#calculator` ([index.html](file:///c:/Users/nagib/Desktop/стоматолог/index.html), [css/style.css](file:///c:/Users/nagib/Desktop/стоматолог/css/style.css)) впроваджено єдину фонову систему: тональний фон `.section--prices` (`--prices-section-bg`), верхня стрічка `.deco--prices-ribbon` (`#deco-ribbon`, `260px` desktop → `210px` `<=979px` → `150px` `<=719px` через `--deco-*` токени без `opacity` на контейнері), ліва дуга `.deco--prices-arc` біля прайсу, нижня хвиля `.deco--prices-wave` (`#deco-wave-a`) та внутрішній декор калькулятора (`.deco--prices-calc-ribbon`, `.deco--prices-calc-arc`, `.deco--prices-calc-wave`); блок `.calc-block` оформлено окремою тональною сценою `--calc-stage-bg` із `isolation: isolate; overflow: clip` на `>=640px` (без подвійної рамки на `<=639px`), із розширеною touch-зоною чекбокса (`::before`, `inset: -10px`), прокруткою списку `.calc-summary__list` при `max-height: 820px` на desktop, та стеком степера під назвою послуги на `<=639px`.
 
-Why: усунуто плоский розрив між `#advantages`, `#prices`, `#calculator` і `#doctors`, стиснення назв до ~109px на 360px та перекриття `.deco--prices-arc`; збережено контраст у світлій і темній темах та стабільні touch-цілі 44px.
+Why: усунуто плоский розрив між `#advantages`, `#prices`, `#calculator` і `#doctors`, стиснення назв до ~109px на 360px та перекриття `.deco--prices-arc`; збережено контраст у світлій і темній темах, працездатність `position: sticky` на `.calc-summary` завдяки `overflow: clip` (без `overflow: hidden`) та стабільні touch-цілі 44px.
 
-Apply: не накладати `overflow: hidden` на `.section--prices` чи `.calc-block`, тримати `--calc-stage-bg` окремо від `--card-grad` карток і зберігати `forced-colors` та `prefers-reduced-motion` правила.
+Apply: не накладати `overflow: hidden` на `.section--prices` чи `.calc-block`, тримати `--calc-stage-bg` окремо від `--card-grad` карток, не додавати `opacity` на контейнери `.deco--prices-*` і зберігати `forced-colors` та `prefers-reduced-motion` правила.
 ```
 
 ```md
@@ -199,11 +199,11 @@ name: pending-sections-and-seo-polish
 type: issue
 status: active
 ---
-У `#doctors` використані тимчасові `[Ім'я]/[Спеціалізація]` і SVG-placeholder-и, у `#works` кейси мають `status: 'placeholder'`, у `#reviews` `TD.REVIEWS = Object.freeze([])` та `summaryVerified: false` очікують підключення backend-проксі або перевірених записів Google Business Profile, у `#contacts` та `#site-footer` (`TD.APPOINTMENT_CONFIG`) очікують підключення серверного `endpoint` для реальної відправки форми, офіційного `mapEmbedUrl` (поки працює стилізована preview-карта `#contacts-map-preview`) і `privacyPolicyUrl`; в `<head>` ([index.html:4-11](file:///c:/Users/nagib/Desktop/стоматолог/index.html#L4-L11)) відсутні `canonical`/OG/JSON-LD `Dentist`.
+У `#doctors` використані тимчасові `[Ім'я]/[Спеціалізація]` і SVG-placeholder-и, у `#works` кейси мають `status: 'placeholder'`, у `#reviews` `TD.REVIEWS = Object.freeze([])` та `summaryVerified: false` очікують підключення backend-проксі або перевірених записів Google Business Profile, у `#contacts` та `#site-footer` (`TD.APPOINTMENT_CONFIG`) очікують підключення серверного `endpoint` для реальної відправки форми, офіційного `mapEmbedUrl` (поки працює стилізована preview-карта `#contacts-map-preview`) і `privacyPolicyUrl`; в `<head>` ([index.html](file:///c:/Users/nagib/Desktop/стоматолог/index.html)) додано `canonical`, `hreflang`, Open Graph, Twitter Card та JSON-LD `Dentist`.
 
 Why: попередні етапи повністю замінили всі заглушки (включно з `#contacts` і `#site-footer`), сфокусувавшись на стабільності рендеру, адаптивності, доступності та чесних UI-станах без вигадування неперевірених даних клініки.
 
-Apply: `[TODO]` — замінити фото лікарів і кейсів `#works`, підключити серверний Google Places API endpoint до `TD.REVIEWS_META.endpoint` (або додати перевірені записи у `TD.REVIEWS`), налаштувати `TD.APPOINTMENT_CONFIG.endpoint` / `mapEmbedUrl` / `privacyPolicyUrl` після підтвердження власником і додати SEO-теги.
+Apply: `[TODO]` — замінити фото лікарів і кейсів `#works`, підключити серверний Google Places API endpoint до `TD.REVIEWS_META.endpoint` (або додати перевірені записи у `TD.REVIEWS`) і налаштувати `TD.APPOINTMENT_CONFIG.endpoint` / `mapEmbedUrl` / `privacyPolicyUrl` після підтвердження власником.
 ```
 
 ```md
@@ -261,11 +261,11 @@ status: active
 - Синхронізовано пре-JS `:empty` висоти (`.services-grid:empty`, `.price-filters:empty`, `.price-list:empty`, `.calc-list:empty`, `.works-filters:empty`, `.works-grid:empty`, `.reviews-summary:empty`) по всіх брейкпоїнтах, додано `min-height: 1.45em` для `.price-status`/`.works-status` та обгортку `#reviews-stage` (`min-height: 226px` / `288px` mobile), що усунуло стрибки при сповільненому завантаженні та reload серед сторінки.
 - Замінено заборонений `transition: width` на `.reviews-slider__dot::before` на GPU `transform: scaleX(0.375)` → `scaleX(1)`.
 - Усі `:hover` ефекти (кнопки, навігація, картки послуг/переваг/лікарів/робіт/відгуків, фільтри, степер, посилання контактів і футера) ізольовано в `@media (hover: hover) and (pointer: fine)`; розширено список елементів плавної зміни теми `html.is-theme-switching` (включно з `.site-footer`, `.stats-card`, `.contacts-list__icon`, `.booking-steps__num`).
-- Додано однократну прогресивну появу секцій нижче hero (`TD.effects.initReveal` у `TD.main.initStage2Modules()`): приховуються (`.td-reveal-pending`) лише елементи нижче поточного вікна (`rect.top >= vh * 0.96`), використовуються тільки `opacity` і `transform: translateY`, з `batchIndex` затримкою ≤ 120ms, очищенням `.is-revealing` після `transitionend` та миттєвим пасивним `rAF`-sweep при швидкому скролі/якірному переході (`removeEventListener` після відкриття всіх елементів).
+- Додано однократну прогресивну появу секцій і блоків нижче першого вікна (`TD.effects.initReveal` у `TD.main.initStage2Modules()`, спільний `IntersectionObserver` із `rootMargin: '0px 0px -8% 0px'`, `threshold: 0.08`): елементи нижче `vh * 0.96` отримують `.td-reveal-pending` (`translateY(14px)` desktop / `10px` mobile `<=719px`; тільки `opacity` для `.deco` без перезапису поворотів), при входженні отримують `.is-visible` і `.is-revealed` з композитними переходами (`520–620ms` desktop, `450–480ms` mobile) й адаптивним stagger (`55ms <= 165ms` desktop, `45ms <= 90ms` tablet, `0ms` `<640px`), очищенням `.is-revealing` після `transitionend` та запобіжним sweep при швидкому скролі (`scroll`/`scrollend`), переході за якорем (`hashchange`), клавіатурному фокусі (`focusin`) і повним відключенням слухачів після відкриття всіх цілей; покрито `.stat-item`, `#services`, `#advantages`, `#prices`/`.price-row`, `#calculator`/`.calc-item`/`.calc-summary`/`.deco--prices-calc-*`, `#doctors`, `#works`, `#reviews`, `#contacts` і разову появу `#site-footer`.
 
-Why: виключає sticky-hover на сенсорних пристроях, затримку наведення після reveal, стрибки висоти на 3G/reload і гарантує 100% видимість контенту без JS або при `prefers-reduced-motion: reduce`.
+Why: виключає sticky-hover на сенсорних пристроях, затримку наведення після reveal, конфлікти `:hover` і поворотів `.deco`, стрибки висоти на 3G/reload і гарантує 100% видимість контенту без JS або при `prefers-reduced-motion: reduce`.
 
-Apply: для нових карток і блоків нижче першого екрана зберігати підхід «спершу резервування геометрії й видимий базовий стан у CSS, потім прогресивний `TD.effects.initReveal` на `opacity`/`transform`».
+Apply: для нових карток і блоків нижче першого екрана зберігати підхід «спершу резервування геометрії й видимий базовий стан у CSS, потім прогресивний `TD.effects.initReveal` / `TD.effects.refreshReveal()` на `opacity`/`transform`» без подвійного приховування вкладених контейнерів.
 ```
 
 ```md
@@ -284,6 +284,38 @@ Why: виключає велику порожню вертикальну зон�
 Apply: під час змін `.drawer*` тримати лише `transform`/`opacity` без `transition: all`/`backdrop-filter` і зберігати адаптацію під `max-height: 560px`.
 ```
 
+```md
+---
+name: prices-calculator-deco-extension
+type: decision
+status: active
+---
+Доповнено декоративну систему `#prices` і `#calculator` ([index.html](file:///c:/Users/nagib/Desktop/стоматолог/index.html), секція `12.2` [css/style.css](file:///c:/Users/nagib/Desktop/стоматолог/css/style.css)) з використанням існуючого `.svg-sprite` без жодних змін JS чи сторонніх залежностей:
+- `.deco--prices-arc` (`#deco-arc`) піднято на лівий фланг `.price-board` (`left: -175px; top: 270px` desktop → `left: -145px; top: 210px` `<=979px`), без `opacity` на `.deco--prices-*`.
+- Усередину `#calculator` (`.calc-block` з `isolation: isolate; overflow: clip` та `.calc-block__head`/`.calc-layout { position: relative; z-index: 1 }`) додано `.deco--prices-calc-ribbon` (`#deco-ribbon`), `.deco--prices-calc-arc` (`#deco-arc`) і `.deco--prices-calc-wave` (`#deco-wave-b`).
+- При `<= 719px` усі другорядні декорації (`.deco--prices-arc`, `.deco--prices-calc-ribbon`, `.deco--prices-calc-arc`, `.deco--prices-calc-wave`) приховуються вище `@media (forced-colors: active)`, лишаючи лише 1 великий верхній декор `.deco--prices-ribbon` і компактну нижню хвилю `.deco--prices-wave` (`76px`); у `forced-colors: active` усі `.deco` вимкнені.
+
+Why: декор калькулятора рухається разом із `#calculator` при фільтрації категорій прайсу, `overflow: clip` не ламає `position: sticky` у `.calc-summary`, а відсутність статичної `opacity` на `.deco` відповідає системі `--deco-*` токенів.
+
+Apply: для подальших змін у `#calculator` зберігати `overflow: clip` (не `overflow: hidden`) та утримувати мобільне приховування другорядних `.deco--prices-*` вище правила `forced-colors`.
+```
+
+```md
+---
+name: frontend-audit-remediation
+type: decision
+status: active
+---
+Усунено технічний борг за результатами фронтенд-аудиту (крім навмисно залишених до хостингу плейсхолдерів `§2.1`):
+- **SEO & Structured Data (`<head>`)**: додано `robots`, `canonical`, `hreflang` (`uk-UA`, `x-default`), Open Graph (`og:*`), Twitter Card (`twitter:*`) і JSON-LD `Dentist` (`PostalAddress`, `GeoCoordinates`, `OpeningHoursSpecification`, `sameAs`).
+- **Дедуплікація SVG та URL**: у `.svg-sprite` винесено `#td-icon-arrow`, `#td-icon-arrow-left`, `#td-icon-arrow-up`, `#td-icon-phone`, `#td-icon-close`, `#td-icon-chevron-right`, `#td-icon-pin`, `#td-icon-clock`, `#td-doctor-fallback` і `#deco-drawer`; `.google-badge` використовує `#td-google-logo` і `#td-star`, `createArrowSvg()` — `#td-icon-arrow`, а всі 7 посилань Google Maps (включно з `<noscript>`) мають `data-clinic="maps-link"`.
+- **A11y, Семантика, CSS і Lifecycle**: `#mobile-drawer` змінено з `<aside>` на `<div role="dialog">`; прибрано дубльовані `role="alert"` із 5 полів `.form-field__error` на користь `aria-invalid` + фокусу + єдиного `#appointment-status`; додано fallback-заголовок у `#work-modal-title`, атрибут `[hidden]` на порожній `#reviews-dots[role="tablist"]`, `srcset`/`sizes` на fallback `<img class="hero__img">`, Linux/Android локальні шрифти (`Roboto`, `Liberation Sans`, `DejaVu Sans`) у `'Inter Fallback'`, `@supports not (overflow-x: clip)` fallback та централізований `TD.lifecycle` (`onPageHide`/`onPageShow`) і `document.hidden` fallback для фонових вкладок і BFcache.
+
+Why: закриває SEO-індексацію локального бізнесу, прибирає дублювання SVG/URL і спам скрінрідера без порушення інваріантів `window.TD`, критичного CSS і WebP/PNG пар.
+
+Apply: нові повторювані іконки додавати в `.svg-sprite`, Google Maps посилання позначати `data-clinic="maps-link"`, а таймери модулів реєструвати в `TD.lifecycle`.
+```
+
 ---
 
 ## 5. Правила плавності, анімацій, стабільного рендерингу та запобігання Layout Shift `[PERF]` `[ARCH]`
@@ -291,13 +323,13 @@ Apply: під час змін `.drawer*` тримати лише `transform`/`op
 - **Архітектурні правила плавності та performance**:
   - Усі переходи й поява елементів виконуються на композитних властивостях (`opacity`, `transform: translateY/translateX/scale`) без сторонніх бібліотек, CDN чи безперервних циклів `setInterval`;
   - `scroll-behavior: smooth` поєднується зі `scroll-margin-top: calc(var(--header-h) + 16px)` на секціях (`.section`, `.advantages-section`) і скидається в `auto` при `prefers-reduced-motion`;
-  - перемикання теми (`html.is-theme-switching`) анімує лише колірні властивості (`background-color`, `color`, `border-color`, `box-shadow`, 300ms); `.header.is-scrolled` змінює фон/бордер/тінь без зміни висоти (`72px`); пасивний `rAF`-sweep у `TD.effects.initReveal()` автоматично знімає слухачів одразу після відкриття всіх елементів.
+  - перемикання теми (`html.is-theme-switching`) анімує лише колірні властивості (`background-color`, `color`, `border-color`, `box-shadow`, 300ms); `.header.is-scrolled` змінює фон/бордер/тінь без зміни висоти (`72px`); пасивний coalesced sweep (`scroll`/`scrollend`/`hashchange`/`focusin`) у `TD.effects.initReveal()` автоматично знімає всі слухачі та observer одразу після відкриття всіх елементів.
 - **Правила анімацій, hover і focus**:
-  - однократна поява `[data-reveal]` (`opacity` + `translateY(10–12px)` для `head`/`card`, чистий `opacity` для `deco`, малювання `.section__eyebrow::before` через `scaleX(0→1)`) із затримкою `<= 120ms`, очищенням `.is-revealing` після `transitionend` та миттєвим відкриттям елементів, уже присутніх або пройдених у в’юпорті;
+  - однократна поява `[data-reveal]` (`.is-visible` + `.is-revealed`, `opacity` + `translateY(14px)` desktop / `10px` `<=719px` для `head`/`card`, чистий `opacity` для `deco`, малювання `.section__eyebrow::before` через `scaleX(0→1)`) із затримкою `<= 165ms` (`0ms` `<640px`), `threshold: 0.08` та `rootMargin: '0px 0px -8% 0px'`, очищенням `.is-revealing` після `transitionend` та миттєвим відкриттям елементів у першому в’юпорті, при клавіатурному `focusin`, при фільтрації (`.is-visible.is-revealed` без `.td-reveal-pending`) та при прокручуванні повз елемент;
   - активні стани карток (`translateY(-2px)`, тінь, бордер), іконочних квадратів `.advantage-card__icon` (`scale(1.03)`), `.reviews-slider__dot::before` (`scaleX(0.375→1)`, без `transition: width`) і фільтрів/калькулятора не змінюють геометрію;
   - усі `:hover` правила обгорнуті в `@media (hover: hover) and (pointer: fine)`; `:focus-visible` та `:active` залишаються активними незалежно від типу вводу.
 - **Обмеження щодо `prefers-reduced-motion` та `forced-colors`**:
-  - у `@media (prefers-reduced-motion: reduce)` (`css/style.css` секція 13): `animation-duration: 0.001ms !important`, `animation-iteration-count: 1 !important`, `transition-duration: 0.001ms !important`, `scroll-behavior: auto !important`, і примусові `opacity: 1 !important; transform: none !important; transition: none !important;` для `[data-reveal]`, `.td-reveal-pending`, `.section__eyebrow::before`; JS-модулі слухають `prefers-reduced-motion` (`TD.effects.revealNow()` миттєво відкриває контент);
+  - у `@media (prefers-reduced-motion: reduce)` (`css/style.css` секція 13): `animation-duration: 0.001ms !important`, `animation-iteration-count: 1 !important`, `transition-duration: 0.001ms !important`, `scroll-behavior: auto !important`, і примусові `opacity: 1 !important; transform: none !important; transition: none !important;` для `[data-reveal="head"]`, `[data-reveal="card"]`, `.td-reveal-pending:not([data-reveal="deco"])`, `.section__eyebrow::before`, `.work-card.is-entering`, `.price-row.is-entering` (а для `[data-reveal="deco"]` — `opacity: 1 !important; transition: none !important;` зі збереженням поворотів SVG); JS-модулі слухають `prefers-reduced-motion` і одразу додають `.is-visible.is-revealed` без observer;
   - `@media (forced-colors: active)` приховує `.deco` (`display: none`) та зберігає чіткі рамки `CanvasText` / `Highlight`.
 - **Додаткові інваріанти стабільного рендерингу й запобігання layout shift**:
 
