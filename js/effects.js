@@ -291,17 +291,17 @@
       {
         kind: 'head',
         selector:
-          '#services .section__head, #advantages .advantages-section__intro, #prices .section__head, #prices .calc-block__head, #doctors .section__head, #works .section__head, #reviews .section__head, #contacts .section__head'
+          '#services .section__head, #advantages .advantages-section__intro, #calculator .section__head, #doctors .section__head, #works .section__head, #reviews .section__head, #contacts .section__head'
       },
       {
         kind: 'card',
         selector:
-          '.stats-section .stat-item, #services-grid .service-card, #services .services-calc-bar, #advantages .advantage-card, #advantages .advantages-note, #prices .price-filters, #price-list .price-row:not(.is-filtered-out):not([hidden]), #calc-items .calc-item, #prices .calc-summary, #doctors .doctor-card, #works .works-filters, #works .work-card, #works .works-empty:not([hidden]), #reviews .reviews-summary, #reviews .reviews-stage, #contacts .contacts-card, #contacts .booking-steps-card, #contacts .contacts-map-card, #contacts .appointment-card, #site-footer .site-footer__brand, #site-footer .site-footer__nav, #site-footer .site-footer__contacts, #site-footer .site-footer__bottom'
+          '.stats-section .stat-item, #services-grid .service-card, #services .services-calc-bar, #advantages .advantage-card, #advantages .advantages-note, #calc-items .calc-item, #calculator .calc-summary, #doctors .doctor-card, #works .works-filters, #works .work-card, #works .works-empty:not([hidden]), #reviews .reviews-summary, #reviews .reviews-stage, #contacts .contacts-card, #contacts .booking-steps-card, #contacts .contacts-map-card, #contacts .appointment-card, #site-footer .site-footer__brand, #site-footer .site-footer__nav, #site-footer .site-footer__contacts, #site-footer .site-footer__bottom'
       },
       {
         kind: 'deco',
         selector:
-          '.deco--services-tooth, .deco--advantages-ribbon, .deco--advantages-arc, .deco--prices-ribbon, .deco--prices-arc, .deco--prices-wave, .deco--prices-calc-ribbon, .deco--prices-calc-arc, .deco--prices-calc-wave, .deco--doctors-tooth, .deco--works-arc, .deco--works-contour, .deco--reviews-arc, .deco--reviews-wave, .deco--contacts-ribbon, .deco--footer-wave'
+          '.deco--services-tooth, .deco--advantages-ribbon, .deco--advantages-arc, .deco--prices-ribbon, .deco--prices-arc, .deco--prices-wave, .deco--doctors-tooth, .deco--works-arc, .deco--works-contour, .deco--reviews-arc, .deco--reviews-wave, .deco--contacts-ribbon, .deco--footer-wave'
       }
     ];
 

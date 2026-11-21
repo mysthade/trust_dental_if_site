@@ -391,7 +391,7 @@
         <ul class="nav__list">
           <li><a class="nav__link" href="#services" data-nav-target="services">Послуги</a></li>
           <li><a class="nav__link" href="#advantages" data-nav-target="advantages">Переваги</a></li>
-          <li><a class="nav__link" href="#prices" data-nav-target="prices">Прайс</a></li>
+          <li><a class="nav__link" href="#calculator" data-nav-target="calculator">Прайс</a></li>
           <li><a class="nav__link" href="#doctors" data-nav-target="doctors">Лікарі</a></li>
           <li><a class="nav__link" href="#works" data-nav-target="works">Роботи</a></li>
           <li><a class="nav__link" href="#reviews" data-nav-target="reviews">Відгуки</a></li>
@@ -490,7 +490,7 @@
           </a>
         </li>
         <li>
-          <a class="drawer__link" href="#prices" data-nav-target="prices">
+          <a class="drawer__link" href="#calculator" data-nav-target="calculator">
             <span class="drawer__link-icon" aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                 <rect x="4" y="4" width="16" height="16" rx="3"/>
@@ -680,7 +680,7 @@
                 <use href="#td-icon-arrow"></use>
               </svg>
             </a>
-            <a class="btn btn--outline btn--lg" href="#prices">Дізнатися прайс</a>
+            <a class="btn btn--outline btn--lg" href="#calculator">Дізнатися прайс</a>
           </div>
         </div>
       </div>
@@ -824,10 +824,10 @@
 
         <div class="container services__container">
           <div class="section__head">
-            <span class="section__eyebrow">Послуги</span>
-            <h2 id="heading-services" class="section__title">Що ми лікуємо</h2>
+            <span class="section__eyebrow">Послуги та ціни</span>
+            <h2 id="heading-services" class="section__title">Послуги та орієнтовна вартість</h2>
             <p class="section__lead">
-              Основні напрямки стоматології в TRUST DENTAL — оберіть потрібну послугу, щоб переглянути актуальні ціни.
+              Перегляньте основні послуги та їх орієнтовну вартість і додайте потрібні процедури до попереднього розрахунку. Остаточна вартість залежить від діагностики та обсягу лікування.
             </p>
           </div>
           <div id="services-grid" class="services-grid"></div>
@@ -921,7 +921,7 @@
         </div>
       </section>
 
-      <section id="prices" class="section section--prices" aria-labelledby="heading-prices">
+      <section id="calculator" class="section section--prices calculator-section" aria-labelledby="heading-calculator">
         <svg class="deco deco--prices-ribbon" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true" focusable="false">
           <use href="#deco-ribbon"></use>
         </svg>
@@ -932,45 +932,45 @@
           <use href="#deco-wave-a"></use>
         </svg>
         <div class="container">
-          <div class="section__head">
-            <span class="section__eyebrow">Прайс</span>
-            <h2 id="heading-prices" class="section__title">Прозорі ціни на лікування</h2>
+          <header class="section__head calculator-section__head">
+            <span class="section__eyebrow">Попередній розрахунок</span>
+            <h2 id="heading-calculator" class="section__title">Попередній розрахунок вартості</h2>
             <p class="section__lead">
-              Фільтруйте позиції за напрямком або скористайтеся калькулятором нижче, щоб сформувати попередній розрахунок.
+              Оберіть потрібні послуги та вкажіть кількість зубів або щелеп, щоб отримати попередню орієнтовну вартість лікування. Остаточний план і вартість лікар визначає після огляду та діагностики.
             </p>
-          </div>
+          </header>
 
-          <div id="price-filters" class="price-filters" role="group" aria-label="Фільтр категорій прайсу"></div>
-          <p id="price-status" class="price-status" aria-live="polite"></p>
-
-          <div class="price-board">
-            <ul id="price-list" class="price-list" aria-label="Перелік цін на стоматологічні послуги"></ul>
-          </div>
-
-          <!-- Calculator subsection -->
-          <div id="calculator" class="calc-block" aria-labelledby="heading-calculator">
-            <svg class="deco deco--prices-calc-ribbon" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-              <use href="#deco-ribbon"></use>
-            </svg>
-            <svg class="deco deco--prices-calc-arc" viewBox="0 0 600 900" aria-hidden="true" focusable="false">
-              <use href="#deco-arc"></use>
-            </svg>
-            <svg class="deco deco--prices-calc-wave" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-              <use href="#deco-wave-b"></use>
-            </svg>
-
-            <div class="calc-block__head">
-              <span class="section__eyebrow">Калькулятор</span>
-              <h3 id="heading-calculator" class="calc-block__title">Попередній розрахунок вартості</h3>
-              <p class="calc-block__lead">
-                Позначте потрібні процедури та вкажіть кількість зубів або щелеп.
-              </p>
-            </div>
-
+          <div class="calc-block">
             <div class="calc-layout">
-              <div id="calc-items" class="calc-list" role="group" aria-label="Вибір послуг для розрахунку"></div>
+              <div class="calc-list-col">
+                <div class="calc-mobile-head">
+                  <span class="calc-mobile-head__title">Оберіть послуги</span>
+                  <a href="#calc-live-region" id="calc-mobile-total-link" class="calc-mobile-head__total" aria-label="Перейти до підсумку розрахунку">
+                    <span class="calc-mobile-head__total-label">Сума:</span>
+                    <strong id="calc-mobile-total" class="calc-mobile-head__total-val">0&nbsp;грн</strong>
+                  </a>
+                </div>
 
-              <div class="calc-summary">
+                <div id="calc-items" class="calc-list" role="group" aria-label="Вибір послуг для розрахунку"></div>
+
+                <button
+                  type="button"
+                  id="calc-more-toggle"
+                  class="calc-more-toggle"
+                  aria-expanded="false"
+                  aria-controls="calc-items"
+                >
+                  <span class="calc-more-toggle__text" id="calc-more-toggle-text">Інші послуги (хірургія, коронки, брекети, імплантація)</span>
+                  <span class="calc-more-toggle__meta">
+                    <span class="calc-more-toggle__badge" id="calc-more-toggle-badge">+4</span>
+                    <svg class="calc-more-toggle__icon" width="18" height="18" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                      <use href="#td-icon-chevron-right"></use>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+
+              <aside class="calc-summary" aria-label="Підсумок попереднього розрахунку">
                 <div id="calc-live-region" class="calc-summary__live">
                   <span class="calc-summary__eyebrow">Ваш попередній розрахунок</span>
                   <div id="calc-total" class="calc-summary__total" aria-live="polite" aria-atomic="true">0&nbsp;грн</div>
@@ -995,11 +995,11 @@
                 <p class="calc-summary__note">
                   Розрахунок орієнтовний. Точну суму фіксує лікар після огляду.
                 </p>
-              </div>
+              </aside>
             </div>
           </div>
 
-          <noscript><p class="section__note">Увімкніть JavaScript для роботи фільтрів прайсу та калькулятора.</p></noscript>
+          <noscript><p class="section__note">Увімкніть JavaScript для роботи калькулятора попереднього розрахунку вартості.</p></noscript>
         </div>
       </section>
 
@@ -1616,7 +1616,7 @@
           <ul class="site-footer__nav-list">
             <li><a class="site-footer__nav-link" href="#services">Послуги</a></li>
             <li><a class="site-footer__nav-link" href="#advantages">Переваги</a></li>
-            <li><a class="site-footer__nav-link" href="#prices">Прайс</a></li>
+            <li><a class="site-footer__nav-link" href="#calculator">Прайс</a></li>
             <li><a class="site-footer__nav-link" href="#doctors">Лікарі</a></li>
             <li><a class="site-footer__nav-link" href="#works">Роботи</a></li>
             <li><a class="site-footer__nav-link" href="#reviews">Відгуки</a></li>

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   TRUST DENTAL — Safe DOM Renderer: Services & Filterable Prices
+   TRUST DENTAL — Safe DOM Renderer: Services, Works, Reviews & Contacts
    Namespace: window.TD.render (zero innerHTML from untrusted data)
    ========================================================================== */
 (function (window, document) {
@@ -8,7 +8,6 @@
   var TD = (window.TD = window.TD || {});
   var SVG_NS = 'http://www.w3.org/2000/svg';
   var isInitialized = false;
-  var activeCategory = 'all';
   var activeWorkCategory = 'all';
   var activeModalWorkId = null;
   var lastModalTriggerEl = null;
@@ -353,51 +352,8 @@
   }
 
   /* ------------------------------------------------------------------------
-     2. Price Filters (#price-filters) & Price Rows (#price-list)
+     2. Roving Pill Key Navigation & Doctor Media Fallbacks
      ------------------------------------------------------------------------ */
-  function getCategoryLabel(catId) {
-    if (!catId || !Array.isArray(TD.PRICE_FILTERS)) return '';
-    for (var i = 0; i < TD.PRICE_FILTERS.length; i++) {
-      if (TD.PRICE_FILTERS[i].id === catId) return TD.PRICE_FILTERS[i].label;
-    }
-    return '';
-  }
-
-  function renderPriceFilters() {
-    var container = document.getElementById('price-filters');
-    if (!container || !Array.isArray(TD.PRICE_FILTERS)) return;
-
-    var frag = document.createDocumentFragment();
-
-    for (var i = 0; i < TD.PRICE_FILTERS.length; i++) {
-      var filter = TD.PRICE_FILTERS[i];
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'filter-pill' + (filter.id === activeCategory ? ' is-active' : '');
-      btn.setAttribute('data-filter', filter.id);
-      btn.setAttribute('aria-pressed', filter.id === activeCategory ? 'true' : 'false');
-      btn.textContent = filter.label;
-      frag.appendChild(btn);
-    }
-
-    container.textContent = '';
-    container.appendChild(frag);
-
-    if (!container.dataset.priceFilterBound) {
-      container.dataset.priceFilterBound = '1';
-      container.addEventListener('click', function (e) {
-        var btn = e.target.closest('[data-filter]');
-        if (!btn) return;
-        var cat = btn.getAttribute('data-filter');
-        if (cat && cat !== activeCategory) {
-          applyPriceFilter(cat, true);
-        }
-      });
-
-      bindRovingPillKeys(container, '[data-filter]');
-    }
-  }
-
   function bindRovingPillKeys(container, selector) {
     /* Arrow-key convenience alongside standard Tab navigation */
     container.addEventListener('keydown', function (e) {
@@ -418,127 +374,6 @@
       else if (key === 'End') nextIdx = buttons.length - 1;
       buttons[nextIdx].focus();
     });
-  }
-
-  function renderPriceList() {
-    var container = document.getElementById('price-list');
-    if (!container || !Array.isArray(TD.PRICES)) return;
-
-    var frag = document.createDocumentFragment();
-
-    for (var i = 0; i < TD.PRICES.length; i++) {
-      var item = TD.PRICES[i];
-      var row = document.createElement('li');
-      row.className = 'price-row';
-      row.setAttribute('data-category', item.category || '');
-      row.setAttribute('data-price-id', item.id);
-
-      var info = document.createElement('div');
-      info.className = 'price-row__info';
-
-      var title = document.createElement('span');
-      title.className = 'price-row__title';
-      title.textContent = item.title;
-      info.appendChild(title);
-
-      var catLabel = getCategoryLabel(item.category);
-      if (catLabel || item.note) {
-        var meta = document.createElement('div');
-        meta.className = 'price-row__meta';
-        if (catLabel) {
-          var badge = document.createElement('span');
-          badge.className = 'price-row__cat';
-          badge.textContent = catLabel;
-          meta.appendChild(badge);
-        }
-        if (item.note) {
-          var note = document.createElement('span');
-          note.className = 'price-row__note';
-          note.textContent = item.note;
-          meta.appendChild(note);
-        }
-        info.appendChild(meta);
-      }
-
-      var cost = document.createElement('span');
-      cost.className = 'price-row__cost';
-      cost.textContent = TD.formatPrice(item.price, item.prefix, item.unit);
-
-      row.appendChild(info);
-      row.appendChild(cost);
-      frag.appendChild(row);
-    }
-
-    container.textContent = '';
-    container.appendChild(frag);
-    updatePriceStatus(TD.PRICES.length, 'all');
-  }
-
-  function updatePriceStatus(visibleCount, categoryId) {
-    var status = document.getElementById('price-status');
-    if (!status || !Array.isArray(TD.PRICES)) return;
-    var label = getCategoryLabel(categoryId) || 'Всі';
-    var word = TD.pluralizeUk(visibleCount, 'позиція', 'позиції', 'позицій');
-    status.textContent =
-      'Категорія «' + label + '»: ' + visibleCount + ' ' + word + ' із ' + TD.PRICES.length;
-  }
-
-  function applyPriceFilter(categoryId, animate) {
-    var valid = false;
-    for (var i = 0; i < TD.PRICE_FILTERS.length; i++) {
-      if (TD.PRICE_FILTERS[i].id === categoryId) {
-        valid = true;
-        break;
-      }
-    }
-    var target = valid ? categoryId : 'all';
-    activeCategory = target;
-
-    var filterBtns = document.querySelectorAll('#price-filters [data-filter]');
-    for (var b = 0; b < filterBtns.length; b++) {
-      var isMatch = filterBtns[b].getAttribute('data-filter') === target;
-      filterBtns[b].classList.toggle('is-active', isMatch);
-      filterBtns[b].setAttribute('aria-pressed', isMatch ? 'true' : 'false');
-    }
-
-    var rows = document.querySelectorAll('#price-list .price-row');
-    var visibleCount = 0;
-    var shouldAnimate = Boolean(animate) && !prefersReducedMotion();
-
-    for (var r = 0; r < rows.length; r++) {
-      var row = rows[r];
-      var rowCat = row.getAttribute('data-category');
-      var matches = target === 'all' || (rowCat !== '' && rowCat === target);
-
-      if (matches) {
-        visibleCount++;
-        row.hidden = false;
-        row.classList.remove('is-filtered-out', 'td-reveal-pending', 'is-revealing');
-        row.classList.add('is-visible', 'is-revealed');
-        if (shouldAnimate) {
-          row.classList.add('is-entering');
-        }
-      } else {
-        row.classList.remove('is-entering');
-        row.classList.add('is-filtered-out');
-        row.hidden = true;
-      }
-    }
-
-    if (shouldAnimate) {
-      var clearEnteringRows = function () {
-        for (var j = 0; j < rows.length; j++) {
-          rows[j].classList.remove('is-entering');
-        }
-      };
-      if (document.hidden || typeof window.requestAnimationFrame !== 'function') {
-        window.setTimeout(clearEnteringRows, 16);
-      } else {
-        window.requestAnimationFrame(clearEnteringRows);
-      }
-    }
-
-    updatePriceStatus(visibleCount, target);
   }
 
   function initDoctorMediaFallbacks() {
@@ -3030,8 +2865,6 @@
     if (isInitialized) return;
     isInitialized = true;
     renderServices();
-    renderPriceFilters();
-    renderPriceList();
     renderWorkFilters();
     renderWorksGrid();
     bindWorkModal();
@@ -3049,13 +2882,6 @@
 
   TD.render = {
     init: init,
-    setPriceFilter: function (cat) {
-      if (!isInitialized) init();
-      applyPriceFilter(cat, true);
-    },
-    getActiveFilter: function () {
-      return activeCategory;
-    },
     setWorkFilter: function (cat) {
       if (!isInitialized) init();
       applyWorkFilter(cat);
