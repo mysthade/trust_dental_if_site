@@ -316,6 +316,22 @@ Why: закриває SEO-індексацію локального бізнес
 Apply: нові повторювані іконки додавати в `.svg-sprite`, Google Maps посилання позначати `data-clinic="maps-link"`, а таймери модулів реєструвати в `TD.lifecycle`.
 ```
 
+```md
+---
+name: services-to-calculator-bridge
+type: decision
+status: active
+---
+Замінено однотипні кнопки «Дізнатися ціну» (`.service-card__cta`) у `#services` на двосторонній інтерактивний місток «картка послуги ↔ калькулятор вартості» ([js/data.js](file:///c:/Users/nagib/Desktop/стоматолог/js/data.js), [js/calculator.js](file:///c:/Users/nagib/Desktop/стоматолог/js/calculator.js), [js/render.js](file:///c:/Users/nagib/Desktop/стоматолог/js/render.js), [css/style.css](file:///c:/Users/nagib/Desktop/стоматолог/css/style.css), [index.html](file:///c:/Users/nagib/Desktop/стоматолог/index.html)):
+- Кожен об’єкт `TD.SERVICES` має стабільне поле `calcItemId` (`therapy -> calc-caries`, `hygiene -> calc-hygiene`, `surgery -> calc-extraction`, `braces -> calc-braces`, `implantation -> calc-implant`, `orthopedics -> calc-crown`, `diagnostics -> calc-consultation`, `pediatric -> null`) та хелпери `TD.findCalcItemById()` / `TD.findServiceById()`.
+- Картка послуги виводить підтверджену ціну безпосередньо з `TD.CALC_ITEMS` (`.service-card__price`) і компактну кнопку `<button type="button" class="service-card__add-to-calc">` (`+ Додати до розрахунку` ↔ `✓ Вибрано`, `aria-pressed="false/true"`). Для `pediatric` (`calcItemId: null`) без вигадування ціни виводиться повідомлення «Ця послуга потребує індивідуального розрахунку» та кнопка `type="button"` «Уточнити вартість», що обирає `pediatric` у `#appointment-service` і плавно скролить до `#contacts`.
+- Двостороння синхронізація працює через `TD.calculator.addItem()`, `TD.calculator.isItemSelected()`, `TD.calculator.reset()` і подію `CustomEvent('td:calc-change')`, а також статус-бар `#services-calc-bar` (`aria-live="polite"`) із кнопкою переходу до `#calculator`.
+
+Why: усуває 8 однакових кнопок «Дізнатися ціну», гарантує 100% збіг ціни на картці й у калькуляторі без вигаданих цифр та підтримує миттєву синхронізацію в обидва боки.
+
+Apply: при додаванні чи зміні позицій у `TD.CALC_ITEMS` оновлювати `calcItemId` у `TD.SERVICES`; для послуг без прямого розрахунку залишати `calcItemId: null`.
+```
+
 ---
 
 ## 5. Правила плавності, анімацій, стабільного рендерингу та запобігання Layout Shift `[PERF]` `[ARCH]`

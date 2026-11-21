@@ -102,7 +102,8 @@
       description: 'Лікування карієсу з кофердамом, реставрація та лікування кореневих каналів.',
       icon: 'td-icon-therapy',
       iconImg: 'img/services/therapy',
-      category: 'therapy'
+      category: 'therapy',
+      calcItemId: 'calc-caries'
     }),
     Object.freeze({
       id: 'hygiene',
@@ -110,7 +111,8 @@
       description: 'Професійна гігієна (40 хв). [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-hygiene',
       iconImg: 'img/services/hygiene',
-      category: 'hygiene'
+      category: 'hygiene',
+      calcItemId: 'calc-hygiene'
     }),
     Object.freeze({
       id: 'surgery',
@@ -118,7 +120,8 @@
       description: 'Ультразвукове (п\'єзохірургічне) видалення зубів із мінімальною травматизацією.',
       icon: 'td-icon-surgery',
       iconImg: 'img/services/surgery',
-      category: 'surgery'
+      category: 'surgery',
+      calcItemId: 'calc-extraction'
     }),
     Object.freeze({
       id: 'braces',
@@ -126,7 +129,8 @@
       description: 'Сучасні брекет-системи та ортодонтія. [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-braces',
       iconImg: 'img/services/braces',
-      category: 'braces'
+      category: 'braces',
+      calcItemId: 'calc-braces'
     }),
     Object.freeze({
       id: 'implantation',
@@ -134,7 +138,8 @@
       description: 'Імплантація зубів (хірургічний етап). [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-implantation',
       iconImg: 'img/services/implant',
-      category: null
+      category: null,
+      calcItemId: 'calc-implant'
     }),
     Object.freeze({
       id: 'orthopedics',
@@ -142,7 +147,8 @@
       description: 'Цирконієві коронки та вініри. [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-orthopedics',
       iconImg: 'img/services/orthopedics',
-      category: 'orthopedics'
+      category: 'orthopedics',
+      calcItemId: 'calc-crown'
     }),
     Object.freeze({
       id: 'pediatric',
@@ -150,7 +156,8 @@
       description: '[ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
       icon: 'td-icon-pediatric',
       iconImg: 'img/services/pediatric',
-      category: null
+      category: null,
+      calcItemId: null
     }),
     Object.freeze({
       id: 'diagnostics',
@@ -158,7 +165,8 @@
       description: 'Консультація та діагностика на візіографі.',
       icon: 'td-icon-diagnostics',
       iconImg: 'img/services/diagnostics',
-      category: null
+      category: null,
+      calcItemId: 'calc-consultation'
     })
   ]);
 
@@ -592,6 +600,28 @@
       ? TD.formatNumber(price[0]) + '–' + TD.formatNumber(price[1])
       : TD.formatNumber(price);
     return (prefix ? prefix + '\u00A0' : '') + body + '\u00A0' + currency;
+  };
+
+  /**
+   * Look up a calculator item in TD.CALC_ITEMS by stable calcItemId
+   */
+  TD.findCalcItemById = function (calcItemId) {
+    if (!calcItemId || !Array.isArray(TD.CALC_ITEMS)) return null;
+    for (var i = 0; i < TD.CALC_ITEMS.length; i++) {
+      if (TD.CALC_ITEMS[i].id === calcItemId) return TD.CALC_ITEMS[i];
+    }
+    return null;
+  };
+
+  /**
+   * Look up a service item in TD.SERVICES by stable serviceId
+   */
+  TD.findServiceById = function (serviceId) {
+    if (!serviceId || !Array.isArray(TD.SERVICES)) return null;
+    for (var i = 0; i < TD.SERVICES.length; i++) {
+      if (TD.SERVICES[i].id === serviceId) return TD.SERVICES[i];
+    }
+    return null;
   };
 
   /**
