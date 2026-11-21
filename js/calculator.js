@@ -9,6 +9,8 @@
 
   var TD = (window.TD = window.TD || {});
   var isInitialized = false;
+  var isMobileExpanded = false;
+  var PRIMARY_GROUP_COUNT = 4;
   var stateMap = Object.create(null);
 
   function prefersReducedMotion() {
@@ -87,6 +89,10 @@
     if (!row) return;
 
     row.classList.toggle('is-selected', entry.checked);
+    if (entry.checked) {
+      row.classList.remove('td-reveal-pending', 'is-revealing');
+      row.classList.add('is-visible', 'is-revealed');
+    }
 
     if (item.countable) {
       var decBtn = row.querySelector('[data-calc-dec]');
@@ -101,9 +107,54 @@
     }
   }
 
+  function syncMobileAccordionUI() {
+    var listEl = document.getElementById('calc-items');
+    var toggleBtn = document.getElementById('calc-more-toggle');
+    var textEl = document.getElementById('calc-more-toggle-text');
+    var badgeEl = document.getElementById('calc-more-toggle-badge');
+    if (!listEl || !toggleBtn || !Array.isArray(TD.CALC_ITEMS)) return;
+
+    var totalExtra = 0;
+    var unselectedExtra = 0;
+    for (var i = PRIMARY_GROUP_COUNT; i < TD.CALC_ITEMS.length; i++) {
+      totalExtra++;
+      var item = TD.CALC_ITEMS[i];
+      var entry = stateMap[item.id];
+      if (!entry || !entry.checked) {
+        unselectedExtra++;
+      }
+    }
+
+    listEl.classList.toggle('is-mobile-expanded', isMobileExpanded);
+    toggleBtn.classList.toggle('is-expanded', isMobileExpanded);
+    toggleBtn.setAttribute('aria-expanded', isMobileExpanded ? 'true' : 'false');
+
+    if (isMobileExpanded) {
+      if (textEl) textEl.textContent = 'Згорнути додаткові послуги';
+      if (badgeEl) badgeEl.textContent = 'Згорнути';
+      var extraRows = listEl.querySelectorAll('.calc-item[data-calc-group="extra"]');
+      for (var r = 0; r < extraRows.length; r++) {
+        extraRows[r].classList.remove('td-reveal-pending', 'is-revealing');
+        extraRows[r].classList.add('is-visible', 'is-revealed');
+      }
+    } else if (unselectedExtra === 0 && totalExtra > 0) {
+      if (textEl) textEl.textContent = 'Усі додаткові послуги вже вибрано';
+      if (badgeEl) badgeEl.textContent = totalExtra + ' з ' + totalExtra;
+    } else {
+      if (textEl) {
+        textEl.textContent = 'Інші послуги (хірургія, коронки, брекети, імплантація)';
+      }
+      if (badgeEl) {
+        badgeEl.textContent = '+' + unselectedExtra;
+      }
+    }
+  }
+
   function updateSummary() {
     var selection = buildSelection();
     var totalEl = document.getElementById('calc-total');
+    var mobileTotalEl = document.getElementById('calc-mobile-total');
+    var mobileTotalLink = document.getElementById('calc-mobile-total-link');
     var listEl = document.getElementById('calc-breakdown');
     var emptyEl = document.getElementById('calc-empty');
     var submitBtn = document.getElementById('calc-submit');
@@ -112,8 +163,16 @@
     if (totalEl) {
       totalEl.textContent = selection.formattedTotal;
     }
+    if (mobileTotalEl) {
+      mobileTotalEl.textContent = selection.formattedTotal;
+    }
 
     var hasItems = selection.items.length > 0;
+    if (mobileTotalLink) {
+      mobileTotalLink.classList.toggle('has-selection', hasItems);
+    }
+
+    syncMobileAccordionUI();
 
     if (emptyEl) {
       emptyEl.hidden = hasItems;
@@ -200,6 +259,7 @@
       var row = document.createElement('div');
       row.className = 'calc-item';
       row.setAttribute('data-calc-row', item.id);
+      row.setAttribute('data-calc-group', i < PRIMARY_GROUP_COUNT ? 'primary' : 'extra');
 
       var checkWrap = document.createElement('div');
       checkWrap.className = 'calc-item__main';
@@ -247,6 +307,11 @@
         stepper.className = 'calc-stepper';
         stepper.setAttribute('role', 'group');
         stepper.setAttribute('aria-label', 'Кількість для: ' + item.title);
+
+        var stepHint = document.createElement('span');
+        stepHint.className = 'calc-stepper__hint';
+        stepHint.textContent = 'Кількість:';
+        stepper.appendChild(stepHint);
 
         var decBtn = document.createElement('button');
         decBtn.type = 'button';
@@ -376,6 +441,15 @@
   function bindSummaryActions() {
     var submitBtn = document.getElementById('calc-submit');
     var resetBtn = document.getElementById('calc-reset');
+    var moreToggleBtn = document.getElementById('calc-more-toggle');
+
+    if (moreToggleBtn && !moreToggleBtn.dataset.calcMoreBound) {
+      moreToggleBtn.dataset.calcMoreBound = '1';
+      moreToggleBtn.addEventListener('click', function () {
+        isMobileExpanded = !isMobileExpanded;
+        syncMobileAccordionUI();
+      });
+    }
 
     if (resetBtn && !resetBtn.dataset.calcResetBound) {
       resetBtn.dataset.calcResetBound = '1';

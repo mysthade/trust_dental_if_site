@@ -39,7 +39,7 @@
   TD.NAV_ITEMS = Object.freeze([
     { id: 'services', label: 'Послуги' },
     { id: 'advantages', label: 'Переваги' },
-    { id: 'prices', label: 'Прайс' },
+    { id: 'calculator', label: 'Прайс' },
     { id: 'doctors', label: 'Лікарі' },
     { id: 'works', label: 'Роботи' },
     { id: 'reviews', label: 'Відгуки' },
@@ -167,105 +167,6 @@
       iconImg: 'img/services/diagnostics',
       category: null,
       calcItemId: 'calc-consultation'
-    })
-  ]);
-
-  /* --------------------------------------------------------------------------
-     Price filters — strictly these 6 filters
-     -------------------------------------------------------------------------- */
-  TD.PRICE_FILTERS = Object.freeze([
-    Object.freeze({ id: 'all', label: 'Всі' }),
-    Object.freeze({ id: 'surgery', label: 'Атравматична хірургія' }),
-    Object.freeze({ id: 'braces', label: 'Брекет-системи' }),
-    Object.freeze({ id: 'therapy', label: 'Терапія та канали' }),
-    Object.freeze({ id: 'orthopedics', label: 'Ортопедія' }),
-    Object.freeze({ id: 'hygiene', label: 'Гігієна' })
-  ]);
-
-  /* --------------------------------------------------------------------------
-     Prices (9 items) — items with category: null appear only in "Всі"
-     -------------------------------------------------------------------------- */
-  TD.PRICES = Object.freeze([
-    Object.freeze({
-      id: 'consultation-visiograph',
-      title: 'Консультація + візіограф',
-      price: 400,
-      prefix: '',
-      unit: 'грн',
-      note: '',
-      category: null
-    }),
-    Object.freeze({
-      id: 'ultrasonic-extraction',
-      title: 'Видалення зуба ультразвуком',
-      price: 2200,
-      prefix: 'від',
-      unit: 'грн',
-      note: '',
-      category: 'surgery'
-    }),
-    Object.freeze({
-      id: 'braces-jaw',
-      title: 'Брекети',
-      price: 9500,
-      prefix: 'від',
-      unit: 'грн',
-      note: 'за 1 щелепу',
-      category: 'braces'
-    }),
-    Object.freeze({
-      id: 'implant-surgical',
-      title: 'Імплантат (хірургічний етап)',
-      price: 11500,
-      prefix: 'від',
-      unit: 'грн',
-      note: '',
-      category: null
-    }),
-    Object.freeze({
-      id: 'caries-restoration',
-      title: 'Карієс і реставрація',
-      price: Object.freeze([1200, 2200]),
-      prefix: '',
-      unit: 'грн',
-      note: '',
-      category: 'therapy'
-    }),
-    Object.freeze({
-      id: 'root-canals',
-      title: 'Кореневі канали',
-      price: 1800,
-      prefix: 'від',
-      unit: 'грн',
-      note: '',
-      category: 'therapy'
-    }),
-    Object.freeze({
-      id: 'zirconia-crowns-veneers',
-      title: 'Цирконієві коронки та вініри',
-      price: 6500,
-      prefix: 'від',
-      unit: 'грн',
-      note: '',
-      category: 'orthopedics'
-    }),
-    Object.freeze({
-      id: 'professional-hygiene',
-      title: 'Гігієна',
-      price: 1300,
-      prefix: '',
-      unit: 'грн',
-      note: '40 хв',
-      category: 'hygiene'
-    }),
-    Object.freeze({
-      id: 'pediatric-dentistry',
-      title: 'Дитяча стоматологія',
-      price: 800,
-      prefix: 'від',
-      unit: 'грн',
-      note: '',
-      category: null
     })
   ]);
 
