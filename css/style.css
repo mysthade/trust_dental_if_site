@@ -6520,6 +6520,140 @@ html.is-theme-switching .site-footer {
   }
 }
 
+/* --------------------------------------------------------------------------
+   12.6.1. Mobile Fixed Quick-Action Bar (#mobile-action-bar)
+   Appears only on mobile/tablet (<= 979px) after Hero CTAs exit viewport,
+   and hides automatically when #contacts, #site-footer, or #mobile-drawer enter.
+   -------------------------------------------------------------------------- */
+html.is-theme-switching .mobile-action-bar,
+html.is-theme-switching .mobile-action-bar__icon,
+html.is-theme-switching .mobile-action-bar__cta {
+  transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.mobile-action-bar {
+  position: fixed;
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 95;
+  display: grid;
+  grid-template-columns: 46px 46px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  max-width: 440px;
+  margin-inline: auto;
+  padding: 8px;
+  border-radius: 24px;
+  background-color: var(--surface-strong);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translate3d(0, calc(100% + 24px), 0);
+  pointer-events: none;
+  transition: opacity 240ms ease, transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobile-action-bar.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  pointer-events: auto;
+}
+
+.mobile-action-bar__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background-color 180ms ease,
+    border-color 180ms ease, color 180ms ease, opacity 180ms ease;
+}
+
+.mobile-action-bar__icon:active:not(.is-disabled) {
+  transform: scale(0.95);
+}
+
+.mobile-action-bar__icon.is-disabled,
+.mobile-action-bar__icon[aria-disabled="true"] {
+  opacity: 0.44;
+  cursor: default;
+  pointer-events: none;
+}
+
+.mobile-action-bar__cta {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@media (max-width: 979px) {
+  body.has-mobile-action-bar .site-footer {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 389px) {
+  .mobile-action-bar {
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    grid-template-columns: 44px 44px minmax(0, 1fr);
+    gap: 6px;
+    padding: 7px;
+  }
+
+  .mobile-action-bar__icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mobile-action-bar__cta {
+    min-height: 44px;
+    padding: 9px 12px;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 979px) and (max-height: 520px) and (orientation: landscape) {
+  .mobile-action-bar {
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    grid-template-columns: 44px 44px minmax(0, 1fr);
+    gap: 6px;
+    max-width: 380px;
+    padding: 6px;
+    border-radius: 20px;
+  }
+
+  .mobile-action-bar__icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mobile-action-bar__cta {
+    min-height: 44px;
+    padding: 8px 14px;
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 980px) {
+  .mobile-action-bar {
+    display: none !important;
+  }
+}
+
 @media (forced-colors: active) {
   .drawer__deco {
     display: none;
@@ -6537,7 +6671,10 @@ html.is-theme-switching .site-footer {
   .appointment-calc-box,
   .form-input,
   .form-status,
-  .site-footer {
+  .site-footer,
+  .mobile-action-bar,
+  .mobile-action-bar__icon,
+  .mobile-action-bar__cta {
     border: 1px solid CanvasText;
   }
 }
@@ -6642,8 +6779,11 @@ html.is-theme-switching .site-footer {
   .advantage-card:hover,
   .doctor-card:hover,
   .work-card:hover,
-  .review-card:hover {
-    transform: none;
+  .review-card:hover,
+  .mobile-action-bar,
+  .mobile-action-bar.is-visible {
+    transform: none !important;
+    transition: none !important;
   }
 
   *,

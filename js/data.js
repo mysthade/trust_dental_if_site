@@ -35,7 +35,9 @@
     GOOGLE_MAPS_EMBED_URL:
       'https://www.google.com/maps?q=%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental,+%D0%BC.+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA,+%D0%B2%D1%83%D0%BB.+%D0%93%D0%B0%D0%BB%D0%B8%D1%86%D1%8C%D0%BA%D0%B0,+51%D0%B0&hl=uk&z=16&output=embed',
     INSTAGRAM_HANDLE: '@trust_dental_ua',
-    INSTAGRAM_URL: 'https://www.instagram.com/trust_dental_ua/'
+    INSTAGRAM_URL: 'https://www.instagram.com/trust_dental_ua/',
+    /* TODO: підтвердити у власника реальний URL Telegram-чату або профілю клініки (наприклад, 'https://t.me/trust_dental_ua') і вставити в TELEGRAM_URL */
+    TELEGRAM_URL: ''
   });
 
   TD.NAV_ITEMS = Object.freeze([
@@ -566,6 +568,33 @@
           inner.textContent = c.INSTAGRAM_HANDLE;
         } else if (el.children.length === 0) {
           el.textContent = c.INSTAGRAM_HANDLE;
+        }
+      },
+      'telegram-link': function (el) {
+        var tgUrl = c.TELEGRAM_URL ? String(c.TELEGRAM_URL).trim() : '';
+        if (/^https?:\/\/(t\.me|telegram\.me)\/\S+$/i.test(tgUrl)) {
+          el.setAttribute('href', tgUrl);
+          el.setAttribute('target', '_blank');
+          el.setAttribute('rel', 'noopener noreferrer');
+          el.removeAttribute('aria-disabled');
+          el.removeAttribute('tabindex');
+          el.removeAttribute('title');
+          el.classList.remove('is-disabled');
+          el.setAttribute(
+            'aria-label',
+            'Написати в Telegram клініки TRUST DENTAL (відкриється у новій вкладці)'
+          );
+        } else {
+          el.removeAttribute('href');
+          el.removeAttribute('target');
+          el.removeAttribute('rel');
+          el.setAttribute('aria-disabled', 'true');
+          el.setAttribute('tabindex', '-1');
+          el.classList.add('is-disabled');
+          el.setAttribute(
+            'aria-label',
+            'Telegram-чат клініки TRUST DENTAL (посилання очікує підтвердження власником)'
+          );
         }
       },
       experience: function (el) {

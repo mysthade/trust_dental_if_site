@@ -14,6 +14,8 @@
   var isScrollStateBound = false;
   var isDrawerBound = false;
   var isScrollSpyBound = false;
+  var isMobileActionBarBound = false;
+  var syncMobileActionBarVisibility = function () {};
 
   function initScrollState() {
     if (isScrollStateBound) return;
@@ -47,7 +49,8 @@
       document.querySelector('.skip-link'),
       document.getElementById('site-header'),
       document.getElementById('main-content'),
-      document.getElementById('site-footer')
+      document.getElementById('site-footer'),
+      document.getElementById('mobile-action-bar')
     ].filter(Boolean);
 
     function setBackgroundInert(state) {
@@ -117,6 +120,7 @@
 
       document.documentElement.classList.add('is-drawer-open');
       setBackgroundInert(true);
+      syncMobileActionBarVisibility();
 
       burgerBtn.setAttribute('aria-expanded', 'true');
       burgerBtn.setAttribute('aria-label', 'Закрити меню навігації');
@@ -140,6 +144,7 @@
       backdrop.classList.remove('is-open');
       document.documentElement.classList.remove('is-drawer-open');
       setBackgroundInert(false);
+      syncMobileActionBarVisibility();
 
       burgerBtn.setAttribute('aria-expanded', 'false');
       burgerBtn.setAttribute('aria-label', 'Відкрити меню навігації');
@@ -324,11 +329,122 @@
     }
   }
 
+  function initMobileActionBar() {
+    if (isMobileActionBarBound) return;
+    var bar = document.getElementById('mobile-action-bar');
+    var heroCta =
+      document.querySelector('[data-primary-hero-actions]') || document.getElementById('hero-cta');
+    var contactsSection = document.getElementById('contacts');
+    var footerSection = document.getElementById('site-footer');
+    if (!bar || !heroCta || !('IntersectionObserver' in window)) return;
+    isMobileActionBarBound = true;
+
+    var heroCtaIntersecting = true;
+    var heroCtaAboveViewport = false;
+    var contactsIntersecting = false;
+    var footerIntersecting = false;
+    var isBarVisible = false;
+
+    function isMobileViewport() {
+      try {
+        return window.matchMedia('(max-width: 979px)').matches;
+      } catch (e) {
+        return (window.innerWidth || document.documentElement.clientWidth || 1280) <= 979;
+      }
+    }
+
+    function updateBarVisibility() {
+      var vh = window.innerHeight || document.documentElement.clientHeight || 800;
+      var ctaRect = heroCta.getBoundingClientRect();
+      heroCtaIntersecting = ctaRect.bottom > 12 && ctaRect.top < vh;
+      heroCtaAboveViewport = ctaRect.bottom <= 12;
+
+      if (contactsSection) {
+        var cRect = contactsSection.getBoundingClientRect();
+        contactsIntersecting = cRect.top < vh - 24 && cRect.bottom > 24;
+      }
+      if (footerSection) {
+        var fRect = footerSection.getBoundingClientRect();
+        footerIntersecting = fRect.top < vh && fRect.bottom > 0;
+      }
+
+      var modalOpen = document.documentElement.classList.contains('is-modal-open');
+      var shouldShow =
+        isMobileViewport() &&
+        !isDrawerOpen &&
+        !modalOpen &&
+        !heroCtaIntersecting &&
+        heroCtaAboveViewport &&
+        !contactsIntersecting &&
+        !footerIntersecting;
+
+      if (shouldShow === isBarVisible) {
+        bar.inert = !shouldShow;
+        return;
+      }
+
+      isBarVisible = shouldShow;
+      bar.classList.toggle('is-visible', shouldShow);
+      bar.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
+      bar.inert = !shouldShow;
+      document.body.classList.toggle('has-mobile-action-bar', shouldShow);
+    }
+
+    syncMobileActionBarVisibility = updateBarVisibility;
+    bar.inert = true;
+
+    var observer = new window.IntersectionObserver(
+      function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          var entry = entries[i];
+          if (entry.target === heroCta) {
+            heroCtaIntersecting = entry.isIntersecting;
+            heroCtaAboveViewport = !entry.isIntersecting && entry.boundingClientRect.bottom <= 16;
+          } else if (entry.target === contactsSection) {
+            contactsIntersecting = entry.isIntersecting;
+          } else if (entry.target === footerSection) {
+            footerIntersecting = entry.isIntersecting;
+          }
+        }
+        updateBarVisibility();
+      },
+      {
+        rootMargin: '0px 0px 0px 0px',
+        threshold: [0, 0.05]
+      }
+    );
+
+    observer.observe(heroCta);
+    if (contactsSection) observer.observe(contactsSection);
+    if (footerSection) observer.observe(footerSection);
+
+    try {
+      var mq = window.matchMedia('(max-width: 979px)');
+      var onMqChange = function () {
+        var rect = heroCta.getBoundingClientRect();
+        heroCtaIntersecting = rect.bottom > 0 && rect.top < window.innerHeight;
+        heroCtaAboveViewport = rect.bottom <= 16;
+        updateBarVisibility();
+      };
+      if (typeof mq.addEventListener === 'function') {
+        mq.addEventListener('change', onMqChange);
+      } else if (typeof mq.addListener === 'function') {
+        mq.addListener(onMqChange);
+      }
+    } catch (e) {}
+
+    TD.header.syncMobileActionBar = updateBarVisibility;
+  }
+
   TD.header = {
     initCritical: function () {
       initScrollState();
       initDrawer();
+      initMobileActionBar();
     },
-    initScrollSpy: initScrollSpy
+    initScrollSpy: initScrollSpy,
+    syncMobileActionBar: function () {
+      syncMobileActionBarVisibility();
+    }
   };
 })(window, document);
