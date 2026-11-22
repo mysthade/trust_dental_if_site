@@ -889,6 +889,10 @@
     for (var i = 0; i < targets.length; i++) {
       if (targets[i]) targets[i].inert = state;
     }
+    if (state) {
+      var mobileBar = document.getElementById('mobile-action-bar');
+      if (mobileBar) mobileBar.inert = true;
+    }
   }
 
   function getModalList() {
@@ -1029,6 +1033,9 @@
     modal.hidden = false;
     document.documentElement.classList.add('is-modal-open');
     setModalBackgroundInert(true);
+    if (TD.header && typeof TD.header.syncMobileActionBar === 'function') {
+      TD.header.syncMobileActionBar();
+    }
 
     window.requestAnimationFrame(function () {
       modal.classList.add('is-open');
@@ -1051,6 +1058,9 @@
     modal.classList.remove('is-open');
     document.documentElement.classList.remove('is-modal-open');
     setModalBackgroundInert(false);
+    if (TD.header && typeof TD.header.syncMobileActionBar === 'function') {
+      TD.header.syncMobileActionBar();
+    }
     document.removeEventListener('keydown', onWorkModalKeyDown);
 
     var hideAfter = prefersReducedMotion() ? 0 : 220;
@@ -1963,14 +1973,6 @@
           clearSliderTimers();
         } else {
           scheduleSliderAutoplay();
-        }
-      });
-
-      window.addEventListener('pagehide', function () {
-        clearSliderTimers();
-        if (modalCloseTimer) {
-          window.clearTimeout(modalCloseTimer);
-          modalCloseTimer = null;
         }
       });
 
@@ -2981,9 +2983,29 @@
         }
       });
 
-      window.addEventListener('pagehide', function () {
-        clearAppointmentTimer();
-      });
+      if (TD.lifecycle && typeof TD.lifecycle.onPageHide === 'function') {
+        TD.lifecycle.onPageHide(function () {
+          clearAppointmentTimer();
+          clearSliderTimers();
+          if (reviewsSliderState.resizeRaf) {
+            window.cancelAnimationFrame(reviewsSliderState.resizeRaf);
+            reviewsSliderState.resizeRaf = null;
+          }
+          if (modalCloseTimer) {
+            window.clearTimeout(modalCloseTimer);
+            modalCloseTimer = null;
+          }
+        });
+      } else {
+        window.addEventListener('pagehide', function () {
+          clearAppointmentTimer();
+          clearSliderTimers();
+          if (modalCloseTimer) {
+            window.clearTimeout(modalCloseTimer);
+            modalCloseTimer = null;
+          }
+        });
+      }
     }
   }
 

@@ -387,7 +387,6 @@
       bar.classList.toggle('is-visible', shouldShow);
       bar.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
       bar.inert = !shouldShow;
-      document.body.classList.toggle('has-mobile-action-bar', shouldShow);
     }
 
     syncMobileActionBarVisibility = updateBarVisibility;
@@ -434,6 +433,12 @@
     } catch (e) {}
 
     TD.header.syncMobileActionBar = updateBarVisibility;
+
+    if (TD.lifecycle && typeof TD.lifecycle.onPageShow === 'function') {
+      TD.lifecycle.onPageShow(function () {
+        updateBarVisibility();
+      });
+    }
   }
 
   TD.header = {
