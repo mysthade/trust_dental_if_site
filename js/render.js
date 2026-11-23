@@ -405,10 +405,6 @@
       var pic = document.createElement('picture');
       pic.className = 'service-card__picture';
 
-      var source = document.createElement('source');
-      source.type = 'image/webp';
-      source.srcset = basePath + '.webp';
-
       var img = document.createElement('img');
       img.className = 'service-card__img';
       img.src = basePath + '.png';
@@ -417,7 +413,6 @@
       img.decoding = 'async';
       img.alt = '';
 
-      pic.appendChild(source);
       pic.appendChild(img);
       wrap.appendChild(pic);
 
