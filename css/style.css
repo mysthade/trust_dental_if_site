@@ -144,11 +144,14 @@
   --focus-ring: #1E222B;
   --star-color: #EAB308;
 
-  /* Background silver ribbons & sculpted tooth tones */
-  --tooth-hi: var(--wave-a);
-  --tooth-mid: #C4CAD3;
-  --tooth-lo: #B3BAC4;
-  --tooth-spec: rgba(255, 255, 255, 0.9);
+  /* Background silver ribbons & 3D volumetric tooth relief tones (light) */
+  --tooth-hi: #F6F8FA;
+  --tooth-mid: #DFE4EC;
+  --tooth-lo: #C4CCD9;
+  --tooth-spec: rgba(255, 255, 255, 0.94);
+  --tooth-shadow: rgba(88, 100, 122, 0.24);
+  --tooth-groove: rgba(105, 118, 138, 0.34);
+  --tooth-edge: rgba(120, 132, 152, 0.28);
   --ribbon-hi: var(--wave-a);
   --ribbon-mid: var(--wave-b);
   --ribbon-lo: var(--wave-c);
@@ -253,10 +256,13 @@
   --focus-ring: #ECEFF3;
   --star-color: #FACC15;
 
-  --tooth-hi: #2A2E35;
-  --tooth-mid: #1C2026;
-  --tooth-lo: #0F1114;
-  --tooth-spec: rgba(255, 255, 255, 0.12);
+  --tooth-hi: #2B3240;
+  --tooth-mid: #1A202B;
+  --tooth-lo: #0D1016;
+  --tooth-spec: rgba(185, 200, 224, 0.22);
+  --tooth-shadow: rgba(0, 0, 0, 0.58);
+  --tooth-groove: rgba(6, 9, 14, 0.72);
+  --tooth-edge: rgba(170, 185, 210, 0.16);
   --ribbon-hi: #2A2E35;
   --ribbon-mid: #1A1E24;
   --ribbon-lo: #0F1114;
@@ -1471,10 +1477,10 @@ p {
 /* Static decorative silhouettes (no blur, no animation) */
 .hero__bg-tooth {
   position: absolute;
-  top: 24px;
-  left: -114px;
-  width: 352px;
-  height: 410px;
+  top: 18px;
+  left: -124px;
+  width: 380px;
+  height: 456px;
   overflow: visible;
   pointer-events: none;
   z-index: 0;
@@ -1948,10 +1954,10 @@ p {
   }
 
   .hero__bg-tooth {
-    width: 234px;
-    height: 270px;
-    left: -85px;
-    top: 36px;
+    width: 260px;
+    height: 312px;
+    left: -94px;
+    top: 28px;
   }
 
   .hero__bg-waves {
@@ -2042,10 +2048,10 @@ p {
   }
 
   .hero__bg-tooth {
-    width: 176px;
-    height: 204px;
-    left: -72px;
-    top: 44px;
+    width: 196px;
+    height: 235px;
+    left: -78px;
+    top: 38px;
   }
 
   :root:not([data-theme='dark']) .hero__bg-tooth {
@@ -3893,14 +3899,6 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
   height: 96px;
 }
 
-.deco--services-tooth {
-  left: -185px;
-  top: 210px;
-  width: 400px;
-  height: 480px;
-  transform: rotate(-12deg);
-}
-
 .deco--advantages-ribbon {
   top: 0;
   right: 0;
@@ -3939,14 +3937,6 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
   height: 110px;
 }
 
-.deco--doctors-tooth {
-  right: -96px;
-  top: 52%;
-  width: 220px;
-  height: 264px;
-  transform: translateY(-50%) scaleX(-1) rotate(-10deg);
-}
-
 .deco--works-arc {
   left: -165px;
   top: 50px;
@@ -3962,6 +3952,15 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
   width: 100%;
   height: 88px;
   transform: scaleY(-1);
+}
+
+.deco--gallery-contour {
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 88px;
+  transform: scale(-1);
 }
 
 .deco--gallery-arc {
@@ -4021,13 +4020,6 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
     height: 520px;
   }
 
-  .deco--services-tooth {
-    left: -135px;
-    top: 150px;
-    width: 280px;
-    height: 336px;
-  }
-
   .deco--advantages-arc {
     right: -145px;
     top: 20px;
@@ -4044,14 +4036,6 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
     top: 140px;
     width: 250px;
     height: 375px;
-  }
-
-  .deco--doctors-tooth {
-    right: -88px;
-    top: 52%;
-    width: 180px;
-    height: 216px;
-    opacity: 0.85;
   }
 
   .deco--works-arc {
@@ -4102,6 +4086,7 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
   .deco--prices-arc,
   .deco--prices-wave,
   .deco--works-contour,
+  .deco--gallery-contour,
   .deco--gallery-arc,
   .deco--reviews-arc {
     display: none;
@@ -4115,28 +4100,12 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
     height: 210px;
   }
 
-  .deco--services-tooth {
-    left: -115px;
-    top: 140px;
-    width: 220px;
-    height: 264px;
-  }
-
   .deco--advantages-ribbon {
     height: 180px;
   }
 
   .deco--prices-ribbon {
     height: 150px;
-  }
-
-  .deco--doctors-tooth {
-    right: -68px;
-    top: 24px;
-    width: 132px;
-    height: 158px;
-    opacity: 0.55;
-    transform: scaleX(-1) rotate(-10deg);
   }
 
   .deco--works-arc {
