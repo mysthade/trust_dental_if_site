@@ -17,14 +17,7 @@
   var introDoneTimer = null;
 
   function prefersReducedMotion() {
-    try {
-      return Boolean(
-        window.matchMedia &&
-          window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      );
-    } catch (e) {
-      return false;
-    }
+    return typeof TD.prefersReducedMotion === 'function' ? TD.prefersReducedMotion() : false;
   }
 
   function easeOutCubic(t) {
@@ -577,21 +570,18 @@
       });
     }
 
-    try {
-      var mq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (mq && typeof mq.addEventListener === 'function') {
-        mq.addEventListener('change', function (e) {
-          if (e.matches) {
-            if (introDoneTimer !== null) {
-              window.clearTimeout(introDoneTimer);
-              introDoneTimer = null;
-            }
-            root.classList.add('td-skip-intro');
-            revealAllPending();
+    if (typeof TD.onMediaQueryChange === 'function') {
+      TD.onMediaQueryChange('(prefers-reduced-motion: reduce)', function (e) {
+        if (e.matches) {
+          if (introDoneTimer !== null) {
+            window.clearTimeout(introDoneTimer);
+            introDoneTimer = null;
           }
-        });
-      }
-    } catch (err) {}
+          root.classList.add('td-skip-intro');
+          revealAllPending();
+        }
+      });
+    }
   }
 
   function refreshReveal() {

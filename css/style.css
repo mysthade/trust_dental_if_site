@@ -193,7 +193,6 @@
   --form-error-bg: rgba(185, 28, 28, 0.08);
   --form-success-color: #0F5132;
   --form-success-bg: rgba(15, 81, 50, 0.09);
-  --map-grid-line: rgba(120, 128, 140, 0.18);
 
   /* Radii & Shadows */
   --radius-card: 28px;
@@ -302,7 +301,6 @@
   --form-error-bg: rgba(248, 113, 113, 0.12);
   --form-success-color: #6EE7B7;
   --form-success-bg: rgba(16, 185, 129, 0.12);
-  --map-grid-line: rgba(255, 255, 255, 0.08);
 
   --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.28);
   --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -390,7 +388,7 @@ html.is-theme-switching .calc-summary,
 html.is-theme-switching .doctor-card,
 html.is-theme-switching .doctor-card__media,
 html.is-theme-switching .doctor-card__role,
-html.is-theme-switching .doctor-card__title,
+html.is-theme-switching .doctor-card__name,
 html.is-theme-switching .doctor-card__bio,
 html.is-theme-switching .works-section,
 html.is-theme-switching .works-carousel__viewport,
@@ -399,7 +397,7 @@ html.is-theme-switching .work-card,
 html.is-theme-switching .work-card__slot,
 html.is-theme-switching .work-card__category,
 html.is-theme-switching .work-card__title,
-html.is-theme-switching .work-card__desc,
+html.is-theme-switching .work-card__description,
 html.is-theme-switching .works-carousel__btn,
 html.is-theme-switching .work-modal__dialog,
 html.is-theme-switching .gallery-section,
@@ -4898,11 +4896,6 @@ html.td-js .work-card__slot:not(.is-loaded):not(.is-fallback) .work-card__img {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   margin-bottom: 14px;
-}
-
-.work-modal__comparison.is-single {
-  grid-template-columns: minmax(0, 1fr);
-  max-width: 620px;
 }
 
 .work-modal__comparison .work-card__fallback-svg {

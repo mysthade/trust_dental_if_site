@@ -650,6 +650,89 @@
   };
 
   /**
+   * Shared reduced-motion preference check across TD modules
+   */
+  TD.prefersReducedMotion = function () {
+    try {
+      return Boolean(
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      );
+    } catch (e) {
+      return false;
+    }
+  };
+
+  /**
+   * Subscribe safely to a CSS media query change across modern and legacy engines
+   */
+  TD.onMediaQueryChange = function (query, handler) {
+    if (!query || typeof handler !== 'function') return null;
+    try {
+      if (!window.matchMedia) return null;
+      var mq = window.matchMedia(query);
+      if (typeof mq.addEventListener === 'function') {
+        mq.addEventListener('change', handler);
+      } else if (typeof mq.addListener === 'function') {
+        mq.addListener(handler);
+      }
+      return mq;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  /**
+   * Validate external HTTP(S) URLs and optional single-slash same-origin paths.
+   * Blocks protocol-relative ("//evil.com"), embedded userinfo, control chars,
+   * and non-HTTP schemes such as "javascript:" or "data:".
+   */
+  TD.isSafeHttpUrl = function (url, allowRelative) {
+    var clean = String(url || '').trim();
+    if (!clean || /[\u0000-\u001F\u007F\s]/.test(clean)) return false;
+
+    if (allowRelative && clean.charAt(0) === '/') {
+      /* Reject protocol-relative URLs ("//host") and backslash confusion ("/\host") */
+      return clean.length === 1 || (clean.charAt(1) !== '/' && clean.charAt(1) !== '\\');
+    }
+
+    if (typeof window.URL === 'function') {
+      try {
+        var base =
+          window.location && window.location.origin && window.location.origin !== 'null'
+            ? window.location.origin
+            : 'https://trustdental.if.ua';
+        var parsed = new window.URL(clean, base);
+        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
+        if (parsed.username || parsed.password) return false;
+        return /^https?:\/\//i.test(clean);
+      } catch (e) {
+        return false;
+      }
+    }
+
+    return /^https?:\/\/[^\s/@]+(?:\/[^\s]*)?$/i.test(clean);
+  };
+
+  /**
+   * Check whether a validated URL points to the current document origin
+   */
+  TD.isSameOriginUrl = function (url) {
+    var clean = String(url || '').trim();
+    if (!clean) return false;
+    if (clean.charAt(0) === '/') {
+      return clean.length === 1 || (clean.charAt(1) !== '/' && clean.charAt(1) !== '\\');
+    }
+    if (typeof window.URL === 'function' && window.location && window.location.origin !== 'null') {
+      try {
+        return new window.URL(clean, window.location.href).origin === window.location.origin;
+      } catch (e) {
+        return false;
+      }
+    }
+    return false;
+  };
+
+  /**
    * Populate DOM placeholders bound via [data-clinic] from TD.CLINIC
    */
   TD.hydrateClinicData = function () {
@@ -706,7 +789,7 @@
       },
       'telegram-link': function (el) {
         var tgUrl = c.TELEGRAM_URL ? String(c.TELEGRAM_URL).trim() : '';
-        if (/^https?:\/\/(t\.me|telegram\.me)\/\S+$/i.test(tgUrl)) {
+        if (/^https:\/\/(t\.me|telegram\.me)\/[A-Za-z0-9_+/=?&%-]+$/i.test(tgUrl)) {
           el.setAttribute('href', tgUrl);
           el.setAttribute('target', '_blank');
           el.setAttribute('rel', 'noopener noreferrer');

@@ -182,12 +182,8 @@
       burgerBtn.setAttribute('aria-label', 'Відкрити меню навігації');
       document.removeEventListener('keydown', onKeyDown);
 
-      var reduced = false;
-      try {
-        reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      } catch (e) {
-        reduced = false;
-      }
+      var reduced =
+        typeof TD.prefersReducedMotion === 'function' ? TD.prefersReducedMotion() : false;
 
       var hideAfter = reduced ? 0 : 350;
       closeTimer = window.setTimeout(function () {
@@ -234,20 +230,12 @@
     }
 
     /* Automatically close drawer if resized to desktop width */
-    try {
-      var desktopMq = window.matchMedia('(min-width: 980px)');
-      var onDesktop = function (e) {
+    if (typeof TD.onMediaQueryChange === 'function') {
+      TD.onMediaQueryChange('(min-width: 980px)', function (e) {
         if (e.matches && isDrawerOpen) {
           closeDrawer(false);
         }
-      };
-      if (typeof desktopMq.addEventListener === 'function') {
-        desktopMq.addEventListener('change', onDesktop);
-      } else if (typeof desktopMq.addListener === 'function') {
-        desktopMq.addListener(onDesktop);
-      }
-    } catch (e) {
-      /* Ignore older browsers */
+      });
     }
 
     if (TD.lifecycle && typeof TD.lifecycle.onPageHide === 'function') {
@@ -449,20 +437,14 @@
     if (contactsSection) observer.observe(contactsSection);
     if (footerSection) observer.observe(footerSection);
 
-    try {
-      var mq = window.matchMedia('(max-width: 979px)');
-      var onMqChange = function () {
+    if (typeof TD.onMediaQueryChange === 'function') {
+      TD.onMediaQueryChange('(max-width: 979px)', function () {
         var rect = heroCta.getBoundingClientRect();
         heroCtaIntersecting = rect.bottom > 0 && rect.top < window.innerHeight;
         heroCtaAboveViewport = rect.bottom <= 16;
         updateBarVisibility();
-      };
-      if (typeof mq.addEventListener === 'function') {
-        mq.addEventListener('change', onMqChange);
-      } else if (typeof mq.addListener === 'function') {
-        mq.addListener(onMqChange);
-      }
-    } catch (e) {}
+      });
+    }
 
     TD.header.syncMobileActionBar = updateBarVisibility;
 

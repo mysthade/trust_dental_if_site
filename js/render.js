@@ -9,11 +9,15 @@
   var SVG_NS = 'http://www.w3.org/2000/svg';
   var isInitialized = false;
   var activeModalWorkId = null;
-  var lastModalTriggerEl = null;
-  var modalCloseTimer = null;
   var activeGalleryModal = { group: null, id: null };
-  var lastGalleryModalTriggerEl = null;
-  var galleryModalCloseTimer = null;
+  var lightboxControllers = {
+    work: { closeTimer: null, lastTrigger: null },
+    gallery: { closeTimer: null, lastTrigger: null }
+  };
+  var activeFetchControllers = {
+    reviews: null,
+    appointment: null
+  };
   var galleryResizeRaf = null;
   var galleryGroupsState = {
     inside: { currentIndex: 0, perView: 3, maxIndex: 0, totalSlides: 0 },
@@ -21,14 +25,161 @@
   };
 
   function prefersReducedMotion() {
-    try {
-      return Boolean(
-        window.matchMedia &&
-          window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      );
-    } catch (e) {
-      return false;
+    return typeof TD.prefersReducedMotion === 'function' ? TD.prefersReducedMotion() : false;
+  }
+
+  function isSafeHttpUrl(url) {
+    if (typeof TD.isSafeHttpUrl === 'function') {
+      return TD.isSafeHttpUrl(url, false);
     }
+    return /^https?:\/\/[^\s/@]+(?:\/[^\s]*)?$/i.test(String(url || '').trim());
+  }
+
+  function isSafeEndpointUrl(url) {
+    if (typeof TD.isSafeHttpUrl === 'function') {
+      return TD.isSafeHttpUrl(url, true);
+    }
+    var clean = String(url || '').trim();
+    if (!clean) return false;
+    if (clean.charAt(0) === '/') return clean.length === 1 || (clean.charAt(1) !== '/' && clean.charAt(1) !== '\\');
+    return isSafeHttpUrl(clean);
+  }
+
+  function isSameOriginUrl(url) {
+    return typeof TD.isSameOriginUrl === 'function' ? TD.isSameOriginUrl(url) : false;
+  }
+
+  function sanitizeExternalText(val, maxLen) {
+    var clean = String(val || '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').trim();
+    return maxLen && clean.length > maxLen ? clean.slice(0, maxLen) : clean;
+  }
+
+  function abortActiveFetch(key) {
+    var ctrl = activeFetchControllers[key];
+    if (ctrl && typeof ctrl.abort === 'function') {
+      try {
+        ctrl.abort();
+      } catch (e) {}
+    }
+    activeFetchControllers[key] = null;
+  }
+
+  function fetchWithTimeout(url, fetchOpts, timeoutMs, controllerKey) {
+    if (typeof window.fetch !== 'function') {
+      return Promise.reject(new Error('Fetch API is unavailable'));
+    }
+
+    var ctrl = typeof window.AbortController === 'function' ? new window.AbortController() : null;
+    if (controllerKey && ctrl) {
+      abortActiveFetch(controllerKey);
+      activeFetchControllers[controllerKey] = ctrl;
+    }
+
+    var timerId = null;
+    var timedOut = false;
+    var opts = {};
+    if (fetchOpts && typeof fetchOpts === 'object') {
+      for (var key in fetchOpts) {
+        if (Object.prototype.hasOwnProperty.call(fetchOpts, key)) {
+          opts[key] = fetchOpts[key];
+        }
+      }
+    }
+    if (ctrl) {
+      opts.signal = ctrl.signal;
+    }
+
+    if (timeoutMs > 0) {
+      timerId = window.setTimeout(function () {
+        timedOut = true;
+        if (ctrl) ctrl.abort();
+      }, timeoutMs);
+    }
+
+    return window.fetch(url, opts).then(
+      function (resp) {
+        if (timerId !== null) window.clearTimeout(timerId);
+        if (controllerKey && activeFetchControllers[controllerKey] === ctrl) {
+          activeFetchControllers[controllerKey] = null;
+        }
+        return resp;
+      },
+      function (err) {
+        if (timerId !== null) window.clearTimeout(timerId);
+        if (controllerKey && activeFetchControllers[controllerKey] === ctrl) {
+          activeFetchControllers[controllerKey] = null;
+        }
+        if (timedOut) {
+          throw new Error('Request timeout');
+        }
+        throw err;
+      }
+    );
+  }
+
+  function scrollToTarget(el) {
+    if (el && typeof el.scrollIntoView === 'function') {
+      el.scrollIntoView({
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+        block: 'start'
+      });
+    }
+  }
+
+  function bindHorizontalSwipe(el, onNext, onPrev, opts) {
+    if (!el || el.dataset.tdSwipeBound) return;
+    el.dataset.tdSwipeBound = '1';
+    var threshold = (opts && opts.threshold) || 40;
+    var ignoreSelector = opts && opts.ignoreSelector;
+    var onSwipe = opts && opts.onSwipe;
+    var startX = 0;
+    var startY = 0;
+    var isSwiping = false;
+
+    el.addEventListener(
+      'touchstart',
+      function (e) {
+        if (!e.touches || e.touches.length !== 1) {
+          isSwiping = false;
+          return;
+        }
+        if (ignoreSelector && e.target && e.target.closest && e.target.closest(ignoreSelector)) {
+          isSwiping = false;
+          return;
+        }
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        isSwiping = true;
+      },
+      { passive: true }
+    );
+
+    el.addEventListener(
+      'touchend',
+      function (e) {
+        if (!isSwiping || !e.changedTouches || !e.changedTouches.length) {
+          isSwiping = false;
+          return;
+        }
+        isSwiping = false;
+        var dx = e.changedTouches[0].clientX - startX;
+        var dy = e.changedTouches[0].clientY - startY;
+        if (Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy) * 1.2) {
+          if (dx < 0) onNext();
+          else onPrev();
+          if (typeof onSwipe === 'function') onSwipe();
+        }
+      },
+      { passive: true }
+    );
+
+    el.addEventListener(
+      'touchcancel',
+      function () {
+        isSwiping = false;
+      },
+      { passive: true }
+    );
   }
 
   function createSvgUse(iconId, className) {
@@ -464,26 +615,14 @@
               }
             }
           }
-          var contactsEl = document.getElementById('contacts');
-          if (contactsEl && typeof contactsEl.scrollIntoView === 'function') {
-            contactsEl.scrollIntoView({
-              behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-              block: 'start'
-            });
-          }
+          scrollToTarget(document.getElementById('contacts'));
           focusContactsTarget('form');
           return;
         }
 
         var jumpBtn = e.target.closest('[data-calc-jump]');
         if (jumpBtn) {
-          var calcEl = document.getElementById('calculator');
-          if (calcEl && typeof calcEl.scrollIntoView === 'function') {
-            calcEl.scrollIntoView({
-              behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-              block: 'start'
-            });
-          }
+          scrollToTarget(document.getElementById('calculator'));
           var calcHeading = document.getElementById('heading-calculator');
           if (calcHeading && typeof calcHeading.focus === 'function') {
             calcHeading.setAttribute('tabindex', '-1');
@@ -524,10 +663,7 @@
      ------------------------------------------------------------------------ */
   var worksCarouselState = {
     currentIndex: 0,
-    totalSlides: 0,
-    touchStartX: 0,
-    touchStartY: 0,
-    isSwiping: false
+    totalSlides: 0
   };
 
   function findWorkById(id) {
@@ -859,37 +995,15 @@
       });
     }
 
-    if (viewport && !viewport.dataset.worksSwipeBound) {
-      viewport.dataset.worksSwipeBound = '1';
-      viewport.addEventListener(
-        'touchstart',
-        function (e) {
-          if (!e.touches || e.touches.length !== 1) return;
-          worksCarouselState.touchStartX = e.touches[0].clientX;
-          worksCarouselState.touchStartY = e.touches[0].clientY;
-          worksCarouselState.isSwiping = true;
+    if (viewport) {
+      bindHorizontalSwipe(
+        viewport,
+        function () {
+          goToWorkSlide(worksCarouselState.currentIndex + 1);
         },
-        { passive: true }
-      );
-
-      viewport.addEventListener(
-        'touchend',
-        function (e) {
-          if (!worksCarouselState.isSwiping || !e.changedTouches || !e.changedTouches.length) {
-            return;
-          }
-          worksCarouselState.isSwiping = false;
-          var dx = e.changedTouches[0].clientX - worksCarouselState.touchStartX;
-          var dy = e.changedTouches[0].clientY - worksCarouselState.touchStartY;
-          if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy) * 1.2) {
-            if (dx < 0) {
-              goToWorkSlide(worksCarouselState.currentIndex + 1);
-            } else {
-              goToWorkSlide(worksCarouselState.currentIndex - 1);
-            }
-          }
-        },
-        { passive: true }
+        function () {
+          goToWorkSlide(worksCarouselState.currentIndex - 1);
+        }
       );
     }
 
@@ -907,7 +1021,7 @@
   }
 
   /* ------------------------------------------------------------------------
-     5. Works Lightbox / Detail Modal (#work-modal)
+     5. Shared Lightbox Helpers & Works Detail Modal (#work-modal)
      ------------------------------------------------------------------------ */
   function setModalBackgroundInert(state) {
     var targets = [
@@ -923,6 +1037,163 @@
       var mobileBar = document.getElementById('mobile-action-bar');
       if (mobileBar) mobileBar.inert = true;
     }
+  }
+
+  function getModalFocusable(dialog) {
+    var sel = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    var nodes = dialog.querySelectorAll(sel);
+    var visible = [];
+    for (var i = 0; i < nodes.length; i++) {
+      if (!nodes[i].hasAttribute('hidden') && nodes[i].offsetParent !== null) {
+        visible.push(nodes[i]);
+      }
+    }
+    return visible;
+  }
+
+  function handleLightboxKeyDown(e, cfg) {
+    var modal = document.getElementById(cfg.modalId);
+    if (!modal || modal.hidden) return;
+
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      cfg.close(true);
+      return;
+    }
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      cfg.step(-1);
+      return;
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      cfg.step(1);
+      return;
+    }
+    if (e.key === 'Tab') {
+      var dialog = modal.querySelector(cfg.dialogSelector);
+      if (!dialog) return;
+      var focusable = getModalFocusable(dialog);
+      if (!focusable.length) {
+        e.preventDefault();
+        return;
+      }
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first || !dialog.contains(document.activeElement)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else if (document.activeElement === last || !dialog.contains(document.activeElement)) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+  function openLightboxModal(cfg, triggerEl, renderFn) {
+    var modal = document.getElementById(cfg.modalId);
+    if (!modal) return;
+    var ctrl = lightboxControllers[cfg.stateKey];
+
+    if (ctrl.closeTimer) {
+      window.clearTimeout(ctrl.closeTimer);
+      ctrl.closeTimer = null;
+    }
+
+    var sibling = cfg.siblingId ? document.getElementById(cfg.siblingId) : null;
+    if (sibling && !sibling.hidden && typeof cfg.closeSibling === 'function') {
+      cfg.closeSibling(false);
+    }
+
+    ctrl.lastTrigger = triggerEl || document.activeElement;
+    if (typeof renderFn === 'function') {
+      renderFn();
+    }
+
+    modal.hidden = false;
+    document.documentElement.classList.add('is-modal-open');
+    setModalBackgroundInert(true);
+    if (TD.header && typeof TD.header.syncMobileActionBar === 'function') {
+      TD.header.syncMobileActionBar();
+    }
+
+    window.requestAnimationFrame(function () {
+      modal.classList.add('is-open');
+      var closeBtn = document.getElementById(cfg.closeId);
+      var dialog = modal.querySelector(cfg.dialogSelector);
+      if (closeBtn) {
+        closeBtn.focus({ preventScroll: true });
+      } else if (dialog) {
+        dialog.focus({ preventScroll: true });
+      }
+    });
+
+    document.addEventListener('keydown', cfg.onKeyDown);
+  }
+
+  function closeLightboxModal(cfg, restoreFocus) {
+    var modal = document.getElementById(cfg.modalId);
+    if (!modal || modal.hidden) return;
+    var ctrl = lightboxControllers[cfg.stateKey];
+
+    modal.classList.remove('is-open');
+    document.documentElement.classList.remove('is-modal-open');
+    setModalBackgroundInert(false);
+    if (TD.header && typeof TD.header.syncMobileActionBar === 'function') {
+      TD.header.syncMobileActionBar();
+    }
+    document.removeEventListener('keydown', cfg.onKeyDown);
+
+    var hideAfter = prefersReducedMotion() ? 0 : 220;
+    ctrl.closeTimer = window.setTimeout(function () {
+      if (!modal.classList.contains('is-open')) {
+        modal.hidden = true;
+      }
+      ctrl.closeTimer = null;
+    }, hideAfter);
+
+    if (restoreFocus && ctrl.lastTrigger && typeof ctrl.lastTrigger.focus === 'function') {
+      ctrl.lastTrigger.focus({ preventScroll: true });
+    }
+    ctrl.lastTrigger = null;
+    if (typeof cfg.onClose === 'function') {
+      cfg.onClose();
+    }
+  }
+
+  function bindLightboxControls(cfg) {
+    var modal = document.getElementById(cfg.modalId);
+    if (!modal || modal.dataset[cfg.boundAttr]) return false;
+    modal.dataset[cfg.boundAttr] = '1';
+
+    var backdrop = document.getElementById(cfg.backdropId);
+    var closeBtn = document.getElementById(cfg.closeId);
+    var prevBtn = document.getElementById(cfg.prevId);
+    var nextBtn = document.getElementById(cfg.nextId);
+
+    if (backdrop) {
+      backdrop.addEventListener('click', function () {
+        cfg.close(true);
+      });
+    }
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function () {
+        cfg.close(true);
+      });
+    }
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function () {
+        cfg.step(-1);
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        cfg.step(1);
+      });
+    }
+    return true;
   }
 
   function getModalList() {
@@ -945,7 +1216,6 @@
 
     if (mediaEl) {
       var frag = document.createDocumentFragment();
-      mediaEl.classList.remove('is-single');
       frag.appendChild(createWorkFigure(item, 'before', true));
       frag.appendChild(createWorkFigure(item, 'after', true));
       mediaEl.textContent = '';
@@ -990,160 +1260,43 @@
     renderWorkModalContent(nextItem);
   }
 
-  function getModalFocusable(dialog) {
-    var sel = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
-    var nodes = dialog.querySelectorAll(sel);
-    var visible = [];
-    for (var i = 0; i < nodes.length; i++) {
-      if (!nodes[i].hasAttribute('hidden') && nodes[i].offsetParent !== null) {
-        visible.push(nodes[i]);
-      }
-    }
-    return visible;
-  }
+  var WORK_MODAL_CFG = {
+    modalId: 'work-modal',
+    siblingId: 'gallery-modal',
+    closeSibling: function (restore) { closeGalleryModal(restore); },
+    closeId: 'work-modal-close',
+    backdropId: 'work-modal-backdrop',
+    prevId: 'work-modal-prev',
+    nextId: 'work-modal-next',
+    dialogSelector: '.work-modal__dialog',
+    stateKey: 'work',
+    boundAttr: 'modalBound',
+    step: stepWorkModal,
+    close: closeWorkModal,
+    onKeyDown: onWorkModalKeyDown,
+    onClose: function () { activeModalWorkId = null; }
+  };
 
   function onWorkModalKeyDown(e) {
-    var modal = document.getElementById('work-modal');
-    if (!modal || modal.hidden) return;
-
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      closeWorkModal(true);
-      return;
-    }
-
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      stepWorkModal(-1);
-      return;
-    }
-
-    if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      stepWorkModal(1);
-      return;
-    }
-
-    if (e.key === 'Tab') {
-      var dialog = modal.querySelector('.work-modal__dialog');
-      if (!dialog) return;
-      var focusable = getModalFocusable(dialog);
-      if (!focusable.length) {
-        e.preventDefault();
-        return;
-      }
-      var first = focusable[0];
-      var last = focusable[focusable.length - 1];
-      if (e.shiftKey) {
-        if (document.activeElement === first || !dialog.contains(document.activeElement)) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else if (document.activeElement === last || !dialog.contains(document.activeElement)) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
+    handleLightboxKeyDown(e, WORK_MODAL_CFG);
   }
 
   function openWorkModal(workId, triggerEl) {
-    var modal = document.getElementById('work-modal');
     var item = findWorkById(workId);
-    if (!modal || !item) return;
-
-    if (modalCloseTimer) {
-      window.clearTimeout(modalCloseTimer);
-      modalCloseTimer = null;
-    }
-
-    var galleryModal = document.getElementById('gallery-modal');
-    if (galleryModal && !galleryModal.hidden) {
-      closeGalleryModal(false);
-    }
-
-    activeModalWorkId = item.id;
-    lastModalTriggerEl = triggerEl || document.activeElement;
-    renderWorkModalContent(item);
-
-    modal.hidden = false;
-    document.documentElement.classList.add('is-modal-open');
-    setModalBackgroundInert(true);
-    if (TD.header && typeof TD.header.syncMobileActionBar === 'function') {
-      TD.header.syncMobileActionBar();
-    }
-
-    window.requestAnimationFrame(function () {
-      modal.classList.add('is-open');
-      var closeBtn = document.getElementById('work-modal-close');
-      var dialog = modal.querySelector('.work-modal__dialog');
-      if (closeBtn) {
-        closeBtn.focus({ preventScroll: true });
-      } else if (dialog) {
-        dialog.focus({ preventScroll: true });
-      }
+    if (!item) return;
+    openLightboxModal(WORK_MODAL_CFG, triggerEl, function () {
+      activeModalWorkId = item.id;
+      renderWorkModalContent(item);
     });
-
-    document.addEventListener('keydown', onWorkModalKeyDown);
   }
 
   function closeWorkModal(restoreFocus) {
-    var modal = document.getElementById('work-modal');
-    if (!modal || modal.hidden) return;
-
-    modal.classList.remove('is-open');
-    document.documentElement.classList.remove('is-modal-open');
-    setModalBackgroundInert(false);
-    if (TD.header && typeof TD.header.syncMobileActionBar === 'function') {
-      TD.header.syncMobileActionBar();
-    }
-    document.removeEventListener('keydown', onWorkModalKeyDown);
-
-    var hideAfter = prefersReducedMotion() ? 0 : 220;
-    modalCloseTimer = window.setTimeout(function () {
-      if (!modal.classList.contains('is-open')) {
-        modal.hidden = true;
-      }
-      modalCloseTimer = null;
-    }, hideAfter);
-
-    if (restoreFocus && lastModalTriggerEl && typeof lastModalTriggerEl.focus === 'function') {
-      lastModalTriggerEl.focus({ preventScroll: true });
-    }
-    lastModalTriggerEl = null;
-    activeModalWorkId = null;
+    closeLightboxModal(WORK_MODAL_CFG, restoreFocus);
   }
 
   function bindWorkModal() {
-    var modal = document.getElementById('work-modal');
-    if (!modal || modal.dataset.modalBound) return;
-    modal.dataset.modalBound = '1';
-
-    var backdrop = document.getElementById('work-modal-backdrop');
-    var closeBtn = document.getElementById('work-modal-close');
-    var prevBtn = document.getElementById('work-modal-prev');
-    var nextBtn = document.getElementById('work-modal-next');
+    if (!bindLightboxControls(WORK_MODAL_CFG)) return;
     var ctaLink = document.getElementById('work-modal-cta');
-
-    if (backdrop) {
-      backdrop.addEventListener('click', function () {
-        closeWorkModal(true);
-      });
-    }
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function () {
-        closeWorkModal(true);
-      });
-    }
-    if (prevBtn) {
-      prevBtn.addEventListener('click', function () {
-        stepWorkModal(-1);
-      });
-    }
-    if (nextBtn) {
-      nextBtn.addEventListener('click', function () {
-        stepWorkModal(1);
-      });
-    }
     if (ctaLink) {
       ctaLink.addEventListener('click', function () {
         closeWorkModal(false);
@@ -1186,43 +1339,6 @@
     if (w < 640) return 1;
     if (w < 980) return Math.min(2, total);
     return Math.min(3, total);
-  }
-
-  function bindHorizontalSwipe(el, onNext, onPrev) {
-    if (!el || el.dataset.tdSwipeBound) return;
-    el.dataset.tdSwipeBound = '1';
-    var startX = 0;
-    var startY = 0;
-    var isSwiping = false;
-
-    el.addEventListener(
-      'touchstart',
-      function (e) {
-        if (!e.touches || e.touches.length !== 1) {
-          isSwiping = false;
-          return;
-        }
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        isSwiping = true;
-      },
-      { passive: true }
-    );
-
-    el.addEventListener(
-      'touchend',
-      function (e) {
-        if (!isSwiping || !e.changedTouches || !e.changedTouches.length) return;
-        isSwiping = false;
-        var dx = e.changedTouches[0].clientX - startX;
-        var dy = e.changedTouches[0].clientY - startY;
-        if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy) * 1.2) {
-          if (dx < 0) onNext();
-          else onPrev();
-        }
-      },
-      { passive: true }
-    );
   }
 
   function createGalleryMediaNode(item, group, index, total, isModal) {
@@ -1642,151 +1758,49 @@
     renderGalleryModalContent(group, nextItem);
   }
 
+  var GALLERY_MODAL_CFG = {
+    modalId: 'gallery-modal',
+    siblingId: 'work-modal',
+    closeSibling: function (restore) { closeWorkModal(restore); },
+    closeId: 'gallery-modal-close',
+    backdropId: 'gallery-modal-backdrop',
+    prevId: 'gallery-modal-prev',
+    nextId: 'gallery-modal-next',
+    dialogSelector: '.gallery-modal__dialog',
+    stateKey: 'gallery',
+    boundAttr: 'galleryModalBound',
+    step: stepGalleryModal,
+    close: closeGalleryModal,
+    onKeyDown: onGalleryModalKeyDown,
+    onClose: function () {
+      activeGalleryModal.group = null;
+      activeGalleryModal.id = null;
+    }
+  };
+
   function onGalleryModalKeyDown(e) {
-    var modal = document.getElementById('gallery-modal');
-    if (!modal || modal.hidden) return;
-
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      closeGalleryModal(true);
-      return;
-    }
-
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      stepGalleryModal(-1);
-      return;
-    }
-
-    if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      stepGalleryModal(1);
-      return;
-    }
-
-    if (e.key === 'Tab') {
-      var dialog = modal.querySelector('.gallery-modal__dialog');
-      if (!dialog) return;
-      var focusable = getModalFocusable(dialog);
-      if (!focusable.length) {
-        e.preventDefault();
-        return;
-      }
-      var first = focusable[0];
-      var last = focusable[focusable.length - 1];
-      if (e.shiftKey) {
-        if (document.activeElement === first || !dialog.contains(document.activeElement)) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else if (document.activeElement === last || !dialog.contains(document.activeElement)) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
+    handleLightboxKeyDown(e, GALLERY_MODAL_CFG);
   }
 
   function openGalleryModal(group, galleryId, triggerEl) {
-    var modal = document.getElementById('gallery-modal');
     var targetGroup = group === 'outside' ? 'outside' : 'inside';
     var item = findGalleryItemById(targetGroup, galleryId);
-    if (!modal || !item) return;
+    if (!item) return;
 
-    if (galleryModalCloseTimer) {
-      window.clearTimeout(galleryModalCloseTimer);
-      galleryModalCloseTimer = null;
-    }
-
-    var workModal = document.getElementById('work-modal');
-    if (workModal && !workModal.hidden) {
-      closeWorkModal(false);
-    }
-
-    activeGalleryModal.group = targetGroup;
-    activeGalleryModal.id = item.id;
-    lastGalleryModalTriggerEl = triggerEl || document.activeElement;
-    renderGalleryModalContent(targetGroup, item);
-
-    modal.hidden = false;
-    document.documentElement.classList.add('is-modal-open');
-    setModalBackgroundInert(true);
-    if (TD.header && typeof TD.header.syncMobileActionBar === 'function') {
-      TD.header.syncMobileActionBar();
-    }
-
-    window.requestAnimationFrame(function () {
-      modal.classList.add('is-open');
-      var closeBtn = document.getElementById('gallery-modal-close');
-      var dialog = modal.querySelector('.gallery-modal__dialog');
-      if (closeBtn) {
-        closeBtn.focus({ preventScroll: true });
-      } else if (dialog) {
-        dialog.focus({ preventScroll: true });
-      }
+    openLightboxModal(GALLERY_MODAL_CFG, triggerEl, function () {
+      activeGalleryModal.group = targetGroup;
+      activeGalleryModal.id = item.id;
+      renderGalleryModalContent(targetGroup, item);
     });
-
-    document.addEventListener('keydown', onGalleryModalKeyDown);
   }
 
   function closeGalleryModal(restoreFocus) {
-    var modal = document.getElementById('gallery-modal');
-    if (!modal || modal.hidden) return;
-
-    modal.classList.remove('is-open');
-    document.documentElement.classList.remove('is-modal-open');
-    setModalBackgroundInert(false);
-    if (TD.header && typeof TD.header.syncMobileActionBar === 'function') {
-      TD.header.syncMobileActionBar();
-    }
-    document.removeEventListener('keydown', onGalleryModalKeyDown);
-
-    var hideAfter = prefersReducedMotion() ? 0 : 220;
-    galleryModalCloseTimer = window.setTimeout(function () {
-      if (!modal.classList.contains('is-open')) {
-        modal.hidden = true;
-      }
-      galleryModalCloseTimer = null;
-    }, hideAfter);
-
-    if (restoreFocus && lastGalleryModalTriggerEl && typeof lastGalleryModalTriggerEl.focus === 'function') {
-      lastGalleryModalTriggerEl.focus({ preventScroll: true });
-    }
-    lastGalleryModalTriggerEl = null;
-    activeGalleryModal.group = null;
-    activeGalleryModal.id = null;
+    closeLightboxModal(GALLERY_MODAL_CFG, restoreFocus);
   }
 
   function bindGalleryModal() {
-    var modal = document.getElementById('gallery-modal');
-    if (!modal || modal.dataset.galleryModalBound) return;
-    modal.dataset.galleryModalBound = '1';
-
-    var backdrop = document.getElementById('gallery-modal-backdrop');
-    var closeBtn = document.getElementById('gallery-modal-close');
-    var prevBtn = document.getElementById('gallery-modal-prev');
-    var nextBtn = document.getElementById('gallery-modal-next');
+    if (!bindLightboxControls(GALLERY_MODAL_CFG)) return;
     var mediaEl = document.getElementById('gallery-modal-media');
-
-    if (backdrop) {
-      backdrop.addEventListener('click', function () {
-        closeGalleryModal(true);
-      });
-    }
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function () {
-        closeGalleryModal(true);
-      });
-    }
-    if (prevBtn) {
-      prevBtn.addEventListener('click', function () {
-        stepGalleryModal(-1);
-      });
-    }
-    if (nextBtn) {
-      nextBtn.addEventListener('click', function () {
-        stepGalleryModal(1);
-      });
-    }
     if (mediaEl) {
       bindHorizontalSwipe(
         mediaEl,
@@ -1838,19 +1852,12 @@
     reducedMotion: false,
     autoplayTimer: null,
     resumeTimer: null,
-    resizeRaf: null,
-    touchStartX: 0,
-    touchStartY: 0,
-    touchIgnore: true
+    resizeRaf: null
   };
-
-  function isSafeHttpUrl(url) {
-    return /^https?:\/\/\S+$/i.test(String(url || '').trim());
-  }
 
   function isAllowedAvatarSrc(url) {
     var clean = String(url || '').trim();
-    return isSafeHttpUrl(clean) || /^(\/)?img\//i.test(clean);
+    return isSafeHttpUrl(clean) || /^(\/)?img\/[^?\s#]+$/i.test(clean);
   }
 
   function getReviewsMeta(overrideMeta) {
@@ -1910,9 +1917,10 @@
     if (raw.verified === false) return null;
     if (!isFromVerifiedSource && raw.verified !== true) return null;
 
-    var stableId = raw.id !== undefined && raw.id !== null ? String(raw.id).trim() : '';
-    var author = raw.author ? String(raw.author).trim() : '';
-    var text = raw.text ? String(raw.text).trim() : '';
+    var stableId =
+      raw.id !== undefined && raw.id !== null ? sanitizeExternalText(raw.id, 120) : '';
+    var author = raw.author ? sanitizeExternalText(raw.author, 120) : '';
+    var text = raw.text ? sanitizeExternalText(raw.text, 4000) : '';
     if (!stableId || !author || !text) return null;
 
     var rawRating =
@@ -1925,21 +1933,21 @@
         : null;
 
     var relativeDate = raw.relativeDate
-      ? String(raw.relativeDate).trim()
+      ? sanitizeExternalText(raw.relativeDate, 80)
       : raw.date
-        ? String(raw.date).trim()
+        ? sanitizeExternalText(raw.date, 80)
         : '';
-    var publishedAt = raw.publishedAt ? String(raw.publishedAt).trim() : '';
-    var ownerReply = raw.ownerReply ? String(raw.ownerReply).trim() : '';
+    var publishedAt = raw.publishedAt ? sanitizeExternalText(raw.publishedAt, 64) : '';
+    var ownerReply = raw.ownerReply ? sanitizeExternalText(raw.ownerReply, 2000) : '';
     var authorPhotoRaw = raw.authorPhoto ? String(raw.authorPhoto).trim() : '';
     var authorPhoto = isAllowedAvatarSrc(authorPhotoRaw) ? authorPhotoRaw : '';
     var googleUrl = isSafeHttpUrl(raw.googleUrl) ? String(raw.googleUrl).trim() : fallbackUrl;
 
     return Object.freeze({
       id: stableId,
-      source: raw.source ? String(raw.source).trim() : 'Google',
+      source: raw.source ? sanitizeExternalText(raw.source, 60) : 'Google',
       author: author,
-      authorInitials: raw.authorInitials ? String(raw.authorInitials).trim() : '',
+      authorInitials: raw.authorInitials ? sanitizeExternalText(raw.authorInitials, 4) : '',
       authorPhoto: authorPhoto,
       rating: normalizedRating,
       relativeDate: relativeDate,
@@ -2049,21 +2057,32 @@
       var meta = getReviewsMeta();
       var url = endpointOverride ? String(endpointOverride).trim() : meta.endpoint;
 
-      if (!url || !isSafeHttpUrl(url) && url.charAt(0) !== '/') {
+      if (!url || !isSafeEndpointUrl(url)) {
         return Promise.resolve({
           meta: meta,
           reviews: normalizeReviewsList(TD.REVIEWS, meta.googleUrl, false)
         });
       }
 
-      if (typeof window.fetch !== 'function') {
-        return Promise.reject(new Error('Fetch API is unavailable'));
-      }
-
-      return window
-        .fetch(url, { headers: { Accept: 'application/json' } })
+      return fetchWithTimeout(
+        url,
+        {
+          headers: { Accept: 'application/json' },
+          cache: 'no-store',
+          credentials: isSameOriginUrl(url) ? 'same-origin' : 'omit'
+        },
+        10000,
+        'reviews'
+      )
         .then(function (resp) {
           if (!resp.ok) throw new Error('HTTP ' + resp.status);
+          var ctype =
+            resp.headers && typeof resp.headers.get === 'function'
+              ? resp.headers.get('content-type') || ''
+              : '';
+          if (ctype && !/json/i.test(ctype)) {
+            throw new Error('Unexpected reviews content-type');
+          }
           return resp.json();
         })
         .then(function (payload) {
@@ -2605,59 +2624,19 @@
       });
 
       if (viewport) {
-        viewport.addEventListener(
-          'touchstart',
-          function (e) {
-            if (!e.touches || e.touches.length !== 1) {
-              reviewsSliderState.touchIgnore = true;
-              return;
-            }
-            if (e.target && e.target.closest('button, a, [role="tab"]')) {
-              reviewsSliderState.touchIgnore = true;
-              return;
-            }
-            reviewsSliderState.touchIgnore = false;
-            reviewsSliderState.touchStartX = e.touches[0].clientX;
-            reviewsSliderState.touchStartY = e.touches[0].clientY;
-          },
-          { passive: true }
-        );
-
-        viewport.addEventListener(
-          'touchend',
-          function (e) {
-            if (
-              reviewsSliderState.touchIgnore ||
-              !e.changedTouches ||
-              !e.changedTouches.length
-            ) {
-              reviewsSliderState.touchIgnore = true;
-              return;
-            }
-            var dx = e.changedTouches[0].clientX - reviewsSliderState.touchStartX;
-            var dy = e.changedTouches[0].clientY - reviewsSliderState.touchStartY;
-            reviewsSliderState.touchIgnore = true;
-
-            if (Math.abs(dx) < 42 || Math.abs(dx) <= Math.abs(dy) * 1.2) {
-              return;
-            }
-
-            if (dx < 0) {
-              stepReviewsSlider(1, { manual: true, announce: true });
-            } else {
-              stepReviewsSlider(-1, { manual: true, announce: true });
-            }
-            pauseSliderAfterInteraction();
-          },
-          { passive: true }
-        );
-
-        viewport.addEventListener(
-          'touchcancel',
+        bindHorizontalSwipe(
+          viewport,
           function () {
-            reviewsSliderState.touchIgnore = true;
+            stepReviewsSlider(1, { manual: true, announce: true });
           },
-          { passive: true }
+          function () {
+            stepReviewsSlider(-1, { manual: true, announce: true });
+          },
+          {
+            threshold: 42,
+            ignoreSelector: 'button, a, [role="tab"]',
+            onSwipe: pauseSliderAfterInteraction
+          }
         );
       }
     }
@@ -2693,20 +2672,17 @@
         });
       }
 
-      try {
-        var mq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-        if (mq && typeof mq.addEventListener === 'function') {
-          mq.addEventListener('change', function () {
-            reviewsSliderState.reducedMotion = Boolean(mq.matches);
-            if (reviewsSliderState.reducedMotion) {
-              clearSliderTimers();
-            } else {
-              scheduleSliderAutoplay();
-            }
-            syncSliderPauseButton();
-          });
-        }
-      } catch (e) {}
+      if (typeof TD.onMediaQueryChange === 'function') {
+        TD.onMediaQueryChange('(prefers-reduced-motion: reduce)', function (e) {
+          reviewsSliderState.reducedMotion = Boolean(e.matches);
+          if (reviewsSliderState.reducedMotion) {
+            clearSliderTimers();
+          } else {
+            scheduleSliderAutoplay();
+          }
+          syncSliderPauseButton();
+        });
+      }
     }
   }
 
@@ -3148,7 +3124,7 @@
   function syncPrivacySlots() {
     var cfg = TD.APPOINTMENT_CONFIG || {};
     var url = cfg.privacyPolicyUrl ? String(cfg.privacyPolicyUrl).trim() : '';
-    if (!isSafeHttpUrl(url) && url.charAt(0) !== '/') return;
+    if (!isSafeEndpointUrl(url)) return;
 
     var formSlot = document.getElementById('appointment-privacy-slot');
     if (formSlot && !formSlot.dataset.privacyBound) {
@@ -3579,24 +3555,22 @@
       clearAppointmentTimer();
       setAppointmentFormState('loading');
 
-      if (endpoint && (isSafeHttpUrl(endpoint) || endpoint.charAt(0) === '/')) {
-        if (typeof window.fetch !== 'function') {
-          setAppointmentFormState(
-            'error',
-            'Браузер не підтримує автоматичне надсилання.',
-            'Зателефонуйте нам за номером ' + (clinic.PHONE_DISPLAY || '') + '.'
-          );
-          return;
-        }
-        window
-          .fetch(endpoint, {
+      if (endpoint && isSafeEndpointUrl(endpoint)) {
+        fetchWithTimeout(
+          endpoint,
+          {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               Accept: 'application/json'
             },
+            cache: 'no-store',
+            credentials: isSameOriginUrl(endpoint) ? 'same-origin' : 'omit',
             body: JSON.stringify(payload)
-          })
+          },
+          12000,
+          'appointment'
+        )
           .then(function (resp) {
             if (!resp.ok) throw new Error('HTTP ' + resp.status);
             setAppointmentFormState(
@@ -3604,7 +3578,15 @@
               'Дякуємо! Ми зв’яжемося з вами для підтвердження запису.'
             );
           })
-          .catch(function () {
+          .catch(function (err) {
+            if (err && err.message === 'Fetch API is unavailable') {
+              setAppointmentFormState(
+                'error',
+                'Браузер не підтримує автоматичне надсилання.',
+                'Зателефонуйте нам за номером ' + (clinic.PHONE_DISPLAY || '') + '.'
+              );
+              return;
+            }
             setAppointmentFormState(
               'error',
               'Не вдалося надіслати заявку на сервер.',
@@ -3633,6 +3615,32 @@
     });
   }
 
+  function onRenderPageHideCleanup() {
+    clearAppointmentTimer();
+    abortActiveFetch('reviews');
+    abortActiveFetch('appointment');
+    if (isSubmittingAppointment) {
+      setAppointmentFormState('idle');
+    }
+    clearSliderTimers();
+    if (reviewsSliderState.resizeRaf) {
+      window.cancelAnimationFrame(reviewsSliderState.resizeRaf);
+      reviewsSliderState.resizeRaf = null;
+    }
+    var modalKeys = ['work', 'gallery'];
+    for (var i = 0; i < modalKeys.length; i++) {
+      var ctrl = lightboxControllers[modalKeys[i]];
+      if (ctrl && ctrl.closeTimer) {
+        window.clearTimeout(ctrl.closeTimer);
+        ctrl.closeTimer = null;
+      }
+    }
+    if (galleryResizeRaf) {
+      window.cancelAnimationFrame(galleryResizeRaf);
+      galleryResizeRaf = null;
+    }
+  }
+
   function bindContactsAndCalcListeners() {
     if (!document.body.dataset.tdContactsGlobalBound) {
       document.body.dataset.tdContactsGlobalBound = '1';
@@ -3648,25 +3656,19 @@
         var link = e.target.closest('a[href="#contacts"], a[href="#top"]');
         if (!link) return;
         var href = link.getAttribute('href');
-        var reduced = prefersReducedMotion();
 
         if (href === '#contacts') {
           var contacts = document.getElementById('contacts');
           if (!contacts) return;
           e.preventDefault();
-          if (typeof contacts.scrollIntoView === 'function') {
-            contacts.scrollIntoView({
-              behavior: reduced ? 'auto' : 'smooth',
-              block: 'start'
-            });
-          }
+          scrollToTarget(contacts);
           var isBookingCta = !link.hasAttribute('data-nav-target');
           focusContactsTarget(isBookingCta ? 'form' : 'heading');
         } else if (href === '#top') {
           e.preventDefault();
           window.scrollTo({
             top: 0,
-            behavior: reduced ? 'auto' : 'smooth'
+            behavior: prefersReducedMotion() ? 'auto' : 'smooth'
           });
           var skip = document.querySelector('.skip-link');
           if (skip && typeof skip.focus === 'function') {
@@ -3676,43 +3678,9 @@
       });
 
       if (TD.lifecycle && typeof TD.lifecycle.onPageHide === 'function') {
-        TD.lifecycle.onPageHide(function () {
-          clearAppointmentTimer();
-          clearSliderTimers();
-          if (reviewsSliderState.resizeRaf) {
-            window.cancelAnimationFrame(reviewsSliderState.resizeRaf);
-            reviewsSliderState.resizeRaf = null;
-          }
-          if (modalCloseTimer) {
-            window.clearTimeout(modalCloseTimer);
-            modalCloseTimer = null;
-          }
-          if (galleryModalCloseTimer) {
-            window.clearTimeout(galleryModalCloseTimer);
-            galleryModalCloseTimer = null;
-          }
-          if (galleryResizeRaf) {
-            window.cancelAnimationFrame(galleryResizeRaf);
-            galleryResizeRaf = null;
-          }
-        });
+        TD.lifecycle.onPageHide(onRenderPageHideCleanup);
       } else {
-        window.addEventListener('pagehide', function () {
-          clearAppointmentTimer();
-          clearSliderTimers();
-          if (modalCloseTimer) {
-            window.clearTimeout(modalCloseTimer);
-            modalCloseTimer = null;
-          }
-          if (galleryModalCloseTimer) {
-            window.clearTimeout(galleryModalCloseTimer);
-            galleryModalCloseTimer = null;
-          }
-          if (galleryResizeRaf) {
-            window.cancelAnimationFrame(galleryResizeRaf);
-            galleryResizeRaf = null;
-          }
-        });
+        window.addEventListener('pagehide', onRenderPageHideCleanup);
       }
     }
   }

@@ -13,13 +13,7 @@
   var isInitialized = false;
 
   function prefersReducedMotion() {
-    try {
-      return Boolean(
-        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      );
-    } catch (e) {
-      return false;
-    }
+    return typeof TD.prefersReducedMotion === 'function' ? TD.prefersReducedMotion() : false;
   }
 
   function clearSwitchTransition() {
@@ -168,41 +162,23 @@
     }
 
     /* Follow OS changes only when user has not saved an explicit choice */
-    try {
-      if (window.matchMedia) {
-        var mq = window.matchMedia('(prefers-color-scheme: dark)');
-        var onSystemChange = function (e) {
-          if (!readSavedTheme()) {
-            applyTheme(e.matches ? 'dark' : 'light', true);
-          }
-        };
-        if (typeof mq.addEventListener === 'function') {
-          mq.addEventListener('change', onSystemChange);
-        } else if (typeof mq.addListener === 'function') {
-          mq.addListener(onSystemChange);
+    if (typeof TD.onMediaQueryChange === 'function') {
+      TD.onMediaQueryChange('(prefers-color-scheme: dark)', function (e) {
+        if (!readSavedTheme()) {
+          applyTheme(e.matches ? 'dark' : 'light', true);
         }
-      }
-    } catch (e) {
-      /* Ignore unsupported matchMedia listeners */
+      });
     }
 
     if (TD.lifecycle && typeof TD.lifecycle.onPageHide === 'function') {
       TD.lifecycle.onPageHide(clearSwitchTransition);
     }
 
-    try {
-      if (window.matchMedia) {
-        var rmq = window.matchMedia('(prefers-reduced-motion: reduce)');
-        var onMotionChange = function (e) {
-          if (e.matches) clearSwitchTransition();
-        };
-        if (typeof rmq.addEventListener === 'function') {
-          rmq.addEventListener('change', onMotionChange);
-        } else if (typeof rmq.addListener === 'function') {
-          rmq.addListener(onMotionChange);
-        }
-      }
-    } catch (e) {}
+    if (typeof TD.onMediaQueryChange === 'function') {
+      TD.onMediaQueryChange('(prefers-reduced-motion: reduce)', function (e) {
+        if (e.matches) clearSwitchTransition();
+      });
+    }
   }
 
   TD.theme = {

@@ -14,14 +14,7 @@
   var stateMap = Object.create(null);
 
   function prefersReducedMotion() {
-    try {
-      return Boolean(
-        window.matchMedia &&
-          window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      );
-    } catch (e) {
-      return false;
-    }
+    return typeof TD.prefersReducedMotion === 'function' ? TD.prefersReducedMotion() : false;
   }
 
   function formatUnitCount(item, qty) {
@@ -80,12 +73,24 @@
     };
   }
 
+  function findCalcRow(itemId) {
+    var inputEl = document.getElementById(itemId);
+    if (inputEl && typeof inputEl.closest === 'function') {
+      return inputEl.closest('[data-calc-row]');
+    }
+    var rows = document.querySelectorAll('[data-calc-row]');
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i].getAttribute('data-calc-row') === itemId) return rows[i];
+    }
+    return null;
+  }
+
   function syncStepperUI(itemId) {
     var item = findItem(itemId);
     var entry = stateMap[itemId];
     if (!item || !entry) return;
 
-    var row = document.querySelector('[data-calc-row="' + itemId + '"]');
+    var row = findCalcRow(itemId);
     if (!row) return;
 
     row.classList.toggle('is-selected', entry.checked);
