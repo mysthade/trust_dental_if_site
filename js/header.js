@@ -15,7 +15,7 @@
   var isDrawerBound = false;
   var isScrollSpyBound = false;
   var isMobileActionBarBound = false;
-  var syncMobileActionBarVisibility = function () {};
+  var syncMobileActionBarVisibility = function () { };
 
   function initScrollState() {
     if (isScrollStateBound) return;
@@ -43,7 +43,10 @@
     }
 
     syncScrolledInstant();
-    window.addEventListener('load', syncScrolledInstant, { once: true, passive: true });
+    window.addEventListener('load', syncScrolledInstant, {
+      once: true,
+      passive: true
+    });
 
     if (TD.lifecycle && typeof TD.lifecycle.onPageShow === 'function') {
       TD.lifecycle.onPageShow(syncScrolledInstant);
@@ -56,8 +59,9 @@
         var entry = entries[0];
         if (!entry) return;
         header.classList.toggle('is-scrolled', !entry.isIntersecting);
-      },
-      { threshold: 0 }
+      }, {
+      threshold: 0
+    }
     );
 
     observer.observe(sentinel);
@@ -336,11 +340,10 @@
           }
         }
         pickActive();
-      },
-      {
-        rootMargin: '-100px 0px -25% 0px',
-        threshold: [0, 0.15, 0.35, 0.6, 0.85, 1]
-      }
+      }, {
+      rootMargin: '-100px 0px -25% 0px',
+      threshold: [0, 0.15, 0.35, 0.6, 0.85, 1]
+    }
     );
 
     if (hero) sectionObserver.observe(hero);
@@ -426,11 +429,10 @@
           }
         }
         updateBarVisibility();
-      },
-      {
-        rootMargin: '0px 0px 0px 0px',
-        threshold: [0, 0.05]
-      }
+      }, {
+      rootMargin: '0px 0px 0px 0px',
+      threshold: [0, 0.05]
+    }
     );
 
     observer.observe(heroCta);

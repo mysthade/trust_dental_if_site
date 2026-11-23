@@ -9,10 +9,19 @@
   var SVG_NS = 'http://www.w3.org/2000/svg';
   var isInitialized = false;
   var activeModalWorkId = null;
-  var activeGalleryModal = { group: null, id: null };
+  var activeGalleryModal = {
+    group: null,
+    id: null
+  };
   var lightboxControllers = {
-    work: { closeTimer: null, lastTrigger: null },
-    gallery: { closeTimer: null, lastTrigger: null }
+    work: {
+      closeTimer: null,
+      lastTrigger: null
+    },
+    gallery: {
+      closeTimer: null,
+      lastTrigger: null
+    }
   };
   var activeFetchControllers = {
     reviews: null,
@@ -20,8 +29,18 @@
   };
   var galleryResizeRaf = null;
   var galleryGroupsState = {
-    inside: { currentIndex: 0, perView: 3, maxIndex: 0, totalSlides: 0 },
-    outside: { currentIndex: 0, perView: 3, maxIndex: 0, totalSlides: 0 }
+    inside: {
+      currentIndex: 0,
+      perView: 3,
+      maxIndex: 0,
+      totalSlides: 0
+    },
+    outside: {
+      currentIndex: 0,
+      perView: 3,
+      maxIndex: 0,
+      totalSlides: 0
+    }
   };
 
   function prefersReducedMotion() {
@@ -59,7 +78,7 @@
     if (ctrl && typeof ctrl.abort === 'function') {
       try {
         ctrl.abort();
-      } catch (e) {}
+      } catch (e) { }
     }
     activeFetchControllers[key] = null;
   }
@@ -150,8 +169,9 @@
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
         isSwiping = true;
-      },
-      { passive: true }
+      }, {
+      passive: true
+    }
     );
 
     el.addEventListener(
@@ -169,16 +189,18 @@
           else onPrev();
           if (typeof onSwipe === 'function') onSwipe();
         }
-      },
-      { passive: true }
+      }, {
+      passive: true
+    }
     );
 
     el.addEventListener(
       'touchcancel',
       function () {
         isSwiping = false;
-      },
-      { passive: true }
+      }, {
+      passive: true
+    }
     );
   }
 
@@ -242,8 +264,12 @@
       }
     }
 
-    img.addEventListener('load', handleLoad, { once: true });
-    img.addEventListener('error', finishFallback, { once: true });
+    img.addEventListener('load', handleLoad, {
+      once: true
+    });
+    img.addEventListener('error', finishFallback, {
+      once: true
+    });
 
     if (img.complete && img.naturalWidth > 0) {
       finishLoaded();
@@ -294,9 +320,9 @@
     }
 
     if (svc.iconImg) {
-      var basePath = svc.iconImg.indexOf('/') === -1
-        ? 'img/services/' + svc.iconImg
-        : svc.iconImg;
+      var basePath = svc.iconImg.indexOf('/') === -1 ?
+        'img/services/' + svc.iconImg :
+        svc.iconImg;
       var pic = document.createElement('picture');
       pic.className = 'service-card__picture';
 
@@ -344,9 +370,9 @@
 
       var serviceId = card.getAttribute('data-service-id');
       var svc =
-        typeof TD.findServiceById === 'function'
-          ? TD.findServiceById(serviceId)
-          : null;
+        typeof TD.findServiceById === 'function' ?
+          TD.findServiceById(serviceId) :
+          null;
       var svcTitle = svc && svc.title ? svc.title : '';
       var isSelected = isCalcReady && TD.calculator.isItemSelected(calcItemId);
 
@@ -358,9 +384,9 @@
         btn.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
         btn.setAttribute(
           'aria-label',
-          isSelected
-            ? 'Послугу «' + svcTitle + '» вже додано до попереднього розрахунку'
-            : 'Додати послугу «' + svcTitle + '» до попереднього розрахунку'
+          isSelected ?
+            'Послугу «' + svcTitle + '» вже додано до попереднього розрахунку' :
+            'Додати послугу «' + svcTitle + '» до попереднього розрахунку'
         );
 
         var iconEl = btn.querySelector('.service-card__add-icon');
@@ -375,22 +401,22 @@
     if (!bar || !statusEl) return;
 
     var selection =
-      TD.calculator && typeof TD.calculator.getSelection === 'function'
-        ? TD.calculator.getSelection()
-        : TD.state && TD.state.calcSelection
-          ? TD.state.calcSelection
-          : null;
+      TD.calculator && typeof TD.calculator.getSelection === 'function' ?
+        TD.calculator.getSelection() :
+        TD.state && TD.state.calcSelection ?
+          TD.state.calcSelection :
+          null;
 
     var count = selection && Array.isArray(selection.items) ? selection.items.length : 0;
     if (count > 0) {
       bar.classList.add('is-active');
       var word =
-        typeof TD.pluralizeUk === 'function'
-          ? TD.pluralizeUk(count, 'послуга', 'послуги', 'послуг')
-          : 'послуг';
-      var prefixText = lastAddedServiceTitle
-        ? 'Послугу «' + lastAddedServiceTitle + '» додано до розрахунку · '
-        : 'У попередньому розрахунку: ';
+        typeof TD.pluralizeUk === 'function' ?
+          TD.pluralizeUk(count, 'послуга', 'послуги', 'послуг') :
+          'послуг';
+      var prefixText = lastAddedServiceTitle ?
+        'Послугу «' + lastAddedServiceTitle + '» додано до розрахунку · ' :
+        'У попередньому розрахунку: ';
       statusEl.textContent =
         prefixText + count + '\u00A0' + word + ' на суму ' + selection.formattedTotal;
     } else {
@@ -410,9 +436,9 @@
     for (var i = 0; i < TD.SERVICES.length; i++) {
       var svc = TD.SERVICES[i];
       var calcItem =
-        svc.calcItemId && typeof TD.findCalcItemById === 'function'
-          ? TD.findCalcItemById(svc.calcItemId)
-          : null;
+        svc.calcItemId && typeof TD.findCalcItemById === 'function' ?
+          TD.findCalcItemById(svc.calcItemId) :
+          null;
 
       var card = document.createElement('article');
       card.className = 'service-card';
@@ -574,9 +600,9 @@
         if (includesToggle) {
           var toggleSvcId = includesToggle.getAttribute('data-service-includes-toggle');
           var wrapEl = includesToggle.closest('.service-card__includes');
-          var panelEl = toggleSvcId
-            ? document.getElementById('service-includes-' + toggleSvcId)
-            : null;
+          var panelEl = toggleSvcId ?
+            document.getElementById('service-includes-' + toggleSvcId) :
+            null;
           if (toggleSvcId && wrapEl) {
             var nextOpen = !wrapEl.classList.contains('is-open');
             expandedServiceIds[toggleSvcId] = nextOpen;
@@ -626,7 +652,9 @@
           var calcHeading = document.getElementById('heading-calculator');
           if (calcHeading && typeof calcHeading.focus === 'function') {
             calcHeading.setAttribute('tabindex', '-1');
-            calcHeading.focus({ preventScroll: true });
+            calcHeading.focus({
+              preventScroll: true
+            });
           }
         }
       });
@@ -1124,9 +1152,13 @@
       var closeBtn = document.getElementById(cfg.closeId);
       var dialog = modal.querySelector(cfg.dialogSelector);
       if (closeBtn) {
-        closeBtn.focus({ preventScroll: true });
+        closeBtn.focus({
+          preventScroll: true
+        });
       } else if (dialog) {
-        dialog.focus({ preventScroll: true });
+        dialog.focus({
+          preventScroll: true
+        });
       }
     });
 
@@ -1155,7 +1187,9 @@
     }, hideAfter);
 
     if (restoreFocus && ctrl.lastTrigger && typeof ctrl.lastTrigger.focus === 'function') {
-      ctrl.lastTrigger.focus({ preventScroll: true });
+      ctrl.lastTrigger.focus({
+        preventScroll: true
+      });
     }
     ctrl.lastTrigger = null;
     if (typeof cfg.onClose === 'function') {
@@ -1263,7 +1297,9 @@
   var WORK_MODAL_CFG = {
     modalId: 'work-modal',
     siblingId: 'gallery-modal',
-    closeSibling: function (restore) { closeGalleryModal(restore); },
+    closeSibling: function (restore) {
+      closeGalleryModal(restore);
+    },
     closeId: 'work-modal-close',
     backdropId: 'work-modal-backdrop',
     prevId: 'work-modal-prev',
@@ -1274,7 +1310,9 @@
     step: stepWorkModal,
     close: closeWorkModal,
     onKeyDown: onWorkModalKeyDown,
-    onClose: function () { activeModalWorkId = null; }
+    onClose: function () {
+      activeModalWorkId = null;
+    }
   };
 
   function onWorkModalKeyDown(e) {
@@ -1359,9 +1397,9 @@
     var useReal = item.status !== 'placeholder' && Boolean(item.src);
     var w = item.width || 1200;
     var h = item.height || 900;
-    var sizesStr = isModal
-      ? '(max-width: 767px) 94vw, 860px'
-      : item.sizes || '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw';
+    var sizesStr = isModal ?
+      '(max-width: 767px) 94vw, 860px' :
+      item.sizes || '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw';
     var placeholderUrl = item.placeholderSrc || ('img/gallery/' + group + '-01.svg');
 
     var pic = document.createElement('picture');
@@ -1384,9 +1422,9 @@
     img.sizes = sizesStr;
     img.src = useReal ? item.src : placeholderUrl;
     img.srcset = useReal ? (item.srcSet || item.src + ' ' + w + 'w') : placeholderUrl + ' ' + w + 'w';
-    img.alt = isModal
-      ? item.alt || (meta.fallbackLabel + ' (' + (index + 1) + ' з ' + total + ')')
-      : item.alt || '';
+    img.alt = isModal ?
+      item.alt || (meta.fallbackLabel + ' (' + (index + 1) + ' з ' + total + ')') :
+      item.alt || '';
 
     pic.appendChild(img);
     wrap.appendChild(pic);
@@ -1551,13 +1589,13 @@
     trigger.setAttribute(
       'aria-label',
       'Відкрити ' +
-        meta.fallbackLabel.toLowerCase() +
-        ' (' +
-        (index + 1) +
-        ' з ' +
-        total +
-        ') у збільшеному вигляді' +
-        (item.caption ? ': ' + item.caption : '')
+      meta.fallbackLabel.toLowerCase() +
+      ' (' +
+      (index + 1) +
+      ' з ' +
+      total +
+      ') у збільшеному вигляді' +
+      (item.caption ? ': ' + item.caption : '')
     );
 
     trigger.appendChild(createGalleryMediaNode(item, group, index, total, false));
@@ -1761,7 +1799,9 @@
   var GALLERY_MODAL_CFG = {
     modalId: 'gallery-modal',
     siblingId: 'work-modal',
-    closeSibling: function (restore) { closeWorkModal(restore); },
+    closeSibling: function (restore) {
+      closeWorkModal(restore);
+    },
     closeId: 'gallery-modal-close',
     backdropId: 'gallery-modal-backdrop',
     prevId: 'gallery-modal-prev',
@@ -1831,7 +1871,9 @@
           syncGalleryCarouselUI('inside', true);
           syncGalleryCarouselUI('outside', true);
         });
-      }, { passive: true });
+      }, {
+        passive: true
+      });
     }
   }
 
@@ -1864,31 +1906,31 @@
     var src = overrideMeta || TD.REVIEWS_META || {};
     var clinic = TD.CLINIC || {};
     var fallbackUrl = clinic.GOOGLE_MAPS_URL || '';
-    var googleUrl = isSafeHttpUrl(src.googleUrl)
-      ? String(src.googleUrl).trim()
-      : isSafeHttpUrl(fallbackUrl)
-        ? String(fallbackUrl).trim()
-        : '';
+    var googleUrl = isSafeHttpUrl(src.googleUrl) ?
+      String(src.googleUrl).trim() :
+      isSafeHttpUrl(fallbackUrl) ?
+        String(fallbackUrl).trim() :
+        '';
 
     var summaryVerified = Boolean(src.summaryVerified === true);
     var rawRating =
-      src.rating !== undefined && src.rating !== null && src.rating !== ''
-        ? Number(src.rating)
-        : NaN;
+      src.rating !== undefined && src.rating !== null && src.rating !== '' ?
+        Number(src.rating) :
+        NaN;
     var hasValidRating =
       summaryVerified && isFinite(rawRating) && rawRating > 0 && rawRating <= 5;
-    var ratingDisplay = hasValidRating
-      ? src.ratingDisplay
-        ? String(src.ratingDisplay)
-        : rawRating.toFixed(1)
-      : '';
+    var ratingDisplay = hasValidRating ?
+      src.ratingDisplay ?
+        String(src.ratingDisplay) :
+        rawRating.toFixed(1) :
+      '';
 
     var rawCountSource =
       src.userRatingCount !== undefined ? src.userRatingCount : src.reviewsCount;
     var rawCount =
-      rawCountSource !== undefined && rawCountSource !== null && rawCountSource !== ''
-        ? Number(rawCountSource)
-        : NaN;
+      rawCountSource !== undefined && rawCountSource !== null && rawCountSource !== '' ?
+        Number(rawCountSource) :
+        NaN;
     var hasValidCount = summaryVerified && isFinite(rawCount) && rawCount > 0;
 
     var autoplayMs = Number(src.autoplayDelayMs);
@@ -1924,19 +1966,19 @@
     if (!stableId || !author || !text) return null;
 
     var rawRating =
-      raw.rating !== undefined && raw.rating !== null && raw.rating !== ''
-        ? Number(raw.rating)
-        : NaN;
+      raw.rating !== undefined && raw.rating !== null && raw.rating !== '' ?
+        Number(raw.rating) :
+        NaN;
     var normalizedRating =
-      isFinite(rawRating) && rawRating >= 1 && rawRating <= 5
-        ? Math.round(rawRating * 10) / 10
-        : null;
+      isFinite(rawRating) && rawRating >= 1 && rawRating <= 5 ?
+        Math.round(rawRating * 10) / 10 :
+        null;
 
-    var relativeDate = raw.relativeDate
-      ? sanitizeExternalText(raw.relativeDate, 80)
-      : raw.date
-        ? sanitizeExternalText(raw.date, 80)
-        : '';
+    var relativeDate = raw.relativeDate ?
+      sanitizeExternalText(raw.relativeDate, 80) :
+      raw.date ?
+        sanitizeExternalText(raw.date, 80) :
+        '';
     var publishedAt = raw.publishedAt ? sanitizeExternalText(raw.publishedAt, 64) : '';
     var ownerReply = raw.ownerReply ? sanitizeExternalText(raw.ownerReply, 2000) : '';
     var authorPhotoRaw = raw.authorPhoto ? String(raw.authorPhoto).trim() : '';
@@ -1981,38 +2023,34 @@
     }
 
     var metaBase = baseMeta || getReviewsMeta();
-    var listRaw = Array.isArray(payload)
-      ? payload
-      : Array.isArray(payload.reviews)
-        ? payload.reviews
-        : [];
-    var payloadMeta =
-      !Array.isArray(payload) && payload.meta && typeof payload.meta === 'object'
-        ? payload.meta
-        : payload;
+    var listRaw = Array.isArray(payload) ?
+      payload :
+      Array.isArray(payload.reviews) ?
+        payload.reviews :
+        [];
+    var payloadMeta = !Array.isArray(payload) && payload.meta && typeof payload.meta === 'object' ?
+      payload.meta :
+      payload;
 
     var mergedMeta = {
       sourceLabel: payloadMeta.source || metaBase.sourceLabel,
       sourceName: metaBase.sourceName,
       placeId: payloadMeta.placeId || metaBase.placeId,
-      googleUrl: isSafeHttpUrl(payloadMeta.googleUrl)
-        ? payloadMeta.googleUrl
-        : metaBase.googleUrl,
-      rating:
-        payloadMeta.rating !== undefined && payloadMeta.rating !== null
-          ? Number(payloadMeta.rating)
-          : metaBase.rating,
-      userRatingCount:
-        payloadMeta.userRatingCount !== undefined && payloadMeta.userRatingCount !== null
-          ? Number(payloadMeta.userRatingCount)
-          : payloadMeta.reviewsCount !== undefined && payloadMeta.reviewsCount !== null
-            ? Number(payloadMeta.reviewsCount)
-            : metaBase.userRatingCount,
-      summaryVerified:
-        (payloadMeta.rating !== undefined &&
-          payloadMeta.rating !== null &&
-          Number(payloadMeta.rating) > 0 &&
-          Number(payloadMeta.rating) <= 5) ||
+      googleUrl: isSafeHttpUrl(payloadMeta.googleUrl) ?
+        payloadMeta.googleUrl :
+        metaBase.googleUrl,
+      rating: payloadMeta.rating !== undefined && payloadMeta.rating !== null ?
+        Number(payloadMeta.rating) :
+        metaBase.rating,
+      userRatingCount: payloadMeta.userRatingCount !== undefined && payloadMeta.userRatingCount !== null ?
+        Number(payloadMeta.userRatingCount) :
+        payloadMeta.reviewsCount !== undefined && payloadMeta.reviewsCount !== null ?
+          Number(payloadMeta.reviewsCount) :
+          metaBase.userRatingCount,
+      summaryVerified: (payloadMeta.rating !== undefined &&
+        payloadMeta.rating !== null &&
+        Number(payloadMeta.rating) > 0 &&
+        Number(payloadMeta.rating) <= 5) ||
         (payloadMeta.userRatingCount !== undefined &&
           payloadMeta.userRatingCount !== null &&
           Number(payloadMeta.userRatingCount) > 0) ||
@@ -2065,21 +2103,22 @@
       }
 
       return fetchWithTimeout(
-        url,
-        {
-          headers: { Accept: 'application/json' },
-          cache: 'no-store',
-          credentials: isSameOriginUrl(url) ? 'same-origin' : 'omit'
+        url, {
+        headers: {
+          Accept: 'application/json'
         },
+        cache: 'no-store',
+        credentials: isSameOriginUrl(url) ? 'same-origin' : 'omit'
+      },
         10000,
         'reviews'
       )
         .then(function (resp) {
           if (!resp.ok) throw new Error('HTTP ' + resp.status);
           var ctype =
-            resp.headers && typeof resp.headers.get === 'function'
-              ? resp.headers.get('content-type') || ''
-              : '';
+            resp.headers && typeof resp.headers.get === 'function' ?
+              resp.headers.get('content-type') || '' :
+              '';
           if (ctype && !/json/i.test(ctype)) {
             throw new Error('Unexpected reviews content-type');
           }
@@ -2107,7 +2146,11 @@
     var clean = String(text || '').replace(/\s+/g, ' ').trim();
     var limit = maxChars || 210;
     if (clean.length <= limit) {
-      return { isTruncated: false, excerpt: clean, full: clean };
+      return {
+        isTruncated: false,
+        excerpt: clean,
+        full: clean
+      };
     }
     var minBreak = Math.floor(limit * 0.55);
     var breakIdx = clean.lastIndexOf(' ', limit);
@@ -2115,7 +2158,11 @@
       breakIdx = clean.indexOf(' ', limit);
     }
     if (breakIdx === -1) {
-      return { isTruncated: false, excerpt: clean, full: clean };
+      return {
+        isTruncated: false,
+        excerpt: clean,
+        full: clean
+      };
     }
     var trimmed = clean.slice(0, breakIdx).replace(/[.,;:!?—-]+$/, '');
     return {
@@ -2144,15 +2191,15 @@
 
   function formatReviewCountLabel(count) {
     var pluralFn =
-      typeof TD.pluralizeUk === 'function'
-        ? TD.pluralizeUk
-        : function (n, one, few, many) {
-            var a = Math.abs(Number(n)) % 100;
-            var m = a % 10;
-            if (a > 10 && a < 20) return many;
-            if (m > 1 && m < 5) return few;
-            return m === 1 ? one : many;
-          };
+      typeof TD.pluralizeUk === 'function' ?
+        TD.pluralizeUk :
+        function (n, one, few, many) {
+          var a = Math.abs(Number(n)) % 100;
+          var m = a % 10;
+          if (a > 10 && a < 20) return many;
+          if (m > 1 && m < 5) return few;
+          return m === 1 ? one : many;
+        };
     return count + ' ' + pluralFn(count, 'відгук', 'відгуки', 'відгуків');
   }
 
@@ -2294,9 +2341,9 @@
     );
     pauseBtn.setAttribute(
       'aria-label',
-      reviewsSliderState.userPaused
-        ? 'Відновити автоматичне перемикання'
-        : 'Призупинити автоматичне перемикання'
+      reviewsSliderState.userPaused ?
+        'Відновити автоматичне перемикання' :
+        'Призупинити автоматичне перемикання'
     );
     pauseBtn.textContent = reviewsSliderState.userPaused ? 'Продовжити' : 'Пауза';
     pauseBtn.classList.toggle('is-paused', reviewsSliderState.userPaused);
@@ -2306,15 +2353,15 @@
     var slider = document.getElementById('reviews-slider');
     return Boolean(
       slider &&
-        !slider.hidden &&
-        reviewsSliderState.maxIndex > 0 &&
-        !reviewsSliderState.reducedMotion &&
-        !reviewsSliderState.userPaused &&
-        !reviewsSliderState.hoverPaused &&
-        !reviewsSliderState.focusPaused &&
-        !reviewsSliderState.expandedPaused &&
-        !reviewsSliderState.hiddenPaused &&
-        !reviewsSliderState.resumeTimer
+      !slider.hidden &&
+      reviewsSliderState.maxIndex > 0 &&
+      !reviewsSliderState.reducedMotion &&
+      !reviewsSliderState.userPaused &&
+      !reviewsSliderState.hoverPaused &&
+      !reviewsSliderState.focusPaused &&
+      !reviewsSliderState.expandedPaused &&
+      !reviewsSliderState.hiddenPaused &&
+      !reviewsSliderState.resumeTimer
     );
   }
 
@@ -2330,7 +2377,10 @@
     reviewsSliderState.autoplayTimer = window.setTimeout(function () {
       reviewsSliderState.autoplayTimer = null;
       if (!canRunSliderAutoplay()) return;
-      stepReviewsSlider(1, { manual: false, announce: false });
+      stepReviewsSlider(1, {
+        manual: false,
+        announce: false
+      });
       scheduleSliderAutoplay();
     }, delay);
   }
@@ -2537,14 +2587,20 @@
 
       if (prevBtn) {
         prevBtn.addEventListener('click', function () {
-          stepReviewsSlider(-1, { manual: true, announce: true });
+          stepReviewsSlider(-1, {
+            manual: true,
+            announce: true
+          });
           pauseSliderAfterInteraction();
         });
       }
 
       if (nextBtn) {
         nextBtn.addEventListener('click', function () {
-          stepReviewsSlider(1, { manual: true, announce: true });
+          stepReviewsSlider(1, {
+            manual: true,
+            announce: true
+          });
           pauseSliderAfterInteraction();
         });
       }
@@ -2555,7 +2611,10 @@
           if (!tab) return;
           var idx = Number(tab.getAttribute('data-slide-to'));
           if (!isFinite(idx)) return;
-          goToSliderIndex(idx, { manual: true, announce: true });
+          goToSliderIndex(idx, {
+            manual: true,
+            announce: true
+          });
           pauseSliderAfterInteraction();
         });
 
@@ -2576,7 +2635,10 @@
 
           e.preventDefault();
           tabs[next].focus();
-          goToSliderIndex(next, { manual: true, announce: true });
+          goToSliderIndex(next, {
+            manual: true,
+            announce: true
+          });
           pauseSliderAfterInteraction();
         });
       }
@@ -2590,9 +2652,9 @@
 
           var liveSlide = document.getElementById('reviews-slider-status');
           if (liveSlide) {
-            liveSlide.textContent = reviewsSliderState.userPaused
-              ? 'Автоматичне перемикання призупинено.'
-              : 'Автоматичне перемикання відновлено.';
+            liveSlide.textContent = reviewsSliderState.userPaused ?
+              'Автоматичне перемикання призупинено.' :
+              'Автоматичне перемикання відновлено.';
           }
 
           if (!reviewsSliderState.userPaused) {
@@ -2627,16 +2689,21 @@
         bindHorizontalSwipe(
           viewport,
           function () {
-            stepReviewsSlider(1, { manual: true, announce: true });
+            stepReviewsSlider(1, {
+              manual: true,
+              announce: true
+            });
           },
           function () {
-            stepReviewsSlider(-1, { manual: true, announce: true });
-          },
-          {
-            threshold: 42,
-            ignoreSelector: 'button, a, [role="tab"]',
-            onSwipe: pauseSliderAfterInteraction
-          }
+            stepReviewsSlider(-1, {
+              manual: true,
+              announce: true
+            });
+          }, {
+          threshold: 42,
+          ignoreSelector: 'button, a, [role="tab"]',
+          onSwipe: pauseSliderAfterInteraction
+        }
         );
       }
     }
@@ -2929,9 +2996,9 @@
 
   function loadReviewsFromAdapter(endpointOverride) {
     var meta = getReviewsMeta();
-    var targetEndpoint = endpointOverride
-      ? String(endpointOverride).trim()
-      : meta.endpoint;
+    var targetEndpoint = endpointOverride ?
+      String(endpointOverride).trim() :
+      meta.endpoint;
 
     if (!targetEndpoint) {
       setReviewsState(meta.state, TD.REVIEWS, meta);
@@ -2952,7 +3019,10 @@
       })
       .catch(function () {
         setReviewsState('error', null, meta);
-        return { meta: meta, reviews: [] };
+        return {
+          meta: meta,
+          reviews: []
+        };
       });
   }
 
@@ -3197,9 +3267,9 @@
         nameSpan.textContent = labelText;
         var valSpan = document.createElement('strong');
         valSpan.textContent =
-          typeof TD.formatPrice === 'function'
-            ? TD.formatPrice(it.subtotal, it.prefix, 'грн')
-            : String(it.subtotal) + ' грн';
+          typeof TD.formatPrice === 'function' ?
+            TD.formatPrice(it.subtotal, it.prefix, 'грн') :
+            String(it.subtotal) + ' грн';
         li.appendChild(nameSpan);
         li.appendChild(valSpan);
         frag.appendChild(li);
@@ -3217,16 +3287,16 @@
 
     if (serviceSel) {
       var nextService =
-        selection.items.length === 1
-          ? mapCalcItemToServiceValue(selection.items[0])
-          : 'calc-bundle';
+        selection.items.length === 1 ?
+          mapCalcItemToServiceValue(selection.items[0]) :
+          'calc-bundle';
       serviceSel.value = nextService;
     }
 
     if (msgEl && (!msgEl.value.trim() || msgEl.dataset.calcAutofill === '1')) {
-      var summaryStr = selection.summaryText
-        ? 'Попередній розрахунок (орієнтовно): ' + selection.summaryText
-        : '';
+      var summaryStr = selection.summaryText ?
+        'Попередній розрахунок (орієнтовно): ' + selection.summaryText :
+        '';
       msgEl.value = summaryStr.slice(0, 600);
       msgEl.dataset.calcAutofill = '1';
       updateMessageCounter();
@@ -3322,11 +3392,11 @@
       submitBtn.classList.toggle('is-loading', isLoading);
     }
     if (submitLabel) {
-      submitLabel.textContent = isLoading
-        ? hasEndpoint
-          ? 'Надсилання заявки…'
-          : 'Перевірка заявки…'
-        : 'Записатися на консультацію';
+      submitLabel.textContent = isLoading ?
+        hasEndpoint ?
+          'Надсилання заявки…' :
+          'Перевірка заявки…' :
+        'Записатися на консультацію';
     }
     form.setAttribute('aria-busy', isLoading ? 'true' : 'false');
 
@@ -3353,13 +3423,13 @@
     pMain.className = 'form-status__title';
     pMain.textContent =
       headingText ||
-      (stateName === 'success'
-        ? 'Дякуємо! Ми зв’яжемося з вами для підтвердження запису.'
-        : stateName === 'error'
-          ? 'Не вдалося завершити надсилання заявки.'
-          : hasEndpoint
-            ? 'Надсилаємо дані заявки…'
-            : 'Перевіряємо заповнені дані…');
+      (stateName === 'success' ?
+        'Дякуємо! Ми зв’яжемося з вами для підтвердження запису.' :
+        stateName === 'error' ?
+          'Не вдалося завершити надсилання заявки.' :
+          hasEndpoint ?
+            'Надсилаємо дані заявки…' :
+            'Перевіряємо заповнені дані…');
     frag.appendChild(pMain);
 
     if (detailText) {
@@ -3380,32 +3450,31 @@
     var msgEl = document.getElementById('appointment-message');
     var consentEl = document.getElementById('appointment-consent');
 
-    var checks = [
-      {
-        el: nameEl,
-        errEl: document.getElementById('appointment-name-error'),
-        msg: validateAppointmentName(nameEl ? nameEl.value : '')
-      },
-      {
-        el: phoneEl,
-        errEl: document.getElementById('appointment-phone-error'),
-        msg: validateAppointmentPhone(phoneEl ? phoneEl.value : '')
-      },
-      {
-        el: timeEl,
-        errEl: document.getElementById('appointment-preferred-time-error'),
-        msg: validateAppointmentPreferredTime(timeEl ? timeEl.value : '')
-      },
-      {
-        el: msgEl,
-        errEl: document.getElementById('appointment-message-error'),
-        msg: validateAppointmentMessage(msgEl ? msgEl.value : '')
-      },
-      {
-        el: consentEl,
-        errEl: document.getElementById('appointment-consent-error'),
-        msg: validateAppointmentConsent(Boolean(consentEl && consentEl.checked))
-      }
+    var checks = [{
+      el: nameEl,
+      errEl: document.getElementById('appointment-name-error'),
+      msg: validateAppointmentName(nameEl ? nameEl.value : '')
+    },
+    {
+      el: phoneEl,
+      errEl: document.getElementById('appointment-phone-error'),
+      msg: validateAppointmentPhone(phoneEl ? phoneEl.value : '')
+    },
+    {
+      el: timeEl,
+      errEl: document.getElementById('appointment-preferred-time-error'),
+      msg: validateAppointmentPreferredTime(timeEl ? timeEl.value : '')
+    },
+    {
+      el: msgEl,
+      errEl: document.getElementById('appointment-message-error'),
+      msg: validateAppointmentMessage(msgEl ? msgEl.value : '')
+    },
+    {
+      el: consentEl,
+      errEl: document.getElementById('appointment-consent-error'),
+      msg: validateAppointmentConsent(Boolean(consentEl && consentEl.checked))
+    }
     ];
 
     var firstInvalid = null;
@@ -3425,7 +3494,9 @@
     var target = targetKind === 'form' && nameInput ? nameInput : heading;
     if (target && typeof target.focus === 'function') {
       window.requestAnimationFrame(function () {
-        target.focus({ preventScroll: true });
+        target.focus({
+          preventScroll: true
+        });
       });
     }
   }
@@ -3461,32 +3532,41 @@
     if (!form || form.dataset.appointmentBound) return;
     form.dataset.appointmentBound = '1';
 
-    var fieldPairs = [
-      {
-        el: document.getElementById('appointment-name'),
-        errId: 'appointment-name-error',
-        fn: function (el) { return validateAppointmentName(el.value); }
-      },
-      {
-        el: document.getElementById('appointment-phone'),
-        errId: 'appointment-phone-error',
-        fn: function (el) { return validateAppointmentPhone(el.value); }
-      },
-      {
-        el: document.getElementById('appointment-preferred-time'),
-        errId: 'appointment-preferred-time-error',
-        fn: function (el) { return validateAppointmentPreferredTime(el.value); }
-      },
-      {
-        el: document.getElementById('appointment-message'),
-        errId: 'appointment-message-error',
-        fn: function (el) { return validateAppointmentMessage(el.value); }
-      },
-      {
-        el: document.getElementById('appointment-consent'),
-        errId: 'appointment-consent-error',
-        fn: function (el) { return validateAppointmentConsent(el.checked); }
+    var fieldPairs = [{
+      el: document.getElementById('appointment-name'),
+      errId: 'appointment-name-error',
+      fn: function (el) {
+        return validateAppointmentName(el.value);
       }
+    },
+    {
+      el: document.getElementById('appointment-phone'),
+      errId: 'appointment-phone-error',
+      fn: function (el) {
+        return validateAppointmentPhone(el.value);
+      }
+    },
+    {
+      el: document.getElementById('appointment-preferred-time'),
+      errId: 'appointment-preferred-time-error',
+      fn: function (el) {
+        return validateAppointmentPreferredTime(el.value);
+      }
+    },
+    {
+      el: document.getElementById('appointment-message'),
+      errId: 'appointment-message-error',
+      fn: function (el) {
+        return validateAppointmentMessage(el.value);
+      }
+    },
+    {
+      el: document.getElementById('appointment-consent'),
+      errId: 'appointment-consent-error',
+      fn: function (el) {
+        return validateAppointmentConsent(el.checked);
+      }
+    }
     ];
 
     for (var i = 0; i < fieldPairs.length; i++) {
@@ -3541,14 +3621,14 @@
         service: serviceEl ? serviceEl.value : 'consultation',
         preferredTime: timeEl ? timeEl.value.trim() : '',
         message: msgEl ? msgEl.value.trim() : '',
-        calcSelection: activeCalcSelection
-          ? {
-              total: activeCalcSelection.total,
-              formattedTotal: activeCalcSelection.formattedTotal,
-              summaryText: activeCalcSelection.summaryText,
-              items: activeCalcSelection.items
-            }
-          : null,
+        calcSelection: activeCalcSelection ?
+          {
+            total: activeCalcSelection.total,
+            formattedTotal: activeCalcSelection.formattedTotal,
+            summaryText: activeCalcSelection.summaryText,
+            items: activeCalcSelection.items
+          } :
+          null,
         consent: true
       };
 
@@ -3557,17 +3637,16 @@
 
       if (endpoint && isSafeEndpointUrl(endpoint)) {
         fetchWithTimeout(
-          endpoint,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json'
-            },
-            cache: 'no-store',
-            credentials: isSameOriginUrl(endpoint) ? 'same-origin' : 'omit',
-            body: JSON.stringify(payload)
+          endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
           },
+          cache: 'no-store',
+          credentials: isSameOriginUrl(endpoint) ? 'same-origin' : 'omit',
+          body: JSON.stringify(payload)
+        },
           12000,
           'appointment'
         )
@@ -3591,8 +3670,8 @@
               'error',
               'Не вдалося надіслати заявку на сервер.',
               'Перевірте з’єднання або зателефонуйте напряму: ' +
-                (clinic.PHONE_DISPLAY || '+38 (050) 050-08-21') +
-                '.'
+              (clinic.PHONE_DISPLAY || '+38 (050) 050-08-21') +
+              '.'
             );
           });
         return;
@@ -3600,16 +3679,16 @@
 
       appointmentTimer = window.setTimeout(function () {
         appointmentTimer = null;
-        var calcNote = activeCalcSelection
-          ? ' Попередній розрахунок (' + activeCalcSelection.formattedTotal + ') додано до заявки.'
-          : '';
+        var calcNote = activeCalcSelection ?
+          ' Попередній розрахунок (' + activeCalcSelection.formattedTotal + ') додано до заявки.' :
+          '';
         setAppointmentFormState(
           'success',
           'Дякуємо! Ми зв’яжемося з вами для підтвердження запису.',
           'Локальна перевірка форми пройшла успішно. Сервер приймання заявок ще не підключений, тому дані не передавалися на сервер — для швидкого запису зателефонуйте: ' +
-            (clinic.PHONE_DISPLAY || '+38 (050) 050-08-21') +
-            '.' +
-            calcNote
+          (clinic.PHONE_DISPLAY || '+38 (050) 050-08-21') +
+          '.' +
+          calcNote
         );
       }, 150);
     });
@@ -3672,7 +3751,9 @@
           });
           var skip = document.querySelector('.skip-link');
           if (skip && typeof skip.focus === 'function') {
-            skip.focus({ preventScroll: true });
+            skip.focus({
+              preventScroll: true
+            });
           }
         }
       });
@@ -3731,14 +3812,14 @@
     closeModal: closeGalleryModal,
     getState: function (group) {
       var st = galleryGroupsState[group];
-      return st
-        ? {
-            currentIndex: st.currentIndex,
-            perView: st.perView,
-            maxIndex: st.maxIndex,
-            totalSlides: st.totalSlides
-          }
-        : null;
+      return st ?
+        {
+          currentIndex: st.currentIndex,
+          perView: st.perView,
+          maxIndex: st.maxIndex,
+          totalSlides: st.totalSlides
+        } :
+        null;
     }
   };
 
@@ -3782,4 +3863,3 @@
     closeWorkModal: closeWorkModal
   };
 })(window, document);
-

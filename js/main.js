@@ -9,7 +9,9 @@
 
   function scheduleIdle(fn) {
     if (typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(fn, { timeout: 1200 });
+      window.requestIdleCallback(fn, {
+        timeout: 1200
+      });
     } else {
       window.setTimeout(fn, 120);
     }
@@ -56,7 +58,10 @@
     if (document.readyState === 'complete') {
       initNonCritical();
     } else {
-      window.addEventListener('load', initNonCritical, { once: true, passive: true });
+      window.addEventListener('load', initNonCritical, {
+        once: true,
+        passive: true
+      });
     }
   }
 
@@ -65,9 +70,10 @@
   };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init, { once: true });
+    document.addEventListener('DOMContentLoaded', init, {
+      once: true
+    });
   } else {
     init();
   }
 })(window, document);
-

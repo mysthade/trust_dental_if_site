@@ -30,24 +30,42 @@
     /* Офіційний профіль клініки TRUST DENTAL у Google Business Profile (Place ID: ChIJ9QI8s0nG1EARlyS0q9U9PV0).
        Примітка: URL збережено з офіційного посилання; за потреби уточніть пряму коротку адресу maps.app.goo.gl через Place ID Finder */
     GOOGLE_PLACE_ID: 'ChIJ9QI8s0nG1EARlyS0q9U9PV0',
-    GOOGLE_MAPS_URL:
-      'https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu',
-    GOOGLE_MAPS_EMBED_URL:
-      'https://www.google.com/maps?q=%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental,+%D0%BC.+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA,+%D0%B2%D1%83%D0%BB.+%D0%93%D0%B0%D0%BB%D0%B8%D1%86%D1%8C%D0%BA%D0%B0,+51%D0%B0&hl=uk&z=16&output=embed',
+    GOOGLE_MAPS_URL: 'https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu',
+    GOOGLE_MAPS_EMBED_URL: 'https://www.google.com/maps?q=%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental,+%D0%BC.+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA,+%D0%B2%D1%83%D0%BB.+%D0%93%D0%B0%D0%BB%D0%B8%D1%86%D1%8C%D0%BA%D0%B0,+51%D0%B0&hl=uk&z=16&output=embed',
     INSTAGRAM_HANDLE: '@trust_dental_ua',
     INSTAGRAM_URL: 'https://www.instagram.com/trust_dental_ua/',
     /* TODO: підтвердити у власника реальний URL Telegram-чату або профілю клініки (наприклад, 'https://t.me/trust_dental_ua') і вставити в TELEGRAM_URL */
     TELEGRAM_URL: ''
   });
 
-  TD.NAV_ITEMS = Object.freeze([
-    { id: 'services', label: 'Послуги та ціни' },
-    { id: 'advantages', label: 'Переваги' },
-    { id: 'doctors', label: 'Лікарі' },
-    { id: 'works', label: 'Роботи' },
-    { id: 'gallery', label: 'Галерея' },
-    { id: 'reviews', label: 'Відгуки' },
-    { id: 'contacts', label: 'Контакти' }
+  TD.NAV_ITEMS = Object.freeze([{
+    id: 'services',
+    label: 'Послуги та ціни'
+  },
+  {
+    id: 'advantages',
+    label: 'Переваги'
+  },
+  {
+    id: 'doctors',
+    label: 'Лікарі'
+  },
+  {
+    id: 'works',
+    label: 'Роботи'
+  },
+  {
+    id: 'gallery',
+    label: 'Галерея'
+  },
+  {
+    id: 'reviews',
+    label: 'Відгуки'
+  },
+  {
+    id: 'contacts',
+    label: 'Контакти'
+  }
   ]);
 
   /* Shared UI state (used for calculator -> Stage 4 booking form handoff) */
@@ -67,14 +85,14 @@
       for (var i = 0; i < pageHideHandlers.length; i++) {
         try {
           pageHideHandlers[i](e);
-        } catch (err) {}
+        } catch (err) { }
       }
     });
     window.addEventListener('pageshow', function (e) {
       for (var i = 0; i < pageShowHandlers.length; i++) {
         try {
           pageShowHandlers[i](e);
-        } catch (err) {}
+        } catch (err) { }
       }
     });
   }
@@ -377,8 +395,7 @@
         category: 'inside',
         group: 'inside',
         src: 'img/gallery/inside-01.webp',
-        srcSet:
-          'img/gallery/inside-01-480.webp 480w, img/gallery/inside-01-800.webp 800w, img/gallery/inside-01-1200.webp 1200w',
+        srcSet: 'img/gallery/inside-01-480.webp 480w, img/gallery/inside-01-800.webp 800w, img/gallery/inside-01-1200.webp 1200w',
         sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
         placeholderSrc: 'img/gallery/inside-01.svg',
         width: 1200,
@@ -392,8 +409,7 @@
         category: 'inside',
         group: 'inside',
         src: 'img/gallery/inside-02.webp',
-        srcSet:
-          'img/gallery/inside-02-480.webp 480w, img/gallery/inside-02-800.webp 800w, img/gallery/inside-02-1200.webp 1200w',
+        srcSet: 'img/gallery/inside-02-480.webp 480w, img/gallery/inside-02-800.webp 800w, img/gallery/inside-02-1200.webp 1200w',
         sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
         placeholderSrc: 'img/gallery/inside-02.svg',
         width: 1200,
@@ -407,8 +423,7 @@
         category: 'inside',
         group: 'inside',
         src: 'img/gallery/inside-03.webp',
-        srcSet:
-          'img/gallery/inside-03-480.webp 480w, img/gallery/inside-03-800.webp 800w, img/gallery/inside-03-1200.webp 1200w',
+        srcSet: 'img/gallery/inside-03-480.webp 480w, img/gallery/inside-03-800.webp 800w, img/gallery/inside-03-1200.webp 1200w',
         sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
         placeholderSrc: 'img/gallery/inside-03.svg',
         width: 1200,
@@ -422,8 +437,7 @@
         category: 'inside',
         group: 'inside',
         src: 'img/gallery/inside-04.webp',
-        srcSet:
-          'img/gallery/inside-04-480.webp 480w, img/gallery/inside-04-800.webp 800w, img/gallery/inside-04-1200.webp 1200w',
+        srcSet: 'img/gallery/inside-04-480.webp 480w, img/gallery/inside-04-800.webp 800w, img/gallery/inside-04-1200.webp 1200w',
         sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
         placeholderSrc: 'img/gallery/inside-04.svg',
         width: 1200,
@@ -437,8 +451,7 @@
         category: 'inside',
         group: 'inside',
         src: 'img/gallery/inside-05.webp',
-        srcSet:
-          'img/gallery/inside-05-480.webp 480w, img/gallery/inside-05-800.webp 800w, img/gallery/inside-05-1200.webp 1200w',
+        srcSet: 'img/gallery/inside-05-480.webp 480w, img/gallery/inside-05-800.webp 800w, img/gallery/inside-05-1200.webp 1200w',
         sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
         placeholderSrc: 'img/gallery/inside-05.svg',
         width: 1200,
@@ -454,8 +467,7 @@
         category: 'outside',
         group: 'outside',
         src: 'img/gallery/outside-01.webp',
-        srcSet:
-          'img/gallery/outside-01-480.webp 480w, img/gallery/outside-01-800.webp 800w, img/gallery/outside-01-1200.webp 1200w',
+        srcSet: 'img/gallery/outside-01-480.webp 480w, img/gallery/outside-01-800.webp 800w, img/gallery/outside-01-1200.webp 1200w',
         sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
         placeholderSrc: 'img/gallery/outside-01.svg',
         width: 1200,
@@ -469,8 +481,7 @@
         category: 'outside',
         group: 'outside',
         src: 'img/gallery/outside-02.webp',
-        srcSet:
-          'img/gallery/outside-02-480.webp 480w, img/gallery/outside-02-800.webp 800w, img/gallery/outside-02-1200.webp 1200w',
+        srcSet: 'img/gallery/outside-02-480.webp 480w, img/gallery/outside-02-800.webp 800w, img/gallery/outside-02-1200.webp 1200w',
         sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
         placeholderSrc: 'img/gallery/outside-02.svg',
         width: 1200,
@@ -484,8 +495,7 @@
         category: 'outside',
         group: 'outside',
         src: 'img/gallery/outside-03.webp',
-        srcSet:
-          'img/gallery/outside-03-480.webp 480w, img/gallery/outside-03-800.webp 800w, img/gallery/outside-03-1200.webp 1200w',
+        srcSet: 'img/gallery/outside-03-480.webp 480w, img/gallery/outside-03-800.webp 800w, img/gallery/outside-03-1200.webp 1200w',
         sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
         placeholderSrc: 'img/gallery/outside-03.svg',
         width: 1200,
@@ -541,8 +551,7 @@
     state: 'ready',
     errorMessage: '',
     endpoint: '',
-    sourceNote:
-      'Відображаються перевірені відгуки пацієнтів із офіційного профілю клініки у Google Business Profile.'
+    sourceNote: 'Відображаються перевірені відгуки пацієнтів із офіційного профілю клініки у Google Business Profile.'
   });
 
   TD.REVIEWS = Object.freeze([]);
@@ -557,27 +566,65 @@
        - Для політики конфіденційності додайте реальний URL сторінки у privacyPolicyUrl.
      -------------------------------------------------------------------------- */
   TD.APPOINTMENT_SERVICES = Object.freeze([
-    Object.freeze({ id: 'consultation', label: 'Первинна консультація та діагностика' }),
-    Object.freeze({ id: 'therapy', label: 'Терапія та лікування каналів' }),
-    Object.freeze({ id: 'hygiene', label: 'Професійна гігієна' }),
-    Object.freeze({ id: 'surgery', label: 'Атравматична хірургія' }),
-    Object.freeze({ id: 'braces', label: 'Брекет-системи (ортодонтія)' }),
-    Object.freeze({ id: 'implantation', label: 'Імплантація' }),
-    Object.freeze({ id: 'orthopedics', label: 'Ортопедія (коронки та вініри)' }),
-    Object.freeze({ id: 'pediatric', label: 'Дитяча стоматологія' }),
-    Object.freeze({ id: 'calc-bundle', label: 'Попередній розрахунок із калькулятора' }),
-    Object.freeze({ id: 'other', label: 'Інше / уточнити з адміністратором' })
+    Object.freeze({
+      id: 'consultation',
+      label: 'Первинна консультація та діагностика'
+    }),
+    Object.freeze({
+      id: 'therapy',
+      label: 'Терапія та лікування каналів'
+    }),
+    Object.freeze({
+      id: 'hygiene',
+      label: 'Професійна гігієна'
+    }),
+    Object.freeze({
+      id: 'surgery',
+      label: 'Атравматична хірургія'
+    }),
+    Object.freeze({
+      id: 'braces',
+      label: 'Брекет-системи (ортодонтія)'
+    }),
+    Object.freeze({
+      id: 'implantation',
+      label: 'Імплантація'
+    }),
+    Object.freeze({
+      id: 'orthopedics',
+      label: 'Ортопедія (коронки та вініри)'
+    }),
+    Object.freeze({
+      id: 'pediatric',
+      label: 'Дитяча стоматологія'
+    }),
+    Object.freeze({
+      id: 'calc-bundle',
+      label: 'Попередній розрахунок із калькулятора'
+    }),
+    Object.freeze({
+      id: 'other',
+      label: 'Інше / уточнити з адміністратором'
+    })
   ]);
 
   TD.APPOINTMENT_CONFIG = Object.freeze({
     endpoint: '',
     privacyPolicyUrl: '',
-    mapEmbedUrl:
-      'https://www.google.com/maps?q=%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental,+%D0%BC.+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA,+%D0%B2%D1%83%D0%BB.+%D0%93%D0%B0%D0%BB%D0%B8%D1%86%D1%8C%D0%BA%D0%B0,+51%D0%B0&hl=uk&z=16&output=embed',
+    mapEmbedUrl: 'https://www.google.com/maps?q=%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental,+%D0%BC.+%D0%86%D0%B2%D0%B0%D0%BD%D0%BE-%D0%A4%D1%80%D0%B0%D0%BD%D0%BA%D1%96%D0%B2%D1%81%D1%8C%D0%BA,+%D0%B2%D1%83%D0%BB.+%D0%93%D0%B0%D0%BB%D0%B8%D1%86%D1%8C%D0%BA%D0%B0,+51%D0%B0&hl=uk&z=16&output=embed',
     contactMethods: Object.freeze([
-      Object.freeze({ id: 'phone', label: 'Телефонний дзвінок' }),
-      Object.freeze({ id: 'messenger', label: 'Месенджер (Viber / Telegram)' }),
-      Object.freeze({ id: 'any', label: 'Будь-який зручний спосіб' })
+      Object.freeze({
+        id: 'phone',
+        label: 'Телефонний дзвінок'
+      }),
+      Object.freeze({
+        id: 'messenger',
+        label: 'Месенджер (Viber / Telegram)'
+      }),
+      Object.freeze({
+        id: 'any',
+        label: 'Будь-який зручний спосіб'
+      })
     ]),
     bookingSteps: Object.freeze([
       Object.freeze({
@@ -609,9 +656,9 @@
    */
   TD.formatPrice = function (price, prefix, unit) {
     var currency = unit || 'грн';
-    var body = Array.isArray(price)
-      ? TD.formatNumber(price[0]) + '–' + TD.formatNumber(price[1])
-      : TD.formatNumber(price);
+    var body = Array.isArray(price) ?
+      TD.formatNumber(price[0]) + '–' + TD.formatNumber(price[1]) :
+      TD.formatNumber(price);
     return (prefix ? prefix + '\u00A0' : '') + body + '\u00A0' + currency;
   };
 
@@ -698,9 +745,9 @@
     if (typeof window.URL === 'function') {
       try {
         var base =
-          window.location && window.location.origin && window.location.origin !== 'null'
-            ? window.location.origin
-            : 'https://trustdental.if.ua';
+          window.location && window.location.origin && window.location.origin !== 'null' ?
+            window.location.origin :
+            'https://trustdental.if.ua';
         var parsed = new window.URL(clean, base);
         if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
         if (parsed.username || parsed.password) return false;
@@ -741,11 +788,21 @@
     var reviewsText = c.REVIEWS_COUNT + ' ' + reviewsWord + ' на Google';
 
     var map = {
-      name: function (el) { el.textContent = c.NAME; },
-      tagline: function (el) { el.textContent = c.TAGLINE; },
-      address: function (el) { el.textContent = c.ADDRESS_FULL; },
-      'address-short': function (el) { el.textContent = c.ADDRESS; },
-      hours: function (el) { el.textContent = c.HOURS; },
+      name: function (el) {
+        el.textContent = c.NAME;
+      },
+      tagline: function (el) {
+        el.textContent = c.TAGLINE;
+      },
+      address: function (el) {
+        el.textContent = c.ADDRESS_FULL;
+      },
+      'address-short': function (el) {
+        el.textContent = c.ADDRESS;
+      },
+      hours: function (el) {
+        el.textContent = c.HOURS;
+      },
       'hours-weekdays': function (el) {
         if (c.HOURS_DETAIL && c.HOURS_DETAIL.WEEKDAYS_SAT) {
           el.textContent = c.HOURS_DETAIL.WEEKDAYS_SAT;
@@ -756,7 +813,9 @@
           el.textContent = c.HOURS_DETAIL.SUNDAY;
         }
       },
-      'phone-display': function (el) { el.textContent = c.PHONE_DISPLAY; },
+      'phone-display': function (el) {
+        el.textContent = c.PHONE_DISPLAY;
+      },
       'phone-link': function (el) {
         el.setAttribute('href', c.PHONE_HREF);
       },
@@ -766,7 +825,9 @@
           el.setAttribute('data-count', c.RATING_DISPLAY);
         }
       },
-      'reviews-text': function (el) { el.textContent = reviewsText; },
+      'reviews-text': function (el) {
+        el.textContent = reviewsText;
+      },
       'maps-link': function (el) {
         el.setAttribute('href', c.GOOGLE_MAPS_URL);
       },
@@ -837,4 +898,3 @@
     }
   };
 })(window, document);
-

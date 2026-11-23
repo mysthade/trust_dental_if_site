@@ -98,8 +98,9 @@
             break;
           }
         }
-      },
-      { threshold: 0.25 }
+      }, {
+      threshold: 0.25
+    }
     );
 
     observer.observe(statsContainer);
@@ -273,14 +274,23 @@
     for (i = 0; i < pendingRevealNodes.length; i++) {
       var el = pendingRevealNodes[i];
       if (!el.isConnected || el.hasAttribute('hidden') || !el.classList.contains('td-reveal-pending')) {
-        actions.push({ el: el, mode: 'prune' });
+        actions.push({
+          el: el,
+          mode: 'prune'
+        });
         continue;
       }
       var rect = el.getBoundingClientRect();
       if (rect.bottom <= 0) {
-        actions.push({ el: el, mode: 'instant' });
+        actions.push({
+          el: el,
+          mode: 'instant'
+        });
       } else if (rect.top < thresholdTop) {
-        actions.push({ el: el, mode: 'animate' });
+        actions.push({
+          el: el,
+          mode: 'animate'
+        });
       }
     }
 
@@ -322,29 +332,28 @@
   }
 
   function collectRevealTargets() {
-    var groups = [
-      {
-        kind: 'head',
-        selector:
-          '#services .section__head, #advantages .advantages-section__intro, #calculator .section__head, #doctors .section__head, #works .section__head, #gallery .section__head, #gallery .gallery-group__title, #reviews .section__head, #contacts .section__head'
-      },
-      {
-        kind: 'card',
-        selector:
-          '.stats-section .stat-item, #services-grid .service-card, #services .services-calc-bar, #advantages .advantage-card, #advantages .advantages-note, #doctors .doctor-card, #works .works-carousel, #gallery .gallery-carousel, #reviews .reviews-summary, #reviews .reviews-stage, #contacts .booking-steps-card, #site-footer .site-footer__brand, #site-footer .site-footer__nav, #site-footer .site-footer__contacts, #site-footer .site-footer__bottom'
-      },
-      {
-        kind: 'deco',
-        selector:
-          '.section .deco, .advantages-section .deco, .footer .deco'
-      }
+    var groups = [{
+      kind: 'head',
+      selector: '#services .section__head, #advantages .advantages-section__intro, #calculator .section__head, #doctors .section__head, #works .section__head, #gallery .section__head, #gallery .gallery-group__title, #reviews .section__head, #contacts .section__head'
+    },
+    {
+      kind: 'card',
+      selector: '.stats-section .stat-item, #services-grid .service-card, #services .services-calc-bar, #advantages .advantage-card, #advantages .advantages-note, #doctors .doctor-card, #works .works-carousel, #gallery .gallery-carousel, #reviews .reviews-summary, #reviews .reviews-stage, #contacts .booking-steps-card, #site-footer .site-footer__brand, #site-footer .site-footer__nav, #site-footer .site-footer__contacts, #site-footer .site-footer__bottom'
+    },
+    {
+      kind: 'deco',
+      selector: '.section .deco, .advantages-section .deco, .footer .deco'
+    }
     ];
 
     var items = [];
     for (var g = 0; g < groups.length; g++) {
       var nodes = document.querySelectorAll(groups[g].selector);
       for (var i = 0; i < nodes.length; i++) {
-        items.push({ el: nodes[i], kind: groups[g].kind });
+        items.push({
+          el: nodes[i],
+          kind: groups[g].kind
+        });
       }
     }
     return items;
@@ -389,12 +398,22 @@
   function bindRevealWatchers() {
     if (sweepListenersBound) return;
     sweepListenersBound = true;
-    window.addEventListener('scroll', onSweepSchedule, { passive: true });
-    window.addEventListener('scrollend', onImmediateCheck, { passive: true });
-    window.addEventListener('resize', onSweepSchedule, { passive: true });
-    window.addEventListener('hashchange', onHashChange, { passive: true });
+    window.addEventListener('scroll', onSweepSchedule, {
+      passive: true
+    });
+    window.addEventListener('scrollend', onImmediateCheck, {
+      passive: true
+    });
+    window.addEventListener('resize', onSweepSchedule, {
+      passive: true
+    });
+    window.addEventListener('hashchange', onHashChange, {
+      passive: true
+    });
     document.addEventListener('focusin', onFocusIn);
-    document.addEventListener('click', onAnchorClick, { passive: true });
+    document.addEventListener('click', onAnchorClick, {
+      passive: true
+    });
     document.addEventListener('visibilitychange', onVisibilityChange);
   }
 
@@ -432,11 +451,10 @@
           );
           removePendingNode(target);
         }
-      },
-      {
-        rootMargin: '0px 0px -8% 0px',
-        threshold: 0.08
-      }
+      }, {
+      rootMargin: '0px 0px -8% 0px',
+      threshold: 0.08
+    }
     );
     return revealObserver;
   }
@@ -465,7 +483,7 @@
             belowFoldThreshold = hashTop + vh + 4;
           }
         }
-      } catch (err) {}
+      } catch (err) { }
     }
     var candidates = [];
     var i;
@@ -486,8 +504,7 @@
       candidates.push({
         el: el,
         kind: item.kind,
-        isImmediate:
-          isDynamicRefresh || inHashSection || el.getBoundingClientRect().top < belowFoldThreshold
+        isImmediate: isDynamicRefresh || inHashSection || el.getBoundingClientRect().top < belowFoldThreshold
       });
     }
 
@@ -540,8 +557,10 @@
           root.classList.add('td-skip-intro');
         }
         onImmediateCheck();
-      },
-      { once: true, passive: true }
+      }, {
+      once: true,
+      passive: true
+    }
     );
 
     if (TD.lifecycle && typeof TD.lifecycle.onPageHide === 'function') {
@@ -596,4 +615,3 @@
     revealNow: revealAllPending
   };
 })(window, document);
-

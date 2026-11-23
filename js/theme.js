@@ -24,7 +24,7 @@
     if (activeTransition && typeof activeTransition.skipTransition === 'function') {
       try {
         activeTransition.skipTransition();
-      } catch (e) {}
+      } catch (e) { }
     }
     activeTransition = null;
     document.documentElement.classList.remove(SWITCH_CLASS);
@@ -188,4 +188,3 @@
     get: getCurrentTheme
   };
 })(window, document);
-

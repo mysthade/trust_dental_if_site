@@ -49,9 +49,9 @@
       });
     }
 
-    var formattedTotal = selectedItems.length
-      ? TD.formatPrice(total, hasFrom ? 'від' : '', 'грн')
-      : '0\u00A0грн';
+    var formattedTotal = selectedItems.length ?
+      TD.formatPrice(total, hasFrom ? 'від' : '', 'грн') :
+      '0\u00A0грн';
 
     var summaryLines = [];
     for (var j = 0; j < selectedItems.length; j++) {
@@ -66,9 +66,9 @@
       total: total,
       isFrom: hasFrom,
       formattedTotal: formattedTotal,
-      summaryText: summaryLines.length
-        ? summaryLines.join('; ') + '. Разом: ' + formattedTotal
-        : '',
+      summaryText: summaryLines.length ?
+        summaryLines.join('; ') + '. Разом: ' + formattedTotal :
+        '',
       timestamp: new Date().toISOString()
     };
   }
@@ -233,7 +233,7 @@
         }
       });
       document.dispatchEvent(changeEvt);
-    } catch (e) {}
+    } catch (e) { }
 
     return selection;
   }
@@ -254,12 +254,15 @@
     for (var i = 0; i < TD.CALC_ITEMS.length; i++) {
       var item = TD.CALC_ITEMS[i];
       var existing = stateMap[item.id];
-      stateMap[item.id] = existing
-        ? {
-            checked: Boolean(existing.checked),
-            qty: existing.qty >= item.min ? existing.qty : item.min
-          }
-        : { checked: false, qty: item.min };
+      stateMap[item.id] = existing ?
+        {
+          checked: Boolean(existing.checked),
+          qty: existing.qty >= item.min ? existing.qty : item.min
+        } :
+        {
+          checked: false,
+          qty: item.min
+        };
 
       var row = document.createElement('div');
       row.className = 'calc-item';
@@ -392,7 +395,10 @@
     for (var i = 0; i < TD.CALC_ITEMS.length; i++) {
       var item = TD.CALC_ITEMS[i];
       if (!stateMap[item.id]) {
-        stateMap[item.id] = { checked: false, qty: item.min };
+        stateMap[item.id] = {
+          checked: false,
+          qty: item.min
+        };
       } else {
         stateMap[item.id].checked = false;
         stateMap[item.id].qty = item.min;
@@ -412,7 +418,10 @@
     if (!item) return null;
     var entry = stateMap[item.id];
     if (!entry) {
-      entry = { checked: false, qty: item.min };
+      entry = {
+        checked: false,
+        qty: item.min
+      };
       stateMap[item.id] = entry;
     }
 
@@ -488,9 +497,13 @@
           var contactsHeading = document.getElementById('heading-contacts');
           if (contactsHeading && typeof contactsHeading.focus === 'function') {
             contactsHeading.setAttribute('tabindex', '-1');
-            contactsHeading.focus({ preventScroll: true });
+            contactsHeading.focus({
+              preventScroll: true
+            });
           } else if (typeof contacts.focus === 'function') {
-            contacts.focus({ preventScroll: true });
+            contacts.focus({
+              preventScroll: true
+            });
           }
         }
       });
@@ -514,4 +527,3 @@
     reset: resetCalculator
   };
 })(window, document);
-
