@@ -21,8 +21,35 @@
     if (isScrollStateBound) return;
     var header = document.getElementById('site-header');
     var sentinel = document.getElementById('header-sentinel');
-    if (!header || !sentinel || !('IntersectionObserver' in window)) return;
+    if (!header || !sentinel) return;
     isScrollStateBound = true;
+
+    function syncScrolledInstant() {
+      var scrolled = (window.scrollY || window.pageYOffset || 0) > 16;
+      if (scrolled && !header.classList.contains('is-scrolled')) {
+        header.classList.add('is-scroll-sync', 'is-scrolled');
+        if (typeof window.requestAnimationFrame === 'function') {
+          window.requestAnimationFrame(function () {
+            header.classList.remove('is-scroll-sync');
+          });
+        } else {
+          window.setTimeout(function () {
+            header.classList.remove('is-scroll-sync');
+          }, 0);
+        }
+      } else {
+        header.classList.toggle('is-scrolled', scrolled);
+      }
+    }
+
+    syncScrolledInstant();
+    window.addEventListener('load', syncScrolledInstant, { once: true, passive: true });
+
+    if (TD.lifecycle && typeof TD.lifecycle.onPageShow === 'function') {
+      TD.lifecycle.onPageShow(syncScrolledInstant);
+    }
+
+    if (!('IntersectionObserver' in window)) return;
 
     var observer = new window.IntersectionObserver(
       function (entries) {
@@ -112,10 +139,15 @@
       drawer.hidden = false;
       backdrop.hidden = false;
 
-      /* Force transition start on next animation frame without layout read */
+      /* Double rAF ensures browser commits initial hidden transform/opacity
+         before adding .is-open so drawer and staggered items always animate */
       window.requestAnimationFrame(function () {
-        drawer.classList.add('is-open');
-        backdrop.classList.add('is-open');
+        if (!isDrawerOpen) return;
+        window.requestAnimationFrame(function () {
+          if (!isDrawerOpen) return;
+          drawer.classList.add('is-open');
+          backdrop.classList.add('is-open');
+        });
       });
 
       document.documentElement.classList.add('is-drawer-open');
@@ -157,7 +189,7 @@
         reduced = false;
       }
 
-      var hideAfter = reduced ? 0 : 280;
+      var hideAfter = reduced ? 0 : 350;
       closeTimer = window.setTimeout(function () {
         if (!isDrawerOpen) {
           drawer.hidden = true;
@@ -298,8 +330,8 @@
         setActiveLink(bestId);
       } else if (heroHeight > 0 && bestHeight <= heroHeight) {
         setActiveLink(null);
-      } else if (bestId) {
-        setActiveLink(bestId);
+      } else {
+        setActiveLink(null);
       }
     }
 

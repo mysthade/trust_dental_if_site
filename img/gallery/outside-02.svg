@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <defs>
+    <linearGradient id="go2-facade" x1="140" y1="100" x2="660" y2="430" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8B94A2" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#6E7785" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+  <rect x="130" y="96" width="540" height="340" rx="24" fill="url(#go2-facade)" stroke="#8C95A3" stroke-opacity="0.28" stroke-width="1.4"/>
+  <path d="M180 436V190l220-48 220 48v246" stroke="#9DA6B3" stroke-opacity="0.32" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M268 436V268h118v168M414 268h138v116H414z" stroke="#9DA6B3" stroke-opacity="0.28" stroke-width="1.2"/>
+  <path d="M232 232h336" stroke="#8C95A3" stroke-opacity="0.22" stroke-width="1.2" stroke-linecap="round"/>
+  <rect x="288" y="472" width="224" height="40" rx="20" fill="#8B94A2" fill-opacity="0.1" stroke="#8C95A3" stroke-opacity="0.26" stroke-width="1"/>
+  <text x="400" y="497" text-anchor="middle" fill="#8B94A2" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="600" letter-spacing="0.08em">ФОТО ФАСАДУ</text>
+</svg>
+

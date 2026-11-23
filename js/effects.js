@@ -14,6 +14,7 @@
   var sweepRafId = null;
   var sweepListenersBound = false;
   var cleanupTimers = [];
+  var introDoneTimer = null;
 
   function prefersReducedMotion() {
     try {
@@ -82,8 +83,14 @@
     if (!statsContainer) return;
     isInitialized = true;
 
-    /* Respect reduced motion: leave rendered final values as-is */
+    /* Respect reduced motion or stats already in/above the viewport on initial load */
     if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
+      return;
+    }
+
+    var initialRect = statsContainer.getBoundingClientRect();
+    var initialVh = window.innerHeight || document.documentElement.clientHeight || 900;
+    if (initialRect.top < initialVh) {
       return;
     }
 
@@ -111,12 +118,12 @@
     el.classList.add('is-visible', 'is-revealed');
   }
 
-  function getStaggerDelayMs(kind, batchIndex) {
-    if (kind !== 'card') return 0;
+  function getStaggerDelayMs(kind, batchIndex, cardCount) {
+    if (kind !== 'card' || cardCount > 4) return 0;
     var vw = window.innerWidth || document.documentElement.clientWidth || 1280;
     if (vw < 640) return 0;
-    if (vw < 980) return Math.min(batchIndex, 2) * 45;
-    return Math.min(batchIndex, 3) * 55;
+    if (vw < 980) return Math.min(batchIndex, 2) * 25;
+    return Math.min(batchIndex, 2) * 45;
   }
 
   function markRevealed(el, delayMs, instant) {
@@ -135,23 +142,26 @@
     el.classList.remove('td-reveal-pending');
     el.classList.add('is-visible', 'is-revealed');
 
+    var kind = el.getAttribute('data-reveal');
+    var maxCleanupMs = (kind === 'deco' ? 620 : 480) + (delayMs || 0);
+
+    var onEnd = function (ev) {
+      if (ev.target !== el) return;
+      if (ev.propertyName !== 'opacity' && ev.propertyName !== 'transform') return;
+      window.clearTimeout(cleanupTimer);
+      el.classList.remove('is-revealing');
+      el.style.removeProperty('--td-reveal-delay');
+      el.removeEventListener('transitionend', onEnd);
+    };
+
     var cleanupTimer = window.setTimeout(function () {
       el.classList.remove('is-revealing');
       el.style.removeProperty('--td-reveal-delay');
-    }, 740 + (delayMs || 0));
+      el.removeEventListener('transitionend', onEnd);
+    }, maxCleanupMs);
     cleanupTimers.push(cleanupTimer);
 
-    el.addEventListener(
-      'transitionend',
-      function onEnd(ev) {
-        if (ev.target !== el) return;
-        if (ev.propertyName !== 'opacity' && ev.propertyName !== 'transform') return;
-        window.clearTimeout(cleanupTimer);
-        el.classList.remove('is-revealing');
-        el.style.removeProperty('--td-reveal-delay');
-        el.removeEventListener('transitionend', onEnd);
-      }
-    );
+    el.addEventListener('transitionend', onEnd);
   }
 
   function removePendingNode(el) {
@@ -198,6 +208,17 @@
     }
   }
 
+  function onHashChange() {
+    if (window.location && window.location.hash && window.location.hash.length > 1) {
+      try {
+        revealSectionById(window.decodeURIComponent(window.location.hash.slice(1)));
+      } catch (err) {
+        revealSectionById(window.location.hash.slice(1));
+      }
+    }
+    onImmediateCheck();
+  }
+
   function onVisibilityChange() {
     if (!document.hidden && pendingRevealNodes.length) {
       onImmediateCheck();
@@ -227,7 +248,7 @@
       window.removeEventListener('scroll', onSweepSchedule);
       window.removeEventListener('scrollend', onImmediateCheck);
       window.removeEventListener('resize', onSweepSchedule);
-      window.removeEventListener('hashchange', onImmediateCheck);
+      window.removeEventListener('hashchange', onHashChange);
       document.removeEventListener('focusin', onFocusIn);
       document.removeEventListener('click', onAnchorClick);
       document.removeEventListener('visibilitychange', onVisibilityChange);
@@ -251,25 +272,46 @@
     );
     var scrollY = window.scrollY || window.pageYOffset || 0;
     var atDocBottom = docH > 0 && scrollY + vh >= docH - 6;
-    var thresholdTop = atDocBottom ? vh + 2 : vh * 0.96;
-    var batchIndex = 0;
+    var thresholdTop = atDocBottom ? Infinity : vh + 4;
+    var actions = [];
+    var i;
 
-    for (var i = pendingRevealNodes.length - 1; i >= 0; i--) {
+    /* Batch reads in forward DOM order so reveal stagger flows left-to-right */
+    for (i = 0; i < pendingRevealNodes.length; i++) {
       var el = pendingRevealNodes[i];
       if (!el.isConnected || el.hasAttribute('hidden') || !el.classList.contains('td-reveal-pending')) {
-        removePendingNode(el);
+        actions.push({ el: el, mode: 'prune' });
         continue;
       }
       var rect = el.getBoundingClientRect();
       if (rect.bottom <= 0) {
-        markRevealed(el, 0, true);
-        removePendingNode(el);
+        actions.push({ el: el, mode: 'instant' });
       } else if (rect.top < thresholdTop) {
-        var kind = el.getAttribute('data-reveal');
-        var delayMs = getStaggerDelayMs(kind, batchIndex);
-        if (delayMs > 0 || kind === 'card') batchIndex++;
-        markRevealed(el, delayMs, false);
-        removePendingNode(el);
+        actions.push({ el: el, mode: 'animate' });
+      }
+    }
+
+    var animateCards = 0;
+    for (i = 0; i < actions.length; i++) {
+      if (actions[i].mode === 'animate' && actions[i].el.getAttribute('data-reveal') === 'card') {
+        animateCards++;
+      }
+    }
+
+    var batchIndex = 0;
+    for (i = 0; i < actions.length; i++) {
+      var act = actions[i];
+      if (act.mode === 'prune') {
+        removePendingNode(act.el);
+      } else if (act.mode === 'instant') {
+        markRevealed(act.el, 0, true);
+        removePendingNode(act.el);
+      } else {
+        var kind = act.el.getAttribute('data-reveal');
+        var delayMs = getStaggerDelayMs(kind, batchIndex, animateCards);
+        if (kind === 'card') batchIndex++;
+        markRevealed(act.el, delayMs, false);
+        removePendingNode(act.el);
       }
     }
   }
@@ -291,17 +333,17 @@
       {
         kind: 'head',
         selector:
-          '#services .section__head, #advantages .advantages-section__intro, #calculator .section__head, #doctors .section__head, #works .section__head, #reviews .section__head, #contacts .section__head'
+          '#services .section__head, #advantages .advantages-section__intro, #calculator .section__head, #doctors .section__head, #works .section__head, #gallery .section__head, #gallery .gallery-group__title, #reviews .section__head, #contacts .section__head'
       },
       {
         kind: 'card',
         selector:
-          '.stats-section .stat-item, #services-grid .service-card, #services .services-calc-bar, #advantages .advantage-card, #advantages .advantages-note, #calc-items .calc-item, #calculator .calc-summary, #doctors .doctor-card, #works .works-carousel, #reviews .reviews-summary, #reviews .reviews-stage, #contacts .contacts-card, #contacts .booking-steps-card, #contacts .appointment-card, #site-footer .site-footer__brand, #site-footer .site-footer__nav, #site-footer .site-footer__contacts, #site-footer .site-footer__bottom'
+          '.stats-section .stat-item, #services-grid .service-card, #services .services-calc-bar, #advantages .advantage-card, #advantages .advantages-note, #doctors .doctor-card, #works .works-carousel, #gallery .gallery-carousel, #reviews .reviews-summary, #reviews .reviews-stage, #contacts .booking-steps-card, #site-footer .site-footer__brand, #site-footer .site-footer__nav, #site-footer .site-footer__contacts, #site-footer .site-footer__bottom'
       },
       {
         kind: 'deco',
         selector:
-          '.deco--services-tooth, .deco--advantages-ribbon, .deco--advantages-arc, .deco--prices-ribbon, .deco--prices-arc, .deco--prices-wave, .deco--doctors-tooth, .deco--works-arc, .deco--works-contour, .deco--reviews-arc, .deco--reviews-wave, .deco--contacts-ribbon, .deco--footer-wave'
+          '.section .deco, .advantages-section .deco, .footer .deco'
       }
     ];
 
@@ -357,7 +399,7 @@
     window.addEventListener('scroll', onSweepSchedule, { passive: true });
     window.addEventListener('scrollend', onImmediateCheck, { passive: true });
     window.addEventListener('resize', onSweepSchedule, { passive: true });
-    window.addEventListener('hashchange', onImmediateCheck, { passive: true });
+    window.addEventListener('hashchange', onHashChange, { passive: true });
     document.addEventListener('focusin', onFocusIn);
     document.addEventListener('click', onAnchorClick, { passive: true });
     document.addEventListener('visibilitychange', onVisibilityChange);
@@ -368,8 +410,17 @@
     revealObserver = new window.IntersectionObserver(
       function (entries) {
         var curVh = window.innerHeight || document.documentElement.clientHeight || 900;
+        var cardCount = 0;
+        var e;
+        for (e = 0; e < entries.length; e++) {
+          var ent = entries[e];
+          var passed = ent.boundingClientRect && ent.boundingClientRect.bottom <= 0;
+          if ((ent.isIntersecting || passed) && !passed && ent.target.getAttribute('data-reveal') === 'card') {
+            cardCount++;
+          }
+        }
         var batchIndex = 0;
-        for (var e = 0; e < entries.length; e++) {
+        for (e = 0; e < entries.length; e++) {
           var entry = entries[e];
           var target = entry.target;
           if (!target.classList.contains('td-reveal-pending')) {
@@ -379,7 +430,7 @@
           var passedAbove = entry.boundingClientRect && entry.boundingClientRect.bottom <= 0;
           if (!entry.isIntersecting && !passedAbove) continue;
           var kind = target.getAttribute('data-reveal');
-          var delayMs = passedAbove ? 0 : getStaggerDelayMs(kind, batchIndex);
+          var delayMs = passedAbove ? 0 : getStaggerDelayMs(kind, batchIndex, cardCount);
           if (!passedAbove && kind === 'card') batchIndex++;
           markRevealed(
             target,
@@ -407,10 +458,27 @@
     if (!targets.length) return;
 
     var vh = window.innerHeight || document.documentElement.clientHeight || 900;
-    var belowFoldThreshold = vh * 0.96;
-    var toObserve = [];
+    var belowFoldThreshold = vh + 4;
+    var hashSection = null;
+    if (!isDynamicRefresh && window.location && window.location.hash && window.location.hash.length > 1) {
+      try {
+        var hashId = window.decodeURIComponent(window.location.hash.slice(1));
+        var hashEl = document.getElementById(hashId);
+        if (hashEl) {
+          hashSection =
+            hashEl.closest('.section, .advantages-section, .stats-section, .footer') || hashEl;
+          var hashTop = hashEl.getBoundingClientRect().top;
+          if (hashTop + vh + 4 > belowFoldThreshold) {
+            belowFoldThreshold = hashTop + vh + 4;
+          }
+        }
+      } catch (err) {}
+    }
+    var candidates = [];
+    var i;
 
-    for (var i = 0; i < targets.length; i++) {
+    /* Phase 1: Batch DOM reads (single layout pass, zero read-after-write thrashing) */
+    for (i = 0; i < targets.length; i++) {
       var item = targets[i];
       var el = item.el;
       if (
@@ -421,18 +489,27 @@
       ) {
         continue;
       }
-      el.setAttribute('data-reveal', item.kind);
+      var inHashSection = Boolean(hashSection && (el === hashSection || hashSection.contains(el)));
+      candidates.push({
+        el: el,
+        kind: item.kind,
+        isImmediate:
+          isDynamicRefresh || inHashSection || el.getBoundingClientRect().top < belowFoldThreshold
+      });
+    }
 
-      var rect = el.getBoundingClientRect();
-      /* Never hide elements already inside or above current viewport, nor dynamically re-rendered filter nodes */
-      if (isDynamicRefresh || rect.top < belowFoldThreshold) {
-        applyVisibleClasses(el);
-        continue;
+    /* Phase 2: Batch DOM writes */
+    var toObserve = [];
+    for (i = 0; i < candidates.length; i++) {
+      var candidate = candidates[i];
+      candidate.el.setAttribute('data-reveal', candidate.kind);
+      if (candidate.isImmediate) {
+        applyVisibleClasses(candidate.el);
+      } else {
+        candidate.el.classList.add('td-reveal-pending');
+        pendingRevealNodes.push(candidate.el);
+        toObserve.push(candidate.el);
       }
-
-      el.classList.add('td-reveal-pending');
-      pendingRevealNodes.push(el);
-      toObserve.push(el);
     }
 
     if (!toObserve.length) return;
@@ -452,10 +529,34 @@
     if (isRevealInitialized) return;
     isRevealInitialized = true;
 
+    var root = document.documentElement;
+    if ((window.scrollY || window.pageYOffset || 0) > 80 || prefersReducedMotion()) {
+      root.classList.add('td-skip-intro');
+    } else if (!root.classList.contains('td-skip-intro')) {
+      introDoneTimer = window.setTimeout(function () {
+        introDoneTimer = null;
+        root.classList.add('td-intro-done');
+      }, 650);
+    }
+
     observeTargets(false);
+    window.addEventListener(
+      'load',
+      function () {
+        if ((window.scrollY || window.pageYOffset || 0) > 80) {
+          root.classList.add('td-skip-intro');
+        }
+        onImmediateCheck();
+      },
+      { once: true, passive: true }
+    );
 
     if (TD.lifecycle && typeof TD.lifecycle.onPageHide === 'function') {
       TD.lifecycle.onPageHide(function () {
+        if (introDoneTimer !== null) {
+          window.clearTimeout(introDoneTimer);
+          introDoneTimer = null;
+        }
         for (var t = 0; t < cleanupTimers.length; t++) {
           window.clearTimeout(cleanupTimers[t]);
         }
@@ -466,9 +567,12 @@
 
     if (TD.lifecycle && typeof TD.lifecycle.onPageShow === 'function') {
       TD.lifecycle.onPageShow(function (e) {
-        if (e && e.persisted && pendingRevealNodes.length) {
-          bindRevealWatchers();
-          onImmediateCheck();
+        if (e && e.persisted) {
+          root.classList.add('td-skip-intro');
+          if (pendingRevealNodes.length) {
+            bindRevealWatchers();
+            onImmediateCheck();
+          }
         }
       });
     }
@@ -478,6 +582,11 @@
       if (mq && typeof mq.addEventListener === 'function') {
         mq.addEventListener('change', function (e) {
           if (e.matches) {
+            if (introDoneTimer !== null) {
+              window.clearTimeout(introDoneTimer);
+              introDoneTimer = null;
+            }
+            root.classList.add('td-skip-intro');
             revealAllPending();
           }
         });

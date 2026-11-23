@@ -41,11 +41,11 @@
   });
 
   TD.NAV_ITEMS = Object.freeze([
-    { id: 'services', label: 'Послуги' },
+    { id: 'services', label: 'Послуги та ціни' },
     { id: 'advantages', label: 'Переваги' },
-    { id: 'calculator', label: 'Прайс' },
     { id: 'doctors', label: 'Лікарі' },
     { id: 'works', label: 'Роботи' },
+    { id: 'gallery', label: 'Галерея' },
     { id: 'reviews', label: 'Відгуки' },
     { id: 'contacts', label: 'Контакти' }
   ]);
@@ -364,6 +364,140 @@
   ]);
 
   /* --------------------------------------------------------------------------
+     Clinic Photo Gallery (#gallery): "Всередині" (5) + "Зовні" (3)
+     TODO: Отримати реальні фото клініки, alt і підписи від власника:
+       1. Підготувати img/gallery/{inside,outside}-0N-{480,800,1200}.webp та fallback .webp/.jpg.
+       2. Заповнити alt і caption (1 короткий рядок), не вигадуючи деталей інтер'єру.
+       3. Змінити status з 'placeholder' на 'ready'.
+     -------------------------------------------------------------------------- */
+  TD.GALLERY = Object.freeze({
+    inside: Object.freeze([
+      Object.freeze({
+        id: 'gallery-01',
+        category: 'inside',
+        group: 'inside',
+        src: 'img/gallery/inside-01.webp',
+        srcSet:
+          'img/gallery/inside-01-480.webp 480w, img/gallery/inside-01-800.webp 800w, img/gallery/inside-01-1200.webp 1200w',
+        sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
+        placeholderSrc: 'img/gallery/inside-01.svg',
+        width: 1200,
+        height: 900,
+        alt: '',
+        caption: '',
+        status: 'placeholder'
+      }),
+      Object.freeze({
+        id: 'gallery-02',
+        category: 'inside',
+        group: 'inside',
+        src: 'img/gallery/inside-02.webp',
+        srcSet:
+          'img/gallery/inside-02-480.webp 480w, img/gallery/inside-02-800.webp 800w, img/gallery/inside-02-1200.webp 1200w',
+        sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
+        placeholderSrc: 'img/gallery/inside-02.svg',
+        width: 1200,
+        height: 900,
+        alt: '',
+        caption: '',
+        status: 'placeholder'
+      }),
+      Object.freeze({
+        id: 'gallery-03',
+        category: 'inside',
+        group: 'inside',
+        src: 'img/gallery/inside-03.webp',
+        srcSet:
+          'img/gallery/inside-03-480.webp 480w, img/gallery/inside-03-800.webp 800w, img/gallery/inside-03-1200.webp 1200w',
+        sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
+        placeholderSrc: 'img/gallery/inside-03.svg',
+        width: 1200,
+        height: 900,
+        alt: '',
+        caption: '',
+        status: 'placeholder'
+      }),
+      Object.freeze({
+        id: 'gallery-04',
+        category: 'inside',
+        group: 'inside',
+        src: 'img/gallery/inside-04.webp',
+        srcSet:
+          'img/gallery/inside-04-480.webp 480w, img/gallery/inside-04-800.webp 800w, img/gallery/inside-04-1200.webp 1200w',
+        sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
+        placeholderSrc: 'img/gallery/inside-04.svg',
+        width: 1200,
+        height: 900,
+        alt: '',
+        caption: '',
+        status: 'placeholder'
+      }),
+      Object.freeze({
+        id: 'gallery-05',
+        category: 'inside',
+        group: 'inside',
+        src: 'img/gallery/inside-05.webp',
+        srcSet:
+          'img/gallery/inside-05-480.webp 480w, img/gallery/inside-05-800.webp 800w, img/gallery/inside-05-1200.webp 1200w',
+        sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
+        placeholderSrc: 'img/gallery/inside-05.svg',
+        width: 1200,
+        height: 900,
+        alt: '',
+        caption: '',
+        status: 'placeholder'
+      })
+    ]),
+    outside: Object.freeze([
+      Object.freeze({
+        id: 'gallery-06',
+        category: 'outside',
+        group: 'outside',
+        src: 'img/gallery/outside-01.webp',
+        srcSet:
+          'img/gallery/outside-01-480.webp 480w, img/gallery/outside-01-800.webp 800w, img/gallery/outside-01-1200.webp 1200w',
+        sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
+        placeholderSrc: 'img/gallery/outside-01.svg',
+        width: 1200,
+        height: 900,
+        alt: '',
+        caption: '',
+        status: 'placeholder'
+      }),
+      Object.freeze({
+        id: 'gallery-07',
+        category: 'outside',
+        group: 'outside',
+        src: 'img/gallery/outside-02.webp',
+        srcSet:
+          'img/gallery/outside-02-480.webp 480w, img/gallery/outside-02-800.webp 800w, img/gallery/outside-02-1200.webp 1200w',
+        sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
+        placeholderSrc: 'img/gallery/outside-02.svg',
+        width: 1200,
+        height: 900,
+        alt: '',
+        caption: '',
+        status: 'placeholder'
+      }),
+      Object.freeze({
+        id: 'gallery-08',
+        category: 'outside',
+        group: 'outside',
+        src: 'img/gallery/outside-03.webp',
+        srcSet:
+          'img/gallery/outside-03-480.webp 480w, img/gallery/outside-03-800.webp 800w, img/gallery/outside-03-1200.webp 1200w',
+        sizes: '(max-width: 639px) 92vw, (max-width: 979px) 46vw, 30vw',
+        placeholderSrc: 'img/gallery/outside-03.svg',
+        width: 1200,
+        height: 900,
+        alt: '',
+        caption: '',
+        status: 'placeholder'
+      })
+    ])
+  });
+
+  /* --------------------------------------------------------------------------
      Google Business Profile Reviews (#reviews)
      Офіційний профіль: TRUST DENTAL (Google Place ID: ChIJ9QI8s0nG1EARlyS0q9U9PV0)
      ВАЖЛИВО:
@@ -576,6 +710,7 @@
           el.setAttribute('href', tgUrl);
           el.setAttribute('target', '_blank');
           el.setAttribute('rel', 'noopener noreferrer');
+          el.removeAttribute('role');
           el.removeAttribute('aria-disabled');
           el.removeAttribute('tabindex');
           el.removeAttribute('title');
@@ -588,6 +723,7 @@
           el.removeAttribute('href');
           el.removeAttribute('target');
           el.removeAttribute('rel');
+          el.setAttribute('role', 'link');
           el.setAttribute('aria-disabled', 'true');
           el.setAttribute('tabindex', '-1');
           el.classList.add('is-disabled');

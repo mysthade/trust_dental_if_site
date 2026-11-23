@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://trustdental.if.ua/sitemap.xml
+

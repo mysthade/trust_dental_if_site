@@ -9,7 +9,50 @@
   var SWITCH_CLASS = 'is-theme-switching';
   var SWITCH_DURATION_MS = 320;
   var switchTimer = null;
+  var activeTransition = null;
   var isInitialized = false;
+
+  function prefersReducedMotion() {
+    try {
+      return Boolean(
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      );
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function clearSwitchTransition() {
+    if (switchTimer) {
+      window.clearTimeout(switchTimer);
+      switchTimer = null;
+    }
+    if (activeTransition && typeof activeTransition.skipTransition === 'function') {
+      try {
+        activeTransition.skipTransition();
+      } catch (e) {}
+    }
+    activeTransition = null;
+    document.documentElement.classList.remove(SWITCH_CLASS);
+  }
+
+  function commitThemeDom(theme) {
+    var root = document.documentElement;
+    var normalized = theme === 'dark' ? 'dark' : 'light';
+
+    root.setAttribute('data-theme', normalized);
+    root.style.colorScheme = normalized;
+
+    var themeColor = document.querySelector('meta[data-theme-color]');
+    if (themeColor) {
+      var targetColor = normalized === 'dark' ? '#0F1217' : '#EEF0F2';
+      if (themeColor.getAttribute('content') !== targetColor) {
+        themeColor.setAttribute('content', targetColor);
+      }
+    }
+
+    syncToggleButtons(normalized);
+  }
 
   function readSavedTheme() {
     try {
@@ -64,36 +107,46 @@
   function applyTheme(theme, animate) {
     var root = document.documentElement;
     var normalized = theme === 'dark' ? 'dark' : 'light';
+    var current = getCurrentTheme();
 
-    if (animate) {
-      var reduced = false;
+    if (!animate || normalized === current || prefersReducedMotion() || document.hidden) {
+      clearSwitchTransition();
+      commitThemeDom(normalized);
+      return;
+    }
+
+    /* Cancel any pending CSS timer or overlapping View Transition on rapid double toggle */
+    clearSwitchTransition();
+    root.classList.add('td-intro-done');
+
+    /* Progressive enhancement: full-page GPU cross-dissolve via View Transitions API */
+    if (typeof document.startViewTransition === 'function') {
       try {
-        reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      } catch (e) {
-        reduced = false;
-      }
-
-      if (!reduced) {
-        if (switchTimer) {
-          window.clearTimeout(switchTimer);
+        var vt = document.startViewTransition(function () {
+          commitThemeDom(normalized);
+        });
+        activeTransition = vt;
+        if (vt && vt.finished && typeof vt.finished.then === 'function') {
+          vt.finished.then(
+            function () {
+              if (activeTransition === vt) activeTransition = null;
+            },
+            function () {
+              if (activeTransition === vt) activeTransition = null;
+            }
+          );
         }
-        root.classList.add(SWITCH_CLASS);
-        switchTimer = window.setTimeout(function () {
-          root.classList.remove(SWITCH_CLASS);
-          switchTimer = null;
-        }, SWITCH_DURATION_MS);
+        return;
+      } catch (e) {
+        activeTransition = null;
       }
     }
 
-    root.setAttribute('data-theme', normalized);
-    root.style.colorScheme = normalized;
-
-    var themeColor = document.querySelector('meta[data-theme-color]');
-    if (themeColor) {
-      themeColor.setAttribute('content', normalized === 'dark'? '#0F1217': '#EEF0F2');
-    }
-
-    syncToggleButtons(normalized);
+    /* Fallback when View Transitions API is unavailable: temporary root CSS class */
+    root.classList.add(SWITCH_CLASS);
+    void root.offsetWidth;
+    commitThemeDom(normalized);
+    switchTimer = window.setTimeout(clearSwitchTransition, SWITCH_DURATION_MS);
   }
 
   function toggleTheme() {
@@ -134,14 +187,22 @@
     }
 
     if (TD.lifecycle && typeof TD.lifecycle.onPageHide === 'function') {
-      TD.lifecycle.onPageHide(function () {
-        if (switchTimer) {
-          window.clearTimeout(switchTimer);
-          switchTimer = null;
-        }
-        document.documentElement.classList.remove(SWITCH_CLASS);
-      });
+      TD.lifecycle.onPageHide(clearSwitchTransition);
     }
+
+    try {
+      if (window.matchMedia) {
+        var rmq = window.matchMedia('(prefers-reduced-motion: reduce)');
+        var onMotionChange = function (e) {
+          if (e.matches) clearSwitchTransition();
+        };
+        if (typeof rmq.addEventListener === 'function') {
+          rmq.addEventListener('change', onMotionChange);
+        } else if (typeof rmq.addListener === 'function') {
+          rmq.addListener(onMotionChange);
+        }
+      }
+    } catch (e) {}
   }
 
   TD.theme = {

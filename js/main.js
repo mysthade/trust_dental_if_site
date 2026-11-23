@@ -15,18 +15,6 @@
     }
   }
 
-  function initStage2Modules() {
-    if (TD.render && typeof TD.render.init === 'function') {
-      TD.render.init();
-    }
-    if (TD.calculator && typeof TD.calculator.init === 'function') {
-      TD.calculator.init();
-    }
-    if (TD.effects && typeof TD.effects.initReveal === 'function') {
-      TD.effects.initReveal();
-    }
-  }
-
   function initNonCritical() {
     scheduleIdle(function () {
       if (TD.header && typeof TD.header.initScrollSpy === 'function') {
@@ -48,14 +36,22 @@
     if (TD.theme && typeof TD.theme.init === 'function') {
       TD.theme.init();
     }
+
+    /* Perform all stage-2 DOM insertions BEFORE any layout reads (header scroll
+       state & reveal viewport checks) so the browser executes a single layout
+       pass before first paint instead of multiple forced layouts. */
+    if (TD.render && typeof TD.render.init === 'function') {
+      TD.render.init();
+    }
+    if (TD.calculator && typeof TD.calculator.init === 'function') {
+      TD.calculator.init();
+    }
     if (TD.header && typeof TD.header.initCritical === 'function') {
       TD.header.initCritical();
     }
-
-    /* Render stage-2 content (services, price filters/list, calculator)
-       synchronously, before first paint. This keeps the page height stable on
-       load/refresh and prevents the lower sections from "popping in" (CLS). */
-    initStage2Modules();
+    if (TD.effects && typeof TD.effects.initReveal === 'function') {
+      TD.effects.initReveal();
+    }
 
     if (document.readyState === 'complete') {
       initNonCritical();
