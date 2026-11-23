@@ -830,81 +830,6 @@
       height: 96px
     }
 
-    .google-badge {
-      position: absolute;
-      right: clamp(20px, 3.2vw, 48px);
-      bottom: 86px;
-      z-index: 4;
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 14px 12px 18px;
-      border-radius: var(--radius-pill);
-      background: var(--surface-strong);
-      border: 1px solid var(--card-border);
-      box-shadow: var(--card-shadow)
-    }
-
-    .google-badge__logo {
-      width: 28px;
-      height: 28px;
-      flex-shrink: 0
-    }
-
-    .google-badge__info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px
-    }
-
-    .google-badge__top {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      line-height: 1.1
-    }
-
-    .google-badge__score {
-      font-size: 1.0625rem;
-      font-weight: 800;
-      letter-spacing: -.02em;
-      font-variant-numeric: tabular-nums;
-      min-width: 28px;
-      color: var(--text)
-    }
-
-    .google-badge__stars {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      color: var(--star-color)
-    }
-
-    .google-badge__star {
-      width: 14px;
-      height: 14px
-    }
-
-    .google-badge__count {
-      font-size: .78125rem;
-      font-weight: 500;
-      color: var(--muted);
-      white-space: nowrap
-    }
-
-    .google-badge__btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      flex-shrink: 0;
-      border-radius: var(--radius-pill);
-      background: var(--surface);
-      border: 1px solid var(--line);
-      color: var(--text)
-    }
-
     .stats-section {
       position: relative;
       isolation: isolate;
@@ -929,7 +854,7 @@
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr))
+      grid-template-columns: repeat(3, minmax(0, 1fr))
     }
 
     .stat-item {
@@ -1123,15 +1048,9 @@
         display: none
       }
 
-      .google-badge {
-        right: 16px;
-        bottom: 16px;
-        padding: 10px 10px 10px 14px;
-        gap: 10px
-      }
-
       .stats-section {
-        margin-top: -18px
+        margin-top: -8px;
+        padding-bottom: 18px
       }
 
       .stats-card {
@@ -1140,21 +1059,20 @@
       }
 
       .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr))
+        grid-template-columns: repeat(3, minmax(0, 1fr))
       }
 
       .stat-item {
-        padding: 16px 18px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 14px 18px;
         border-right: 1px solid var(--divider);
-        border-bottom: 1px solid var(--divider)
-      }
-
-      .stat-item:nth-child(2n) {
-        border-right: 0
-      }
-
-      .stat-item:nth-last-child(-n+2) {
         border-bottom: 0
+      }
+
+      .stat-item:last-child {
+        border-right: 0
       }
     }
 
@@ -1183,6 +1101,33 @@
 
       .deco--stats-wave {
         height: 64px
+      }
+    }
+
+    @media (max-width:639px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
+
+      .stat-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 14px;
+        border-right: 0;
+        border-bottom: 1px solid var(--divider)
+      }
+
+      .stat-item:first-child {
+        border-right: 1px solid var(--divider)
+      }
+
+      .stat-item:last-child {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        gap: 14px;
+        border-bottom: 0
       }
     }
 
@@ -1243,33 +1188,9 @@
         object-position: 36% center
       }
 
-      .google-badge {
-        right: 12px;
-        bottom: 12px;
-        padding: 8px 8px 8px 12px;
-        gap: 9px
-      }
-
-      .google-badge__logo {
-        width: 24px;
-        height: 24px
-      }
-
-      .google-badge__score {
-        font-size: .9375rem
-      }
-
-      .google-badge__star {
-        width: 12px;
-        height: 12px
-      }
-
-      .google-badge__count {
-        font-size: .78125rem
-      }
-
       .stats-section {
-        margin-top: -12px
+        margin-top: 0;
+        padding-bottom: 12px
       }
 
       .stats-card {
@@ -1278,9 +1199,6 @@
       }
 
       .stat-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
         padding: 14px 12px
       }
 
@@ -1539,6 +1457,10 @@
     }
 
     @media (max-width:979px) {
+      .section--services {
+        padding-top: 28px
+      }
+
       .services__bg-waves {
         top: auto;
         bottom: 0;
@@ -1661,6 +1583,10 @@
     }
 
     @media (max-width:639px) {
+      .section--services {
+        padding-top: 22px
+      }
+
       .services-grid:empty {
         min-height: 1672px
       }
@@ -1716,8 +1642,7 @@
       animation-delay: 120ms
     }
 
-    html.td-js:not(.td-skip-intro):not(.td-intro-done) .hero__badge,
-    html.td-js:not(.td-skip-intro):not(.td-intro-done) .google-badge {
+    html.td-js:not(.td-skip-intro):not(.td-intro-done) .hero__badge {
       animation: td-intro-fade 260ms cubic-bezier(.22, 1, .36, 1) 140ms backwards
     }
 
@@ -1754,7 +1679,6 @@
       html.td-js .hero__title,
       html.td-js .hero__subtitle,
       html.td-js .hero__cta>.btn,
-      html.td-js .google-badge,
       html.td-js .stats-card,
       html.td-js .stats-section .stat-item {
         opacity: 1 !important;
@@ -2359,38 +2283,6 @@
               alt="Сучасний стоматологічний кабінет клініки TRUST DENTAL в Івано-Франківську" width="3008" height="1408"
               loading="eager" fetchpriority="high" decoding="sync"> </picture>
         </div>
-        <!-- Floating Google Reviews Badge -->
-        <div class="google-badge"> <svg class="google-badge__logo" viewBox="0 0 48 48" aria-hidden="true"
-            focusable="false">
-            <use href="#td-google-logo"></use>
-          </svg>
-          <div class="google-badge__info">
-            <div class="google-badge__top"> <span class="google-badge__score" data-clinic="rating"
-                data-decimals="1">5.0</span> <span class="google-badge__stars" role="img" aria-label="5 із 5 зірок">
-                <svg class="google-badge__star" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-                  <use href="#td-star"></use>
-                </svg>
-                <svg class="google-badge__star" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-                  <use href="#td-star"></use>
-                </svg>
-                <svg class="google-badge__star" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-                  <use href="#td-star"></use>
-                </svg>
-                <svg class="google-badge__star" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-                  <use href="#td-star"></use>
-                </svg>
-                <svg class="google-badge__star" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-                  <use href="#td-star"></use>
-                </svg>
-              </span> </div> <span class="google-badge__count" data-clinic="reviews-text">73 відгуки на Google</span>
-          </div> <a class="google-badge__btn" data-clinic="maps-link"
-            href="https://www.google.com/maps/place/%D0%A1%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F+Trust+Dental/@48.9262602,24.7089406,1034m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4730c1cbf46247f5:0x5a3dbed54b7a2497!8m2!3d48.9262602!4d48.7089406!16s%2Fg%2F11vc1rfymb?entry=ttu"
-            target="_blank" rel="noopener noreferrer" aria-label="Відкрити відгуки TRUST DENTAL у Google Картах">
-            <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-              <use href="#td-icon-arrow"></use>
-            </svg>
-          </a>
-        </div>
       </div>
     </section>
     <!-- ======================== STATS GLASS BAR ======================== -->
@@ -2401,15 +2293,6 @@
       <div class="container">
         <div id="stats-card" class="stats-card">
           <ul class="stats-grid">
-            <li class="stat-item"> <svg class="stat-item__icon" viewBox="0 0 32 32" fill="none" stroke="currentColor"
-                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                <path
-                  d="M16 4.5l3.35 6.8 7.5 1.09-5.42 5.29 1.28 7.47L16 21.62l-6.71 3.53 1.28-7.47-5.42-5.29 7.5-1.09L16 4.5Z" />
-              </svg>
-              <div class="stat-item__body"> <span class="stat-item__value" data-clinic="rating" data-count="5.0"
-                  data-decimals="1">5.0</span> <span class="stat-item__label">рейтинг у Google (на підставі
-                  відгуків)</span> </div>
-            </li>
             <li class="stat-item"> <svg class="stat-item__icon" viewBox="0 0 32 32" fill="none" stroke="currentColor"
                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                 <path
@@ -2429,11 +2312,12 @@
             </li>
             <li class="stat-item"> <svg class="stat-item__icon" viewBox="0 0 32 32" fill="none" stroke="currentColor"
                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                <path d="M16 4.5 26 8.5v7.2c0 6.1-4.1 10.6-10 12.3-5.9-1.7-10-6.2-10-12.3V8.5l10-4Z" />
-                <path d="m11.5 16.2 3 3 6-6.2" />
+                <rect x="5.5" y="7.5" width="21" height="19" rx="3.5" />
+                <path d="M10.5 4.5v5M21.5 4.5v5M5.5 13h21M12.5 19.5l2.2 2.2 4.8-4.4" />
               </svg>
-              <div class="stat-item__body"> <span class="stat-item__value" data-count="0" data-decimals="0">0</span>
-                <span class="stat-item__label">черг — прийом за записом</span> </div>
+              <div class="stat-item__body"> <span class="stat-item__value">За записом</span> <span
+                  class="stat-item__label">Прийом: <span data-clinic="hours">Пн–Сб 09:00–22:00, Нд
+                    09:00–20:00</span></span> </div>
             </li>
           </ul>
         </div>
