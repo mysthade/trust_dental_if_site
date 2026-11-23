@@ -1,6 +1,9 @@
 # Local backup of unresized original service icons
 img/services/_orig/
 
+# Local AI/developer context notes (keep off repository)
+PROJECT_CONTEXT.md
+
 # OS / Editor artifacts
 .DS_Store
 Thumbs.db
