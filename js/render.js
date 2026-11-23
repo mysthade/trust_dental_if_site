@@ -204,6 +204,85 @@
     );
   }
 
+  function createEl(tag, className, text) {
+    var el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text !== undefined && text !== null) el.textContent = text;
+    return el;
+  }
+
+  function setSlideInteractivity(slide, isActive) {
+    slide.classList.toggle('is-active', isActive);
+    slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+    slide.inert = !isActive;
+    var interactive = slide.querySelectorAll('button, a[href]');
+    for (var i = 0; i < interactive.length; i++) {
+      interactive[i].tabIndex = isActive ? 0 : -1;
+    }
+  }
+
+  function syncTabDotsState(dotsWrap, dotSelector, activeIdx) {
+    if (!dotsWrap) return;
+    var dots = dotsWrap.querySelectorAll(dotSelector);
+    for (var i = 0; i < dots.length; i++) {
+      var isActive = i === activeIdx;
+      dots[i].classList.toggle('is-active', isActive);
+      dots[i].setAttribute('aria-selected', isActive ? 'true' : 'false');
+      dots[i].tabIndex = isActive ? 0 : -1;
+    }
+  }
+
+  function applyTrackTransform(track, transformVal, instant) {
+    if (track.style.transform === transformVal) return;
+    if (instant && track.style.transform) {
+      track.style.transition = 'none';
+      track.style.transform = transformVal;
+      track.getBoundingClientRect();
+      track.style.transition = '';
+    } else {
+      track.style.transform = transformVal;
+    }
+  }
+
+  function bindTablistKeyNav(dotsWrap, dotSelector, getCurIdx, onSelect) {
+    if (!dotsWrap) return;
+    dotsWrap.addEventListener('keydown', function (e) {
+      var key = e.key;
+      if (key !== 'ArrowRight' && key !== 'ArrowLeft' && key !== 'Home' && key !== 'End') {
+        return;
+      }
+      var dots = dotsWrap.querySelectorAll(dotSelector);
+      if (!dots.length) return;
+      var cur = typeof getCurIdx === 'function' ?
+        getCurIdx() :
+        Array.prototype.indexOf.call(dots, document.activeElement);
+      if (cur < 0) return;
+
+      e.preventDefault();
+      var nextIdx = cur;
+      if (key === 'ArrowRight') nextIdx = (cur + 1) % dots.length;
+      else if (key === 'ArrowLeft') nextIdx = (cur - 1 + dots.length) % dots.length;
+      else if (key === 'Home') nextIdx = 0;
+      else if (key === 'End') nextIdx = dots.length - 1;
+      onSelect(nextIdx);
+      if (dots[nextIdx]) dots[nextIdx].focus();
+    });
+  }
+
+  function bindCarouselArrowsKey(carousel, dotsWrap, onPrev, onNext) {
+    if (!carousel) return;
+    carousel.addEventListener('keydown', function (e) {
+      if (dotsWrap && dotsWrap.contains(e.target)) return;
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        onPrev();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        onNext();
+      }
+    });
+  }
+
   function createSvgUse(iconId, className) {
     var svg = document.createElementNS(SVG_NS, 'svg');
     svg.setAttribute('class', className);
@@ -326,10 +405,6 @@
       var pic = document.createElement('picture');
       pic.className = 'service-card__picture';
 
-      var source = document.createElement('source');
-      source.type = 'image/webp';
-      source.srcset = basePath + '.webp';
-
       var img = document.createElement('img');
       img.className = 'service-card__img';
       img.src = basePath + '.png';
@@ -338,7 +413,6 @@
       img.decoding = 'async';
       img.alt = '';
 
-      pic.appendChild(source);
       pic.appendChild(img);
       wrap.appendChild(pic);
 
@@ -440,67 +514,39 @@
           TD.findCalcItemById(svc.calcItemId) :
           null;
 
-      var card = document.createElement('article');
-      card.className = 'service-card';
+      var card = createEl('article', 'service-card');
       card.setAttribute('data-service-id', svc.id);
       if (calcItem) {
         card.setAttribute('data-calc-item-id', calcItem.id);
       }
 
-      var title = document.createElement('h3');
-      title.className = 'service-card__title';
-      title.textContent = svc.title;
-
-      var desc = document.createElement('p');
-      desc.className = 'service-card__desc';
-      desc.textContent = svc.description;
-
-      var footer = document.createElement('div');
-      footer.className = 'service-card__footer';
-
-      var priceWrap = document.createElement('div');
-      priceWrap.className = 'service-card__price-wrap';
+      var title = createEl('h3', 'service-card__title', svc.title);
+      var desc = createEl('p', 'service-card__desc', svc.description);
+      var footer = createEl('div', 'service-card__footer');
+      var priceWrap = createEl('div', 'service-card__price-wrap');
 
       if (calcItem) {
-        var priceVal = document.createElement('span');
-        priceVal.className = 'service-card__price';
-        priceVal.textContent = TD.formatPrice(calcItem.price, calcItem.prefix, 'грн');
-        priceWrap.appendChild(priceVal);
-
+        priceWrap.appendChild(createEl('span', 'service-card__price', TD.formatPrice(calcItem.price, calcItem.prefix, 'грн')));
         if (calcItem.note) {
-          var priceMeta = document.createElement('span');
-          priceMeta.className = 'service-card__price-meta';
-          priceMeta.textContent = calcItem.note;
-          priceWrap.appendChild(priceMeta);
+          priceWrap.appendChild(createEl('span', 'service-card__price-meta', calcItem.note));
         }
       } else {
-        var consultPrice = document.createElement('span');
-        consultPrice.className = 'service-card__price service-card__price--consult';
-        consultPrice.textContent = 'Уточнити вартість';
-        priceWrap.appendChild(consultPrice);
-
-        var priceNote = document.createElement('span');
-        priceNote.className = 'service-card__price-meta service-card__price-note';
-        priceNote.textContent = 'індивідуально після огляду';
-        priceWrap.appendChild(priceNote);
+        priceWrap.appendChild(createEl('span', 'service-card__price service-card__price--consult', 'Уточнити вартість'));
+        priceWrap.appendChild(createEl('span', 'service-card__price-meta service-card__price-note', 'індивідуально після огляду'));
       }
 
       /* Expandable block: "Що входить у вартість" */
       var isIncludesOpen = Boolean(expandedServiceIds[svc.id]);
-      var includesWrap = document.createElement('div');
-      includesWrap.className = 'service-card__includes' + (isIncludesOpen ? ' is-open' : '');
+      var includesWrap = createEl('div', 'service-card__includes' + (isIncludesOpen ? ' is-open' : ''));
 
       var panelId = 'service-includes-' + svc.id;
-      var includesBtn = document.createElement('button');
+      var includesBtn = createEl('button', 'service-card__includes-btn');
       includesBtn.type = 'button';
-      includesBtn.className = 'service-card__includes-btn';
       includesBtn.setAttribute('data-service-includes-toggle', svc.id);
       includesBtn.setAttribute('aria-expanded', isIncludesOpen ? 'true' : 'false');
       includesBtn.setAttribute('aria-controls', panelId);
 
-      var includesLabel = document.createElement('span');
-      includesLabel.className = 'service-card__includes-label';
-      includesLabel.textContent = 'Що входить у вартість';
+      var includesLabel = createEl('span', 'service-card__includes-label', 'Що входить у вартість');
 
       var includesIcon = createSvgUse('td-icon-chevron-right', 'service-card__includes-icon');
       includesIcon.setAttribute('viewBox', '0 0 20 20');
@@ -508,49 +554,36 @@
       includesBtn.appendChild(includesLabel);
       includesBtn.appendChild(includesIcon);
 
-      var includesPanel = document.createElement('div');
+      var includesPanel = createEl('div', 'service-card__includes-panel');
       includesPanel.id = panelId;
-      includesPanel.className = 'service-card__includes-panel';
       includesPanel.setAttribute('role', 'region');
       includesPanel.setAttribute('aria-label', 'Що входить у вартість: ' + svc.title);
       includesPanel.setAttribute('aria-hidden', isIncludesOpen ? 'false' : 'true');
 
-      var includesInner = document.createElement('div');
-      includesInner.className = 'service-card__includes-inner';
+      var includesInner = createEl('div', 'service-card__includes-inner');
 
       if (Array.isArray(svc.includedItems) && svc.includedItems.length > 0) {
-        var includesList = document.createElement('ul');
-        includesList.className = 'service-card__includes-list';
+        var includesList = createEl('ul', 'service-card__includes-list');
         for (var m = 0; m < svc.includedItems.length; m++) {
-          var li = document.createElement('li');
-          li.className = 'service-card__includes-item';
-          li.textContent = svc.includedItems[m];
-          includesList.appendChild(li);
+          includesList.appendChild(createEl('li', 'service-card__includes-item', svc.includedItems[m]));
         }
         includesInner.appendChild(includesList);
       } else {
-        var fallbackNote = document.createElement('p');
-        fallbackNote.className = 'service-card__includes-note';
-        fallbackNote.textContent =
-          svc.includedFallback || 'Склад послуги уточнюється лікарем після огляду.';
-        includesInner.appendChild(fallbackNote);
+        includesInner.appendChild(createEl('p', 'service-card__includes-note', svc.includedFallback || 'Склад послуги уточнюється лікарем після огляду.'));
       }
 
       includesPanel.appendChild(includesInner);
       includesWrap.appendChild(includesBtn);
       includesWrap.appendChild(includesPanel);
 
-      var actionBtn = document.createElement('button');
+      var actionBtn = createEl('button', 'service-card__add-to-calc');
       actionBtn.type = 'button';
-      actionBtn.className = 'service-card__add-to-calc';
       actionBtn.setAttribute('data-service-id', svc.id);
 
-      var iconSpan = document.createElement('span');
-      iconSpan.className = 'service-card__add-icon';
+      var iconSpan = createEl('span', 'service-card__add-icon');
       iconSpan.setAttribute('aria-hidden', 'true');
 
-      var labelSpan = document.createElement('span');
-      labelSpan.className = 'service-card__add-label';
+      var labelSpan = createEl('span', 'service-card__add-label');
 
       if (calcItem) {
         actionBtn.setAttribute('data-calc-item-id', calcItem.id);
@@ -732,14 +765,10 @@
       hintLabel = 'Фото «після»';
     }
 
-    var fallback = document.createElement('div');
-    fallback.className = 'work-card__fallback';
+    var fallback = createEl('div', 'work-card__fallback');
     fallback.setAttribute('aria-hidden', 'true');
     fallback.appendChild(createSvgUse(iconId, 'work-card__fallback-svg'));
-    var hintSpan = document.createElement('span');
-    hintSpan.className = 'work-card__fallback-label';
-    hintSpan.textContent = hintLabel;
-    fallback.appendChild(hintSpan);
+    fallback.appendChild(createEl('span', 'work-card__fallback-label', hintLabel));
     slot.appendChild(fallback);
 
     var useRealImage = item.status !== 'placeholder' && Boolean(src);
@@ -812,47 +841,22 @@
     comp.appendChild(createWorkFigure(item, 'after', isFirst));
     trigger.appendChild(comp);
 
-    var content = document.createElement('div');
-    content.className = 'work-slide__content work-card__body';
+    var content = createEl('div', 'work-slide__content work-card__body');
+    var info = createEl('div', 'work-slide__info');
+    var meta = createEl('div', 'work-slide__meta');
 
-    var info = document.createElement('div');
-    info.className = 'work-slide__info';
-
-    var meta = document.createElement('div');
-    meta.className = 'work-slide__meta';
-
-    var cat = document.createElement('span');
-    cat.className = 'work-slide__category work-card__category';
-    cat.textContent = item.categoryLabel || 'Клінічний приклад';
-
-    var stepBadge = document.createElement('span');
-    stepBadge.className = 'work-slide__step';
-    stepBadge.textContent = 'Приклад ' + (index + 1) + ' із ' + total;
-
-    meta.appendChild(cat);
-    meta.appendChild(stepBadge);
-
-    var title = document.createElement('h3');
-    title.className = 'work-slide__title work-card__title';
-    title.textContent = item.title;
-
-    var desc = document.createElement('p');
-    desc.className = 'work-slide__description work-card__description';
-    desc.textContent = item.description;
+    meta.appendChild(createEl('span', 'work-slide__category work-card__category', item.categoryLabel || 'Клінічний приклад'));
+    meta.appendChild(createEl('span', 'work-slide__step', 'Приклад ' + (index + 1) + ' із ' + total));
 
     info.appendChild(meta);
-    info.appendChild(title);
-    info.appendChild(desc);
+    info.appendChild(createEl('h3', 'work-slide__title work-card__title', item.title));
+    info.appendChild(createEl('p', 'work-slide__description work-card__description', item.description));
 
-    var ctaBtn = document.createElement('button');
+    var ctaBtn = createEl('button', 'btn btn--outline work-slide__open work-card__link');
     ctaBtn.type = 'button';
-    ctaBtn.className = 'btn btn--outline work-slide__open work-card__link';
     ctaBtn.setAttribute('data-work-open', item.id);
     ctaBtn.setAttribute('aria-label', 'Переглянути приклад детальніше: ' + item.title);
-
-    var ctaLabel = document.createElement('span');
-    ctaLabel.textContent = 'Переглянути приклад';
-    ctaBtn.appendChild(ctaLabel);
+    ctaBtn.appendChild(createEl('span', null, 'Переглянути приклад'));
     ctaBtn.appendChild(createArrowSvg('btn__arrow'));
 
     content.appendChild(info);
@@ -879,25 +883,10 @@
 
     var slides = track.querySelectorAll('.work-slide');
     for (var i = 0; i < slides.length; i++) {
-      var isActive = i === idx;
-      slides[i].classList.toggle('is-active', isActive);
-      slides[i].setAttribute('aria-hidden', isActive ? 'false' : 'true');
-      slides[i].inert = !isActive;
-      var slideBtns = slides[i].querySelectorAll('button, a[href]');
-      for (var b = 0; b < slideBtns.length; b++) {
-        slideBtns[b].tabIndex = isActive ? 0 : -1;
-      }
+      setSlideInteractivity(slides[i], i === idx);
     }
 
-    if (dotsWrap) {
-      var dots = dotsWrap.querySelectorAll('.works-carousel__dot');
-      for (var d = 0; d < dots.length; d++) {
-        var isDotActive = d === idx;
-        dots[d].classList.toggle('is-active', isDotActive);
-        dots[d].setAttribute('aria-selected', isDotActive ? 'true' : 'false');
-        dots[d].tabIndex = isDotActive ? 0 : -1;
-      }
-    }
+    syncTabDotsState(dotsWrap, '.works-carousel__dot', idx);
 
     if (counterEl) {
       counterEl.textContent = (idx + 1) + ' / ' + total;
@@ -990,37 +979,28 @@
         }
       });
 
-      dotsWrap.addEventListener('keydown', function (e) {
-        var key = e.key;
-        if (key !== 'ArrowRight' && key !== 'ArrowLeft' && key !== 'Home' && key !== 'End') {
-          return;
-        }
-        var dots = dotsWrap.querySelectorAll('.works-carousel__dot');
-        if (!dots.length) return;
-        e.preventDefault();
-        var cur = worksCarouselState.currentIndex;
-        var nextIdx = cur;
-        if (key === 'ArrowRight') nextIdx = (cur + 1) % dots.length;
-        else if (key === 'ArrowLeft') nextIdx = (cur - 1 + dots.length) % dots.length;
-        else if (key === 'Home') nextIdx = 0;
-        else if (key === 'End') nextIdx = dots.length - 1;
-        goToWorkSlide(nextIdx);
-        if (dots[nextIdx]) dots[nextIdx].focus();
-      });
+      bindTablistKeyNav(
+        dotsWrap,
+        '.works-carousel__dot',
+        function () {
+          return worksCarouselState.currentIndex;
+        },
+        goToWorkSlide
+      );
     }
 
     if (carousel && !carousel.dataset.worksKeyBound) {
       carousel.dataset.worksKeyBound = '1';
-      carousel.addEventListener('keydown', function (e) {
-        if (dotsWrap && dotsWrap.contains(e.target)) return;
-        if (e.key === 'ArrowLeft') {
-          e.preventDefault();
+      bindCarouselArrowsKey(
+        carousel,
+        dotsWrap,
+        function () {
           goToWorkSlide(worksCarouselState.currentIndex - 1);
-        } else if (e.key === 'ArrowRight') {
-          e.preventDefault();
+        },
+        function () {
           goToWorkSlide(worksCarouselState.currentIndex + 1);
         }
-      });
+      );
     }
 
     if (viewport) {
@@ -1381,17 +1361,11 @@
 
   function createGalleryMediaNode(item, group, index, total, isModal) {
     var meta = GALLERY_GROUP_META[group] || GALLERY_GROUP_META.inside;
-    var wrap = document.createElement('div');
-    wrap.className = isModal ? 'gallery-modal__frame' : 'gallery-card__media';
-
-    var fallback = document.createElement('div');
-    fallback.className = 'gallery-card__fallback';
+    var wrap = createEl('div', isModal ? 'gallery-modal__frame' : 'gallery-card__media');
+    var fallback = createEl('div', 'gallery-card__fallback');
     fallback.setAttribute('aria-hidden', 'true');
     fallback.appendChild(createSvgUse(meta.fallbackIcon, 'gallery-card__fallback-svg'));
-    var hintSpan = document.createElement('span');
-    hintSpan.className = 'gallery-card__fallback-label';
-    hintSpan.textContent = meta.fallbackLabel;
-    fallback.appendChild(hintSpan);
+    fallback.appendChild(createEl('span', 'gallery-card__fallback-label', meta.fallbackLabel));
     wrap.appendChild(fallback);
 
     var useReal = item.status !== 'placeholder' && Boolean(item.src);
@@ -1496,26 +1470,11 @@
     var offsetPx = idx > 0 && idx < cards.length ? cards[idx].offsetLeft : 0;
     var nextTransform = offsetPx > 0 ? 'translate3d(-' + offsetPx + 'px, 0, 0)' : 'translate3d(0, 0, 0)';
 
-    if (track.style.transform !== nextTransform) {
-      if (instant && track.style.transform) {
-        track.style.transition = 'none';
-        track.style.transform = nextTransform;
-        track.getBoundingClientRect();
-        track.style.transition = '';
-      } else {
-        track.style.transform = nextTransform;
-      }
-    }
+    applyTrackTransform(track, nextTransform, instant);
 
     for (var i = 0; i < cards.length; i++) {
       var isActive = i >= idx && i < idx + perView;
-      cards[i].classList.toggle('is-active', isActive);
-      cards[i].setAttribute('aria-hidden', isActive ? 'false' : 'true');
-      cards[i].inert = !isActive;
-      var interactive = cards[i].querySelectorAll('button, a[href]');
-      for (var k = 0; k < interactive.length; k++) {
-        interactive[k].tabIndex = isActive ? 0 : -1;
-      }
+      setSlideInteractivity(cards[i], isActive);
       if (isActive) {
         var revealCard = cards[i].querySelector('.gallery-card.td-reveal-pending');
         if (revealCard) {
@@ -1531,15 +1490,7 @@
       }
     }
 
-    if (dotsWrap) {
-      var dots = dotsWrap.querySelectorAll('.gallery-carousel__dot');
-      for (var d = 0; d < dots.length; d++) {
-        var isDotActive = d === idx;
-        dots[d].classList.toggle('is-active', isDotActive);
-        dots[d].setAttribute('aria-selected', isDotActive ? 'true' : 'false');
-        dots[d].tabIndex = isDotActive ? 0 : -1;
-      }
-    }
+    syncTabDotsState(dotsWrap, '.gallery-carousel__dot', idx);
 
     if (counterEl) {
       counterEl.textContent = (idx + 1) + ' / ' + positionsCount;
@@ -1664,37 +1615,30 @@
         }
       });
 
-      dotsWrap.addEventListener('keydown', function (e) {
-        var key = e.key;
-        if (key !== 'ArrowRight' && key !== 'ArrowLeft' && key !== 'Home' && key !== 'End') {
-          return;
+      bindTablistKeyNav(
+        dotsWrap,
+        '.gallery-carousel__dot',
+        function () {
+          return galleryGroupsState[group].currentIndex;
+        },
+        function (nextIdx) {
+          goToGallerySlide(group, nextIdx);
         }
-        var dots = dotsWrap.querySelectorAll('.gallery-carousel__dot');
-        if (!dots.length) return;
-        e.preventDefault();
-        var cur = galleryGroupsState[group].currentIndex;
-        var nextIdx = cur;
-        if (key === 'ArrowRight') nextIdx = (cur + 1) % dots.length;
-        else if (key === 'ArrowLeft') nextIdx = (cur - 1 + dots.length) % dots.length;
-        else if (key === 'Home') nextIdx = 0;
-        else if (key === 'End') nextIdx = dots.length - 1;
-        goToGallerySlide(group, nextIdx);
-        if (dots[nextIdx]) dots[nextIdx].focus();
-      });
+      );
     }
 
     if (carousel && !carousel.dataset.galleryKeyBound) {
       carousel.dataset.galleryKeyBound = '1';
-      carousel.addEventListener('keydown', function (e) {
-        if (dotsWrap && dotsWrap.contains(e.target)) return;
-        if (e.key === 'ArrowLeft') {
-          e.preventDefault();
+      bindCarouselArrowsKey(
+        carousel,
+        dotsWrap,
+        function () {
           goToGallerySlide(group, galleryGroupsState[group].currentIndex - 1);
-        } else if (e.key === 'ArrowRight') {
-          e.preventDefault();
+        },
+        function () {
           goToGallerySlide(group, galleryGroupsState[group].currentIndex + 1);
         }
-      });
+      );
     }
 
     if (viewport) {
@@ -2190,17 +2134,11 @@
   }
 
   function formatReviewCountLabel(count) {
-    var pluralFn =
+    var word =
       typeof TD.pluralizeUk === 'function' ?
-        TD.pluralizeUk :
-        function (n, one, few, many) {
-          var a = Math.abs(Number(n)) % 100;
-          var m = a % 10;
-          if (a > 10 && a < 20) return many;
-          if (m > 1 && m < 5) return few;
-          return m === 1 ? one : many;
-        };
-    return count + ' ' + pluralFn(count, 'відгук', 'відгуки', 'відгуків');
+        TD.pluralizeUk(count, 'відгук', 'відгуки', 'відгуків') :
+        'відгуків';
+    return count + ' ' + word;
   }
 
   function renderReviewsSummary(meta, visibleReviewsCount) {
@@ -2467,26 +2405,9 @@
     }
     var nextTransform = offsetPx > 0 ? 'translate3d(-' + offsetPx + 'px, 0, 0)' : 'translate3d(0, 0, 0)';
 
-    if (track.style.transform !== nextTransform) {
-      if (instant && track.style.transform) {
-        track.style.transition = 'none';
-        track.style.transform = nextTransform;
-        track.getBoundingClientRect();
-        track.style.transition = '';
-      } else {
-        track.style.transform = nextTransform;
-      }
-    }
+    applyTrackTransform(track, nextTransform, instant);
 
-    if (dotsEl) {
-      var dots = dotsEl.querySelectorAll('[role="tab"]');
-      for (var i = 0; i < dots.length; i++) {
-        var active = i === idx;
-        dots[i].classList.toggle('is-active', active);
-        dots[i].setAttribute('aria-selected', active ? 'true' : 'false');
-        dots[i].tabIndex = active ? 0 : -1;
-      }
-    }
+    syncTabDotsState(dotsEl, '[role="tab"]', idx);
 
     var noNav = reviewsSliderState.maxIndex <= 0;
     if (prevBtn) prevBtn.disabled = noNav;
@@ -2618,29 +2539,18 @@
           pauseSliderAfterInteraction();
         });
 
-        dotsEl.addEventListener('keydown', function (e) {
-          var tabs = Array.prototype.slice.call(
-            dotsEl.querySelectorAll('[role="tab"]')
-          );
-          if (!tabs.length) return;
-          var current = tabs.indexOf(document.activeElement);
-          if (current === -1) return;
-
-          var next = current;
-          if (e.key === 'ArrowRight') next = (current + 1) % tabs.length;
-          else if (e.key === 'ArrowLeft') next = (current - 1 + tabs.length) % tabs.length;
-          else if (e.key === 'Home') next = 0;
-          else if (e.key === 'End') next = tabs.length - 1;
-          else return;
-
-          e.preventDefault();
-          tabs[next].focus();
-          goToSliderIndex(next, {
-            manual: true,
-            announce: true
-          });
-          pauseSliderAfterInteraction();
-        });
+        bindTablistKeyNav(
+          dotsEl,
+          '[role="tab"]',
+          null,
+          function (nextIdx) {
+            goToSliderIndex(nextIdx, {
+              manual: true,
+              announce: true
+            });
+            pauseSliderAfterInteraction();
+          }
+        );
       }
 
       if (pauseBtn) {
@@ -2754,23 +2664,14 @@
   }
 
   function createReviewCard(item, index, fallbackUrl) {
-    var card = document.createElement('article');
-    card.className = 'review-card';
+    var card = createEl('article', 'review-card');
     if (item.id) card.setAttribute('data-review-id', item.id);
 
-    var head = document.createElement('header');
-    head.className = 'review-card__head';
-
-    var authorBox = document.createElement('div');
-    authorBox.className = 'review-card__author';
-
-    var avatar = document.createElement('div');
-    avatar.className = 'review-card__avatar';
-
-    var initials = document.createElement('span');
-    initials.className = 'review-card__initials';
+    var head = createEl('header', 'review-card__head');
+    var authorBox = createEl('div', 'review-card__author');
+    var avatar = createEl('div', 'review-card__avatar');
+    var initials = createEl('span', 'review-card__initials', getReviewInitials(item.author, item.authorInitials));
     initials.setAttribute('aria-hidden', 'true');
-    initials.textContent = getReviewInitials(item.author, item.authorInitials);
     avatar.appendChild(initials);
 
     var photoUrl = item.authorPhoto ? String(item.authorPhoto).trim() : '';
@@ -2792,31 +2693,18 @@
       avatar.setAttribute('aria-hidden', 'true');
     }
 
-    var identity = document.createElement('div');
-    identity.className = 'review-card__identity';
-
-    var nameEl = document.createElement('h3');
-    nameEl.className = 'review-card__name';
-    nameEl.textContent = item.author;
-
-    var metaEl = document.createElement('p');
-    metaEl.className = 'review-card__meta';
+    var identity = createEl('div', 'review-card__identity');
+    identity.appendChild(createEl('h3', 'review-card__name', item.author));
     var dateDisplay = item.relativeDate || item.publishedAt || '';
-    metaEl.textContent = dateDisplay ? item.source + ' · ' + dateDisplay : item.source;
-
-    identity.appendChild(nameEl);
-    identity.appendChild(metaEl);
+    identity.appendChild(createEl('p', 'review-card__meta', dateDisplay ? item.source + ' · ' + dateDisplay : item.source));
 
     authorBox.appendChild(avatar);
     authorBox.appendChild(identity);
 
-    var sourceBadge = document.createElement('span');
-    sourceBadge.className = 'review-card__source';
+    var sourceBadge = createEl('span', 'review-card__source');
     sourceBadge.setAttribute('aria-label', 'Відгук із Google');
     sourceBadge.appendChild(createSvgUse('td-google-logo', 'review-card__source-icon'));
-    var sourceText = document.createElement('span');
-    sourceText.textContent = item.source;
-    sourceBadge.appendChild(sourceText);
+    sourceBadge.appendChild(createEl('span', null, item.source));
 
     head.appendChild(authorBox);
     head.appendChild(sourceBadge);
@@ -2874,16 +2762,9 @@
     card.appendChild(bodyWrap);
 
     if (item.ownerReply) {
-      var replyBox = document.createElement('div');
-      replyBox.className = 'review-card__reply';
-      var replyTitle = document.createElement('strong');
-      replyTitle.className = 'review-card__reply-title';
-      replyTitle.textContent = 'Відповідь власника';
-      var replyBody = document.createElement('p');
-      replyBody.className = 'review-card__reply-text';
-      replyBody.textContent = item.ownerReply;
-      replyBox.appendChild(replyTitle);
-      replyBox.appendChild(replyBody);
+      var replyBox = createEl('div', 'review-card__reply');
+      replyBox.appendChild(createEl('strong', 'review-card__reply-title', 'Відповідь власника'));
+      replyBox.appendChild(createEl('p', 'review-card__reply-text', item.ownerReply));
       card.appendChild(replyBox);
     }
 
