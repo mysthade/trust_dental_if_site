@@ -142,7 +142,6 @@
   --media-placeholder-end: #C3CAD4;
   --backdrop: rgba(15, 18, 23, 0.42);
   --focus-ring: #1E222B;
-  --star-color: #EAB308;
 
   /* Background silver ribbons & 3D volumetric tooth relief tones (light) */
   --tooth-hi: #F6F8FA;
@@ -254,7 +253,6 @@
   --media-placeholder-end: #141820;
   --backdrop: rgba(0, 0, 0, 0.65);
   --focus-ring: #ECEFF3;
-  --star-color: #FACC15;
 
   --tooth-hi: #2B3240;
   --tooth-mid: #1A202B;
@@ -2067,10 +2065,6 @@ p {
 
   .stat-item__value {
     font-size: 1.25rem;
-  }
-
-  .stat-item__label {
-    font-size: 0.8125rem;
   }
 }
 
