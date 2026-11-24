@@ -115,130 +115,152 @@
   };
 
   /* --------------------------------------------------------------------------
-     Services (8 items) — strictly owner facts or confirmation placeholders
-     TODO: Заповнити includedItems для послуг із порожнім масивом після
-           фінального підтвердження складу процедур власником клініки.
+     Services (8 items) — synchronized with current price list & calculator
      -------------------------------------------------------------------------- */
   TD.SERVICES = Object.freeze([
     Object.freeze({
       id: 'therapy',
       title: 'Терапія та канали',
-      description: 'Лікування карієсу з кофердамом, реставрація та лікування кореневих каналів.',
+      description: 'Пломбування Estelite ASTERIA, реставрація зубів та ендодонтичне лікування каналів.',
       icon: 'td-icon-therapy',
       iconImg: 'img/services/therapy',
       category: 'therapy',
       calcItemId: 'calc-caries',
       includedItems: Object.freeze([
-        'Ізоляція робочого поля кофердамом',
-        'Препарування та лікування карієсу зуба',
-        'Відновлення анатомічної форми (реставрація)',
-        'Обробка кореневих каналів за показаннями'
+        'Пломбування карієсу Estelite ASTERIA — 1 900 грн',
+        'Реставрація зуба (часткова / повна) — 2 400 / 3 500 грн',
+        'Первинна обробка каналів (1–4) — 1 300–5 200 грн',
+        'Вторинна обробка каналів (1–4) — 1 800–7 200 грн',
+        'Постановка кофердаму — 300 грн'
       ]),
       includedFallback: ''
     }),
     Object.freeze({
       id: 'hygiene',
       title: 'Професійна гігієна',
-      description: 'Професійна гігієна (40 хв). [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
+      description: 'Професійна гігієна порожнини рота, профілактичне фторування та ремінералізуюча терапія.',
       icon: 'td-icon-hygiene',
       iconImg: 'img/services/hygiene',
       category: 'hygiene',
       calcItemId: 'calc-hygiene',
-      /* TODO: Підтвердити у власника точний перелік етапів гігієни (40 хв) */
-      includedItems: Object.freeze([]),
-      includedFallback: 'Тривалість процедури — 40 хв. Склад послуги уточнюється лікарем.'
+      includedItems: Object.freeze([
+        'Професійна гігієна порожнини рота — 2 400 грн',
+        'Покриття зубів фтором — 900 грн',
+        'Ремінералізуюча терапія — 900 грн',
+        'Дитяча профілактична гігієна — 1 200 грн'
+      ]),
+      includedFallback: ''
     }),
     Object.freeze({
       id: 'surgery',
       title: 'Атравматична хірургія',
-      description: 'Ультразвукове (п\'єзохірургічне) видалення зубів із мінімальною травматизацією.',
+      description: 'Ультразвукове (п\'єзохірургічне) видалення зубів, кісткова пластика та резекція.',
       icon: 'td-icon-surgery',
       iconImg: 'img/services/surgery',
       category: 'surgery',
       calcItemId: 'calc-extraction',
       includedItems: Object.freeze([
-        'Огляд ділянки втручання перед процедурою',
-        'Ультразвукове (п’єзохірургічне) видалення зуба',
-        'Контроль гемостазу та обробка лунки',
-        'Рекомендації лікаря щодо догляду після видалення'
+        'Видалення зуба 1–2 ст. складності — 1 650 / 1 950 грн',
+        'Видалення зуба мудрості / ретинованого — 2 200 / 3 900 грн',
+        'Аугментація (кісткова пластика) — від 13 500 грн',
+        'Резекція верхівки кореня / цистектомія — 4 400 / 3 500 грн',
+        'Пластика вуздечки язика або губи — 2 800 грн'
       ]),
       includedFallback: ''
     }),
     Object.freeze({
       id: 'braces',
       title: 'Брекет-системи',
-      description: 'Сучасні брекет-системи та ортодонтія. [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
+      description: 'Встановлення брекетів на 2 щелепи, ортодонтичні апарати, елайнери, сплінти та ретенція.',
       icon: 'td-icon-braces',
       iconImg: 'img/services/braces',
       category: 'braces',
       calcItemId: 'calc-braces',
-      /* TODO: Підтвердити у власника точний склад ортодонтичного етапу (за 1 щелепу) */
-      includedItems: Object.freeze([]),
-      includedFallback: 'Розрахунок вказано за 1 щелепу. Склад послуги уточнюється лікарем.'
+      includedItems: Object.freeze([
+        'Брекети (за 2 щелепи) — від 58 000 грн',
+        'Консультація та діагностика (відбитки + дуга) — 700 / 1 800 грн',
+        'Корекція брекетів — 800 грн · Елайнер — 2 700 грн',
+        'Ретенційна капа / ретейнер — 1 900 грн · Сплінт — 7 500 грн'
+      ]),
+      includedFallback: ''
     }),
     Object.freeze({
       id: 'implantation',
       title: 'Імплантація',
-      description: 'Імплантація зубів (хірургічний етап). [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
+      description: 'Імплантація зубів, навігаційні хірургічні шаблони, кісткова пластика та формувач ясен.',
       icon: 'td-icon-implantation',
       iconImg: 'img/services/implant',
       category: null,
       calcItemId: 'calc-implant',
-      /* TODO: Підтвердити у власника точний склад хірургічного етапу імплантації */
-      includedItems: Object.freeze([]),
-      includedFallback: 'Вказано вартість хірургічного етапу за 1 зуб. Склад послуги уточнюється лікарем.'
+      includedItems: Object.freeze([
+        'Імплантація — від 14 300 грн (окремі системи від 16 500 грн)',
+        'Шаблон для імплантації — від 8 000 / від 13 050 грн',
+        'Встановлення формувача (+ формувач) — від 1 600 грн',
+        'Аугментація (кісткова пластика) — від 13 500 грн'
+      ]),
+      includedFallback: ''
     }),
     Object.freeze({
       id: 'orthopedics',
       title: 'Ортопедія',
-      description: 'Цирконієві коронки та вініри. [ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
+      description: 'Цирконієві й прескерамічні коронки, вініри, металокераміка, вкладки та протезування.',
       icon: 'td-icon-orthopedics',
       iconImg: 'img/services/orthopedics',
       category: 'orthopedics',
       calcItemId: 'calc-crown',
-      /* TODO: Підтвердити у власника точний склад ортопедичного етапу (за 1 зуб) */
-      includedItems: Object.freeze([]),
-      includedFallback: 'Цирконієві коронки та вініри (за 1 зуб). Склад послуги уточнюється лікарем.'
+      includedItems: Object.freeze([
+        'Цирконієва / прескерамічна коронка — від 11 500 грн',
+        'Вінір — від 12 250 грн · Металокерамічна коронка — від 5 500 грн',
+        'Тимчасова коронка — 900 грн · на імпланті — 1 500 / 1 800 грн',
+        'Вкладки та знімне протезування — від 1 200 / від 9 000 грн'
+      ]),
+      includedFallback: ''
     }),
     Object.freeze({
       id: 'pediatric',
       title: 'Дитяча стоматологія',
-      description: '[ВПИСАТИ ПІСЛЯ ПІДТВЕРДЖЕННЯ ВЛАСНИКОМ]',
+      description: 'Адаптаційний прийом, дитяча гігієна, фторування та лікування молочних зубів.',
       icon: 'td-icon-pediatric',
       iconImg: 'img/services/pediatric',
       category: null,
-      calcItemId: null,
-      /* TODO: Підтвердити у власника перелік та вартість дитячих процедур */
-      includedItems: Object.freeze([]),
-      includedFallback: 'Склад послуги та план лікування визначаються лікарем після огляду.'
+      calcItemId: 'calc-pediatric',
+      includedItems: Object.freeze([
+        'Адаптаційний прийом / без лікування — 500 грн',
+        'Консультація дитячого стоматолога — 700 грн',
+        'Гігієна дитяча — 1 000–1 200 грн · Фторування / фісури — 900 грн',
+        'Пломбування тимчасового зуба — 1 200–1 800 грн',
+        'Видалення молочного зуба — 950 / 1 350 грн'
+      ]),
+      includedFallback: ''
     }),
     Object.freeze({
       id: 'diagnostics',
       title: 'Діагностика',
-      description: 'Консультація та діагностика на візіографі.',
+      description: 'Експрес і розширена консультація з планом лікування та ортодонтична діагностика.',
       icon: 'td-icon-diagnostics',
       iconImg: 'img/services/diagnostics',
       category: null,
       calcItemId: 'calc-consultation',
       includedItems: Object.freeze([
-        'Первинний огляд та консультація стоматолога',
-        'Прицільна рентген-діагностика на візіографі',
-        'Складання попереднього плану лікування'
+        'Експрес-консультація — 700 грн',
+        'Розширена консультація з планом лікування — 800 грн',
+        'Консультація ортодонта / дитячого стоматолога — 700 грн',
+        'Діагностика (3 відбитки + лицева дуга) — 1 800 грн'
       ]),
       includedFallback: ''
     })
   ]);
 
   /* --------------------------------------------------------------------------
-     Calculator items (8 items with fixed base prices & unit steppers)
+     Calculator items (9 items aligned with updated price list)
      -------------------------------------------------------------------------- */
   TD.CALC_ITEMS = Object.freeze([
     Object.freeze({
       id: 'calc-consultation',
       title: 'Консультація',
-      price: 400,
-      prefix: '',
-      note: '',
+      price: 700,
+      prefix: 'від',
+      note: 'експрес / розширена 800 грн',
       countable: false,
       min: 1,
       max: 1,
@@ -247,9 +269,9 @@
     Object.freeze({
       id: 'calc-caries',
       title: 'Лікування карієсу',
-      price: 1500,
-      prefix: '',
-      note: 'за 1 зуб з кофердамом',
+      price: 1900,
+      prefix: 'від',
+      note: 'за 1 зуб (Estelite ASTERIA)',
       countable: true,
       min: 1,
       max: 32,
@@ -258,9 +280,9 @@
     Object.freeze({
       id: 'calc-canals',
       title: 'Кореневі канали',
-      price: 1800,
+      price: 1300,
       prefix: 'від',
-      note: 'за 1 зуб',
+      note: 'від 1 каналу, за 1 зуб',
       countable: true,
       min: 1,
       max: 32,
@@ -268,10 +290,10 @@
     }),
     Object.freeze({
       id: 'calc-hygiene',
-      title: 'Гігієна',
-      price: 1300,
+      title: 'Професійна гігієна',
+      price: 2400,
       prefix: '',
-      note: '40 хв',
+      note: 'порожнини рота',
       countable: false,
       min: 1,
       max: 1,
@@ -279,8 +301,8 @@
     }),
     Object.freeze({
       id: 'calc-extraction',
-      title: 'Видалення зуба ультразвуком',
-      price: 2200,
+      title: 'Видалення зуба',
+      price: 1650,
       prefix: 'від',
       note: 'за 1 зуб',
       countable: true,
@@ -291,9 +313,9 @@
     Object.freeze({
       id: 'calc-crown',
       title: 'Коронка',
-      price: 6500,
+      price: 11500,
       prefix: 'від',
-      note: 'за 1 зуб',
+      note: 'цирконієва / прескераміка, за 1 зуб',
       countable: true,
       min: 1,
       max: 32,
@@ -302,24 +324,35 @@
     Object.freeze({
       id: 'calc-braces',
       title: 'Брекети',
-      price: 9500,
+      price: 58000,
       prefix: 'від',
-      note: 'за 1 щелепу',
-      countable: true,
+      note: 'за 2 щелепи',
+      countable: false,
       min: 1,
-      max: 2,
-      unitForms: Object.freeze(['щелепа', 'щелепи', 'щелеп'])
+      max: 1,
+      unitForms: null
     }),
     Object.freeze({
       id: 'calc-implant',
       title: 'Імплантат',
-      price: 11500,
+      price: 14300,
       prefix: 'від',
       note: 'за 1 зуб',
       countable: true,
       min: 1,
       max: 32,
       unitForms: Object.freeze(['зуб', 'зуби', 'зубів'])
+    }),
+    Object.freeze({
+      id: 'calc-pediatric',
+      title: 'Дитяча стоматологія',
+      price: 500,
+      prefix: 'від',
+      note: 'адаптаційний прийом',
+      countable: false,
+      min: 1,
+      max: 1,
+      unitForms: null
     })
   ]);
 

@@ -5,22 +5,50 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. Font-Face (Self-hosted Inter Variable + Metric-adjusted Fallback)
+   1. Font-Face (Self-hosted Onest + Metric-adjusted Fallback)
    -------------------------------------------------------------------------- */
 @font-face {
-  font-family: 'Inter Fallback';
+  font-family: 'Onest Fallback';
   font-style: normal;
-  font-weight: 100 599;
+  font-weight: 400;
   src: local('Arial'), local('Helvetica Neue'), local('Segoe UI'), local('Roboto'),
     local('Liberation Sans'), local('DejaVu Sans');
-  ascent-override: 89.9%;
-  descent-override: 22.4%;
+  ascent-override: 93.3%;
+  descent-override: 29.8%;
   line-gap-override: 0%;
-  size-adjust: 107.8%;
+  size-adjust: 104.0%;
 }
 
 @font-face {
-  font-family: 'Inter Fallback';
+  font-family: 'Onest Fallback';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold'),
+    local('Roboto Medium'), local('Roboto'), local('Liberation Sans'), local('DejaVu Sans');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+  ascent-override: 88.6%;
+  descent-override: 28.3%;
+  line-gap-override: 0%;
+  size-adjust: 109.5%;
+}
+
+@font-face {
+  font-family: 'Onest Fallback';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold'),
+    local('Roboto Medium'), local('Roboto'), local('Liberation Sans'), local('DejaVu Sans');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+0460-052F;
+  ascent-override: 91.9%;
+  descent-override: 29.4%;
+  line-gap-override: 0%;
+  size-adjust: 105.5%;
+}
+
+@font-face {
+  font-family: 'Onest Fallback';
   font-style: normal;
   font-weight: 600;
   src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold'),
@@ -29,66 +57,124 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
     U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
     U+2215, U+FEFF, U+FFFD;
-  ascent-override: 86.0%;
-  descent-override: 21.5%;
+  ascent-override: 88.0%;
+  descent-override: 28.1%;
   line-gap-override: 0%;
-  size-adjust: 112.7%;
+  size-adjust: 110.2%;
 }
 
 @font-face {
-  font-family: 'Inter Fallback';
+  font-family: 'Onest Fallback';
   font-style: normal;
   font-weight: 600;
   src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold'),
     local('Roboto Medium'), local('Roboto'), local('Liberation Sans Bold'),
     local('DejaVu Sans Bold');
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+0460-052F;
-  ascent-override: 95.0%;
-  descent-override: 23.7%;
+  ascent-override: 97.6%;
+  descent-override: 31.2%;
+  line-gap-override: 0%;
+  size-adjust: 99.4%;
+}
+
+@font-face {
+  font-family: 'Onest Fallback';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold'),
+    local('Roboto Bold'), local('Roboto'), local('Liberation Sans Bold'),
+    local('DejaVu Sans Bold');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+  ascent-override: 92.1%;
+  descent-override: 29.4%;
+  line-gap-override: 0%;
+  size-adjust: 105.3%;
+}
+
+@font-face {
+  font-family: 'Onest Fallback';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold'),
+    local('Roboto Bold'), local('Roboto'), local('Liberation Sans Bold'),
+    local('DejaVu Sans Bold');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+0460-052F;
+  ascent-override: 96.4%;
+  descent-override: 30.8%;
+  line-gap-override: 0%;
+  size-adjust: 100.6%;
+}
+
+@font-face {
+  font-family: 'Onest Fallback';
+  font-style: normal;
+  font-weight: 800 900;
+  src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold'),
+    local('Roboto Bold'), local('Roboto'), local('Liberation Sans Bold'),
+    local('DejaVu Sans Bold');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+  ascent-override: 107.7%;
+  descent-override: 34.4%;
+  line-gap-override: 0%;
+  size-adjust: 90.1%;
+}
+
+@font-face {
+  font-family: 'Onest Fallback';
+  font-style: normal;
+  font-weight: 800 900;
+  src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold'),
+    local('Roboto Bold'), local('Roboto'), local('Liberation Sans Bold'),
+    local('DejaVu Sans Bold');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+0460-052F;
+  ascent-override: 95.1%;
+  descent-override: 30.4%;
   line-gap-override: 0%;
   size-adjust: 102.0%;
 }
 
 @font-face {
-  font-family: 'Inter Fallback';
+  font-family: 'Onest';
   font-style: normal;
-  font-weight: 700 900;
-  src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold'),
-    local('Roboto Bold'), local('Roboto'), local('Liberation Sans Bold'),
-    local('DejaVu Sans Bold');
-  ascent-override: 94.0%;
-  descent-override: 23.4%;
-  line-gap-override: 0%;
-  size-adjust: 103.2%;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/onest-400.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: 'Inter Variable';
+  font-family: 'Onest';
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 500;
   font-display: swap;
-  src: url('../fonts/inter-cyrillic-ext-wght-normal.woff2') format('woff2');
-  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+  src: url('../fonts/onest-500.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: 'Inter Variable';
+  font-family: 'Onest';
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 600;
   font-display: swap;
-  src: url('../fonts/inter-cyrillic-wght-normal.woff2') format('woff2');
-  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  src: url('../fonts/onest-600.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: 'Inter Variable';
+  font-family: 'Onest';
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 700;
   font-display: swap;
-  src: url('../fonts/inter-latin-wght-normal.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
-    U+2215, U+FEFF, U+FFFD;
+  src: url('../fonts/onest-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Onest';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../fonts/onest-800.woff2') format('woff2');
 }
 
 /* --------------------------------------------------------------------------
@@ -96,7 +182,7 @@
    -------------------------------------------------------------------------- */
 :root {
   color-scheme: light;
-  --font-sans: 'Inter Variable', 'Inter Fallback', system-ui, -apple-system, 'Segoe UI',
+  --font-sans: 'Onest', 'Onest Fallback', system-ui, -apple-system, 'Segoe UI',
     Roboto, sans-serif;
 
   /* Light theme palette */
@@ -507,7 +593,6 @@ body {
   background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg) 42%, var(--bg-bottom) 100%);
   background-attachment: scroll;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
   overflow-x: clip;
 }
 
@@ -708,9 +793,9 @@ p {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  min-height: 46px;
-  padding: 6px 16px 6px 12px;
-  border-radius: var(--radius-pill);
+  min-height: 54px;
+  padding: 5px 14px;
+  border-radius: 18px;
   background-color: var(--brand-pill-bg);
   border: 1px solid var(--brand-pill-border);
   box-shadow: var(--shadow-sm);
@@ -733,9 +818,9 @@ p {
 }
 
 .brand__img {
-  height: 34px;
+  height: 48px;
   width: auto;
-  aspect-ratio: 373 / 84;
+  aspect-ratio: 370 / 200;
   object-fit: contain;
 }
 
@@ -1009,8 +1094,8 @@ p {
 .drawer__logo-img {
   display: block;
   width: auto;
-  height: 28px;
-  aspect-ratio: 373 / 84;
+  height: 46px;
+  aspect-ratio: 370 / 200;
   object-fit: contain;
 }
 
@@ -1395,7 +1480,7 @@ p {
   }
 
   .drawer__logo-img {
-    height: 24px;
+    height: 36px;
   }
 
   .drawer__nav {
@@ -1795,11 +1880,12 @@ p {
   }
 
   .brand {
-    padding: 4px 10px 4px 8px;
+    min-height: 48px;
+    padding: 4px 12px;
   }
 
   .brand__img {
-    height: 26px;
+    height: 42px;
   }
 
   .nav__list {
@@ -1864,11 +1950,12 @@ p {
   }
 
   .brand {
-    padding: 5px 14px 5px 10px;
+    min-height: 48px;
+    padding: 4px 13px;
   }
 
   .brand__img {
-    height: 30px;
+    height: 44px;
   }
 
   .hero {
@@ -1988,8 +2075,13 @@ p {
 
 /* Narrow Mobile (<= 540px) */
 @media (max-width: 540px) {
+  .brand {
+    min-height: 46px;
+    padding: 4px 12px;
+  }
+
   .brand__img {
-    height: 28px;
+    height: 40px;
   }
 
   .hero {
@@ -2204,7 +2296,7 @@ p {
 }
 
 .services-grid:empty {
-  min-height: 1056px;
+  min-height: 1067px;
 }
 
 .service-card {
@@ -2223,8 +2315,9 @@ p {
     border-color 200ms ease, box-shadow 220ms ease;
 }
 
-/* Diagonal light wave in top-right corner beneath card text */
-.service-card::after {
+/* Diagonal light wave in top-right corner beneath card text (shared by services & advantages) */
+.service-card::after,
+.advantage-card::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -2237,7 +2330,8 @@ p {
   background-size: 220px 180px;
 }
 
-.service-card>* {
+.service-card>*,
+.advantage-card>* {
   position: relative;
   z-index: 1;
 }
@@ -2736,7 +2830,7 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
 }
 
 .calc-list:empty {
-  min-height: 676px;
+  min-height: 762px;
 }
 
 .calc-item {
@@ -3055,7 +3149,7 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
   }
 
   .services-grid:empty {
-    min-height: 1729px;
+    min-height: 1738px;
   }
 }
 
@@ -3066,7 +3160,7 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
   }
 
   .services-grid:empty {
-    min-height: 2312px;
+    min-height: 2324px;
   }
 
   .services__bg-waves {
@@ -3254,7 +3348,7 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
   }
 
   .services-grid:empty {
-    min-height: 1672px;
+    min-height: 1680px;
   }
 
   .service-card {
@@ -3528,6 +3622,8 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
 }
 
 .advantage-card {
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -3539,6 +3635,10 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
   box-shadow: var(--shadow-sm);
   transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease,
     border-color 200ms ease;
+}
+
+.advantage-card::after {
+  background-size: 196px 160px;
 }
 
 .advantage-card__icon {
@@ -3648,6 +3748,10 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
   .advantage-card {
     padding: 22px 20px;
   }
+
+  .advantage-card::after {
+    background-size: 140px 110px;
+  }
 }
 
 @media (max-width: 540px) {
@@ -3728,7 +3832,8 @@ html.td-js .service-card__media:not(.is-loaded):not(.is-fallback) .service-card_
     border: 2px solid Highlight;
   }
 
-  .service-card::after {
+  .service-card::after,
+  .advantage-card::after {
     display: none;
   }
 
@@ -7046,8 +7151,9 @@ html.td-js .review-card__avatar:not(.is-loaded):not(.is-fallback) .review-card__
 .site-footer__logo-img {
   display: block;
   width: auto;
-  height: 34px;
-  aspect-ratio: 373 / 84;
+  height: 64px;
+  aspect-ratio: 370 / 200;
+  object-fit: contain;
   transition: opacity 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 

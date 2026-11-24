@@ -69,24 +69,31 @@
       }
     })();
   </script>
-  <!-- Preload LCP hero image (Inter Variable @font-face is inlined immediately below) -->
+  <!-- Preload LCP hero image (Onest @font-face is inlined immediately below) -->
   <link rel="preload" as="image" type="image/jpeg"
     imagesrcset="img/hero-new-800.jpg 800w, img/hero-new-1200.jpg 1200w, img/hero-new-1600.jpg 1600w"
     imagesizes="(max-width: 540px) 135vw, (max-width: 979px) 120vw, 1600px" fetchpriority="high">
   <!-- Inline Critical CSS (light & dark variables + above-the-fold layout for CLS 0) -->
   <style>
-@font-face{font-family: 'Inter Fallback';font-style: normal;font-weight: 100 599;src: local('Arial'), local('Helvetica Neue'), local('Segoe UI'), local('Roboto'), local('Liberation Sans'), local('DejaVu Sans');ascent-override: 89.9%;descent-override: 22.4%;line-gap-override: 0%;size-adjust: 107.8%}
-@font-face{font-family: 'Inter Fallback';font-style: normal;font-weight: 600;src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold'), local('Roboto Medium'), local('Roboto'), local('Liberation Sans Bold'), local('DejaVu Sans Bold');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;ascent-override: 86.0%;descent-override: 21.5%;line-gap-override: 0%;size-adjust: 112.7%}
-@font-face{font-family: 'Inter Fallback';font-style: normal;font-weight: 600;src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold'), local('Roboto Medium'), local('Roboto'), local('Liberation Sans Bold'), local('DejaVu Sans Bold');unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+0460-052F;ascent-override: 95.0%;descent-override: 23.7%;line-gap-override: 0%;size-adjust: 102.0%}
-@font-face{font-family: 'Inter Fallback';font-style: normal;font-weight: 700 900;src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold'), local('Roboto Bold'), local('Roboto'), local('Liberation Sans Bold'), local('DejaVu Sans Bold');ascent-override: 94.0%;descent-override: 23.4%;line-gap-override: 0%;size-adjust: 103.2%}
-@font-face{font-family: 'Inter Variable';font-style: normal;font-weight: 100 900;font-display: swap;src: url('fonts/inter-cyrillic-ext-wght-normal.woff2') format('woff2');unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
-@font-face{font-family: 'Inter Variable';font-style: normal;font-weight: 100 900;font-display: swap;src: url('fonts/inter-cyrillic-wght-normal.woff2') format('woff2');unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
-@font-face{font-family: 'Inter Variable';font-style: normal;font-weight: 100 900;font-display: swap;src: url('fonts/inter-latin-wght-normal.woff2') format('woff2');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-:root{color-scheme: light;--font-sans: 'Inter Variable', 'Inter Fallback', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;--bg: #EEF0F2;--bg-top: #F8F9FA;--bg-bottom: #E4E8EE;--surface: rgba(255, 255, 255, .84);--surface-scrolled: rgba(244, 246, 248, .88);--line-soft: rgba(120, 128, 140, .28);--wave-a: #D5D9DF;--wave-b: #AEB4BD;--wave-c: #9AA1AB;--wave-stroke: rgba(90, 98, 110, .35);--card-grad: linear-gradient(180deg, rgba(255, 255, 255, .92) 0%, rgba(242, 245, 248, .74) 100%);--card-border: var(--line-soft);--card-shadow: 0 10px 30px rgba(20, 24, 31, .08), inset 0 1px 0 rgba(255, 255, 255, .9);--brand-pill-bg: rgba(255, 255, 255, .72);--brand-pill-border: rgba(255, 255, 255, .92);--toggle-bg: #FFFFFF;--toggle-border: rgba(255, 255, 255, .95);--toggle-shadow: 0 6px 18px rgba(20, 24, 31, .1), inset 0 1px 0 #FFFFFF;--border: var(--line-soft);--text: #1B1F27;--muted: #4B5360;--primary: #1E222B;--on-primary: #FFFFFF;--accent: #525B68;--line: #C9CED6;--divider: rgba(27, 31, 39, .1);--arc-line: rgba(70, 78, 90, .45);--arc-width: 1.5px;--header-scrim: rgba(240, 242, 245, .9);--header-scrim-mid: rgba(240, 242, 245, .48);--media-placeholder-start: #DDE2E8;--media-placeholder-end: #C3CAD4;--tooth-hi: #F6F8FA;--tooth-mid: #DFE4EC;--tooth-lo: #C4CCD9;--tooth-spec: rgba(255, 255, 255, .94);--tooth-shadow: rgba(88, 100, 122, .24);--tooth-groove: rgba(105, 118, 138, .34);--tooth-edge: rgba(120, 132, 152, .28);--ribbon-hi: var(--wave-a);--ribbon-mid: var(--wave-b);--ribbon-lo: var(--wave-c);--ribbon-edge: var(--wave-stroke);--wave-fill-2: rgba(248, 249, 250, .96);--deco-fill-1: rgba(190, 196, 206, .28);--deco-fill-2: rgba(190, 196, 206, .10);--deco-wave: rgba(205, 210, 218, .42);--deco-wave-soft: rgba(225, 228, 233, .68);--deco-line: rgba(120, 128, 140, .25);--deco-line-soft: rgba(120, 128, 140, .13);--radius-pill: 999px;--shadow-sm: 0 4px 16px rgba(27, 31, 39, .05);--container: 1280px;--header-h: 72px}
+@font-face{font-family: 'Onest Fallback';font-style: normal;font-weight: 400;src: local('Arial'), local('Helvetica Neue'), local('Segoe UI'), local('Roboto'), local('Liberation Sans'), local('DejaVu Sans');ascent-override: 93.3%;descent-override: 29.8%;line-gap-override: 0%;size-adjust: 104.0%}
+@font-face{font-family: 'Onest Fallback';font-style: normal;font-weight: 500;src: local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold'), local('Roboto Medium'), local('Roboto'), local('Liberation Sans'), local('DejaVu Sans');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;ascent-override: 88.6%;descent-override: 28.3%;line-gap-override: 0%;size-adjust: 109.5%}
+@font-face{font-family: 'Onest Fallback';font-style: normal;font-weight: 500;src: local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold'), local('Roboto Medium'), local('Roboto'), local('Liberation Sans'), local('DejaVu Sans');unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+0460-052F;ascent-override: 91.9%;descent-override: 29.4%;line-gap-override: 0%;size-adjust: 105.5%}
+@font-face{font-family: 'Onest Fallback';font-style: normal;font-weight: 600;src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold'), local('Roboto Medium'), local('Roboto'), local('Liberation Sans Bold'), local('DejaVu Sans Bold');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;ascent-override: 88.0%;descent-override: 28.1%;line-gap-override: 0%;size-adjust: 110.2%}
+@font-face{font-family: 'Onest Fallback';font-style: normal;font-weight: 600;src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Semibold'), local('Roboto Medium'), local('Roboto'), local('Liberation Sans Bold'), local('DejaVu Sans Bold');unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+0460-052F;ascent-override: 97.6%;descent-override: 31.2%;line-gap-override: 0%;size-adjust: 99.4%}
+@font-face{font-family: 'Onest Fallback';font-style: normal;font-weight: 700;src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold'), local('Roboto Bold'), local('Roboto'), local('Liberation Sans Bold'), local('DejaVu Sans Bold');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;ascent-override: 92.1%;descent-override: 29.4%;line-gap-override: 0%;size-adjust: 105.3%}
+@font-face{font-family: 'Onest Fallback';font-style: normal;font-weight: 700;src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold'), local('Roboto Bold'), local('Roboto'), local('Liberation Sans Bold'), local('DejaVu Sans Bold');unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+0460-052F;ascent-override: 96.4%;descent-override: 30.8%;line-gap-override: 0%;size-adjust: 100.6%}
+@font-face{font-family: 'Onest Fallback';font-style: normal;font-weight: 800 900;src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold'), local('Roboto Bold'), local('Roboto'), local('Liberation Sans Bold'), local('DejaVu Sans Bold');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;ascent-override: 107.7%;descent-override: 34.4%;line-gap-override: 0%;size-adjust: 90.1%}
+@font-face{font-family: 'Onest Fallback';font-style: normal;font-weight: 800 900;src: local('Arial Bold'), local('Arial'), local('Helvetica Neue'), local('Segoe UI Bold'), local('Roboto Bold'), local('Roboto'), local('Liberation Sans Bold'), local('DejaVu Sans Bold');unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116, U+0460-052F;ascent-override: 95.1%;descent-override: 30.4%;line-gap-override: 0%;size-adjust: 102.0%}
+@font-face{font-family: 'Onest';font-style: normal;font-weight: 400;font-display: swap;src: url('fonts/onest-400.woff2') format('woff2')}
+@font-face{font-family: 'Onest';font-style: normal;font-weight: 500;font-display: swap;src: url('fonts/onest-500.woff2') format('woff2')}
+@font-face{font-family: 'Onest';font-style: normal;font-weight: 600;font-display: swap;src: url('fonts/onest-600.woff2') format('woff2')}
+@font-face{font-family: 'Onest';font-style: normal;font-weight: 700;font-display: swap;src: url('fonts/onest-700.woff2') format('woff2')}
+@font-face{font-family: 'Onest';font-style: normal;font-weight: 800;font-display: swap;src: url('fonts/onest-800.woff2') format('woff2')}
+:root{color-scheme: light;--font-sans: 'Onest', 'Onest Fallback', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;--bg: #EEF0F2;--bg-top: #F8F9FA;--bg-bottom: #E4E8EE;--surface: rgba(255, 255, 255, .84);--surface-scrolled: rgba(244, 246, 248, .88);--line-soft: rgba(120, 128, 140, .28);--wave-a: #D5D9DF;--wave-b: #AEB4BD;--wave-c: #9AA1AB;--wave-stroke: rgba(90, 98, 110, .35);--card-grad: linear-gradient(180deg, rgba(255, 255, 255, .92) 0%, rgba(242, 245, 248, .74) 100%);--card-border: var(--line-soft);--card-shadow: 0 10px 30px rgba(20, 24, 31, .08), inset 0 1px 0 rgba(255, 255, 255, .9);--brand-pill-bg: rgba(255, 255, 255, .72);--brand-pill-border: rgba(255, 255, 255, .92);--toggle-bg: #FFFFFF;--toggle-border: rgba(255, 255, 255, .95);--toggle-shadow: 0 6px 18px rgba(20, 24, 31, .1), inset 0 1px 0 #FFFFFF;--border: var(--line-soft);--text: #1B1F27;--muted: #4B5360;--primary: #1E222B;--on-primary: #FFFFFF;--accent: #525B68;--line: #C9CED6;--divider: rgba(27, 31, 39, .1);--arc-line: rgba(70, 78, 90, .45);--arc-width: 1.5px;--header-scrim: rgba(240, 242, 245, .9);--header-scrim-mid: rgba(240, 242, 245, .48);--media-placeholder-start: #DDE2E8;--media-placeholder-end: #C3CAD4;--tooth-hi: #F6F8FA;--tooth-mid: #DFE4EC;--tooth-lo: #C4CCD9;--tooth-spec: rgba(255, 255, 255, .94);--tooth-shadow: rgba(88, 100, 122, .24);--tooth-groove: rgba(105, 118, 138, .34);--tooth-edge: rgba(120, 132, 152, .28);--ribbon-hi: var(--wave-a);--ribbon-mid: var(--wave-b);--ribbon-lo: var(--wave-c);--ribbon-edge: var(--wave-stroke);--wave-fill-2: rgba(248, 249, 250, .96);--deco-fill-1: rgba(190, 196, 206, .28);--deco-fill-2: rgba(190, 196, 206, .10);--deco-wave: rgba(205, 210, 218, .42);--deco-wave-soft: rgba(225, 228, 233, .68);--deco-line: rgba(120, 128, 140, .25);--deco-line-soft: rgba(120, 128, 140, .13);--radius-pill: 999px;--shadow-sm: 0 4px 16px rgba(27, 31, 39, .05);--container: 1280px;--header-h: 72px}
 [data-theme='dark']{color-scheme: dark;--bg: #0F1217;--bg-top: #151921;--bg-bottom: #0B0D11;--surface: rgba(24, 28, 35, .86);--surface-scrolled: rgba(15, 18, 23, .88);--line-soft: rgba(255, 255, 255, .12);--wave-a: #2A2E35;--wave-b: #1A1E24;--wave-c: #0F1114;--wave-stroke: rgba(255, 255, 255, .09);--card-grad: linear-gradient(180deg, rgba(32, 37, 46, .92) 0%, rgba(20, 24, 31, .82) 100%);--card-border: rgba(255, 255, 255, .12);--card-shadow: 0 12px 32px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255, 255, 255, .1);--brand-pill-bg: rgba(24, 28, 35, .78);--brand-pill-border: rgba(255, 255, 255, .12);--toggle-bg: #222731;--toggle-border: rgba(255, 255, 255, .14);--toggle-shadow: 0 6px 18px rgba(0, 0, 0, .4), inset 0 1px 0 rgba(255, 255, 255, .08);--border: rgba(255, 255, 255, .12);--text: #ECEFF3;--muted: #B6BEC9;--primary: #ECEFF3;--on-primary: #12151A;--accent: #A9B2BF;--line: #2A303A;--divider: rgba(255, 255, 255, .09);--arc-line: rgba(154, 162, 174, .34);--arc-width: 1px;--header-scrim: rgba(15, 18, 23, .9);--header-scrim-mid: rgba(15, 18, 23, .5);--media-placeholder-start: #1E242E;--media-placeholder-end: #141820;--tooth-hi: #2B3240;--tooth-mid: #1A202B;--tooth-lo: #0D1016;--tooth-spec: rgba(185, 200, 224, .22);--tooth-shadow: rgba(0, 0, 0, .58);--tooth-groove: rgba(6, 9, 14, .72);--tooth-edge: rgba(170, 185, 210, .16);--ribbon-hi: #2A2E35;--ribbon-mid: #1A1E24;--ribbon-lo: #0F1114;--ribbon-edge: rgba(255, 255, 255, .09);--wave-fill-2: rgba(15, 18, 23, .98);--deco-fill-1: rgba(255, 255, 255, .05);--deco-fill-2: rgba(255, 255, 255, .02);--deco-wave: rgba(255, 255, 255, .055);--deco-wave-soft: rgba(255, 255, 255, .025);--deco-line: rgba(255, 255, 255, .10);--deco-line-soft: rgba(255, 255, 255, .06);--shadow-sm: 0 4px 16px rgba(0, 0, 0, .28)}
 *, *::before, *::after{box-sizing: border-box}
 html{font-size: 16px;background-color: var(--bg);-webkit-text-size-adjust: 100%;scrollbar-gutter: stable}
-body{margin: 0;min-height: 100vh;font-family: var(--font-sans);font-size: 1rem;line-height: 1.55;color: var(--text);background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg) 42%, var(--bg-bottom) 100%);background-attachment: scroll;overflow-x: clip;-webkit-font-smoothing: antialiased;text-rendering: optimizeLegibility}
+body{margin: 0;min-height: 100vh;font-family: var(--font-sans);font-size: 1rem;line-height: 1.55;color: var(--text);background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg) 42%, var(--bg-bottom) 100%);background-attachment: scroll;overflow-x: clip;-webkit-font-smoothing: antialiased}
 img, picture, svg{display: block;max-width: 100%}
 a{color: inherit;text-decoration: none}
 button{font: inherit;color: inherit;background: none;border: 0;padding: 0;cursor: pointer}
@@ -99,11 +106,11 @@ h1, h2, h3, p{margin: 0}
 .header-sentinel{position: absolute;top: 0;left: 0;width: 1px;height: 16px;pointer-events: none}
 .header{position: fixed;top: 0;left: 0;right: 0;z-index: 100;height: var(--header-h);background: transparent;border-bottom: 1px solid transparent}
 .header__inner{display: flex;align-items: center;justify-content: space-between;gap: 14px;height: 100%}
-.brand{display: inline-flex;align-items: center;flex-shrink: 0;min-height: 46px;padding: 6px 16px 6px 12px;border-radius: var(--radius-pill);background: var(--brand-pill-bg);border: 1px solid var(--brand-pill-border);box-shadow: var(--shadow-sm)}
+.brand{display: inline-flex;align-items: center;flex-shrink: 0;min-height: 54px;padding: 5px 14px;border-radius: 18px;background: var(--brand-pill-bg);border: 1px solid var(--brand-pill-border);box-shadow: var(--shadow-sm)}
 .brand__picture--dark{display: none}
 [data-theme='dark'] .brand__picture--light{display: none}
 [data-theme='dark'] .brand__picture--dark{display: block}
-.brand__img{height: 34px;width: auto;aspect-ratio: 373/84;object-fit: contain}
+.brand__img{height: 48px;width: auto;aspect-ratio: 370/200;object-fit: contain}
 .nav{display: flex;align-items: center}
 .nav__list{display: flex;align-items: center;gap: clamp(10px, 1.4vw, 22px)}
 .nav__link{position: relative;display: inline-flex;align-items: center;min-height: 44px;padding-inline: 2px;font-size: .9rem;font-weight: 500;color: var(--muted);white-space: nowrap}
@@ -159,8 +166,8 @@ h1, h2, h3, p{margin: 0}
 .stat-item__value{font-size: clamp(1.35rem, 1.9vw, 1.7rem);font-weight: 800;line-height: 1.08;letter-spacing: -.03em;color: var(--text);font-variant-numeric: tabular-nums}
 .stat-item__label{font-size: .8125rem;line-height: 1.42;color: var(--muted)}
 @media (max-width:1220px) and (min-width:980px){.header__inner{gap: 6px;padding-inline: 12px}
-.brand{padding: 4px 10px 4px 8px}
-.brand__img{height: 26px}
+.brand{min-height: 48px;padding: 4px 12px}
+.brand__img{height: 42px}
 .nav__list{gap: clamp(5px, .7vw, 10px)}
 .nav__link{font-size: clamp(.75rem, 1vw, .8125rem);white-space: nowrap}
 .header__actions{gap: 6px}
@@ -174,8 +181,8 @@ h1, h2, h3, p{margin: 0}
 }
 @media (max-width:979px){.nav, .header__phone, .header__cta{display: none}
 .burger{display: inline-flex}
-.brand{padding: 5px 14px 5px 10px}
-.brand__img{height: 30px}
+.brand{min-height: 48px;padding: 4px 13px}
+.brand__img{height: 44px}
 .hero{display: block;min-height: auto;padding-top: calc(var(--header-h) + 24px);padding-bottom: 44px}
 .hero__content{max-width: 640px;margin-bottom: 32px}
 .hero__bg-tooth{width: 260px;height: 312px;left: -94px;top: 28px}
@@ -204,7 +211,8 @@ h1, h2, h3, p{margin: 0}
 .stat-item:first-child{border-right: 1px solid var(--divider)}
 .stat-item:last-child{grid-column: 1 / -1;flex-direction: row;align-items: center;gap: 14px;border-bottom: 0}
 }
-@media (max-width:540px){.brand__img{height: 28px}
+@media (max-width:540px){.brand{min-height: 46px;padding: 4px 12px}
+.brand__img{height: 40px}
 .hero{padding-top: calc(var(--header-h) + 18px);padding-bottom: 36px}
 .hero__bg-tooth{width: 196px;height: 235px;left: -78px;top: 38px}
 :root:not([data-theme='dark']) .hero__bg-tooth{opacity: .55}
@@ -253,13 +261,13 @@ h1, h2, h3, p{margin: 0}
 .deco--reviews-wave{left: 0;right: 0;bottom: 0;width: 100%;height: 112px;transform: scaleX(-1)}
 .deco--contacts-ribbon{right: 0;bottom: 0;width: 100%;height: 190px;transform: scale(-1)}
 .deco--footer-wave{left: 0;right: 0;bottom: 0;width: 100%;height: 48px}
-.services-grid:empty{min-height: 1056px}
-.calc-list:empty{min-height: 676px}
+.services-grid:empty{min-height: 1067px}
+.calc-list:empty{min-height: 762px}
 .works-carousel__track:empty{min-height: 658px}
 .gallery-carousel__track:empty{min-height: 302px}
 .reviews-summary:empty{min-height: 166px}
 .reviews-stage{min-height: 226px}
-@media (max-width:1279px){.services-grid:empty{min-height: 1729px}
+@media (max-width:1279px){.services-grid:empty{min-height: 1738px}
 }
 @media (max-width:979px){.section--services{padding-top: 28px}
 .services__bg-waves{top: auto;bottom: 0;height: 260px}
@@ -270,7 +278,7 @@ h1, h2, h3, p{margin: 0}
 .deco--works-arc{left: -140px;top: 36px;width: 240px;height: 360px}
 .deco--gallery-arc{left: -145px;top: 56px;width: 230px;height: 345px}
 .deco--reviews-arc{right: -145px;top: 32px;width: 220px;height: 330px;opacity: .78}
-.services-grid:empty{min-height: 2312px}
+.services-grid:empty{min-height: 2324px}
 .works-carousel__track:empty{min-height: 484px}
 .gallery-carousel__track:empty{min-height: 288px}
 .reviews-summary:empty{min-height: 213px}
@@ -288,7 +296,7 @@ h1, h2, h3, p{margin: 0}
 @media (max-width:767px){.works-carousel__track:empty{min-height: 430px}
 }
 @media (max-width:639px){.section--services{padding-top: 22px}
-.services-grid:empty{min-height: 1672px}
+.services-grid:empty{min-height: 1680px}
 .calc-list:empty{min-height: 296px}
 .gallery-carousel__track:empty{min-height: 263px}
 .reviews-summary:empty{min-height: 326px}
@@ -646,11 +654,11 @@ html.td-js .hero__bg-tooth, html.td-js .hero__wave-outline, html.td-js .hero__bg
   <!-- ======================== HEADER ======================== -->
   <header id="site-header" class="header">
     <div class="container header__inner">
-      <a class="brand" href="#top" aria-label="TRUST DENTAL — турбота про вашу усмішку, на початок сторінки">
+      <a class="brand" href="#top" aria-label="TRUST DENTAL — на початок сторінки">
         <picture class="brand__picture brand__picture--light"> <img class="brand__img" src="img/logo.png"
-            alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" decoding="sync"> </picture>
+            alt="TRUST DENTAL" width="370" height="200" decoding="sync"> </picture>
         <picture class="brand__picture brand__picture--dark"> <img class="brand__img" src="img/logo-white.png"
-            alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" decoding="sync"> </picture>
+            alt="TRUST DENTAL" width="370" height="200" decoding="sync"> </picture>
       </a>
       <nav class="nav" aria-label="Основна навігація">
         <ul class="nav__list">
@@ -704,10 +712,10 @@ html.td-js .hero__bg-tooth, html.td-js .hero__wave-outline, html.td-js .hero__bg
     <div class="drawer__head">
       <div class="drawer__brand"> <span id="drawer-title" class="sr-only" data-clinic="name">TRUST DENTAL</span>
         <picture class="brand__picture brand__picture--light"> <img class="drawer__logo-img" src="img/logo.png"
-            alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" loading="lazy" decoding="async">
+            alt="TRUST DENTAL" width="370" height="200" loading="lazy" decoding="async">
         </picture>
         <picture class="brand__picture brand__picture--dark"> <img class="drawer__logo-img" src="img/logo-white.png"
-            alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" loading="lazy" decoding="async">
+            alt="TRUST DENTAL" width="370" height="200" loading="lazy" decoding="async">
         </picture>
       </div> <button type="button" class="drawer__close" id="drawer-close" aria-label="Закрити меню">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -1095,9 +1103,9 @@ html.td-js .hero__bg-tooth, html.td-js .hero__wave-outline, html.td-js .hero__bg
                 <button type="button" id="calc-more-toggle" class="calc-more-toggle" aria-expanded="false"
                   aria-controls="calc-items">
                   <span class="calc-more-toggle__text" id="calc-more-toggle-text">Інші послуги (хірургія, коронки,
-                    брекети, імплантація)</span>
+                    брекети, імплантація, дитяча)</span>
                   <span class="calc-more-toggle__meta">
-                    <span class="calc-more-toggle__badge" id="calc-more-toggle-badge">+4</span>
+                    <span class="calc-more-toggle__badge" id="calc-more-toggle-badge">+5</span>
                     <svg class="calc-more-toggle__icon" width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"
                       focusable="false">
                       <use href="#td-icon-chevron-right"></use>
@@ -1614,10 +1622,10 @@ html.td-js .hero__bg-tooth, html.td-js .hero__wave-outline, html.td-js .hero__bg
         <div class="site-footer__brand">
           <a class="site-footer__logo-link" href="#top" aria-label="TRUST DENTAL — на початок сторінки">
             <picture class="brand__picture brand__picture--light"> <img class="site-footer__logo-img" src="img/logo.png"
-                alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84" loading="lazy" decoding="async">
+                alt="TRUST DENTAL" width="370" height="200" loading="lazy" decoding="async">
             </picture>
             <picture class="brand__picture brand__picture--dark"> <img class="site-footer__logo-img"
-                src="img/logo-white.png" alt="TRUST DENTAL — турбота про вашу усмішку" width="373" height="84"
+                src="img/logo-white.png" alt="TRUST DENTAL" width="370" height="200"
                 loading="lazy" decoding="async"> </picture>
           </a>
           <p class="site-footer__desc"> Стоматологічна клініка в Івано-Франківську: діагностика, профілактика, лікування
