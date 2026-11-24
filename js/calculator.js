@@ -147,7 +147,7 @@
       if (badgeEl) badgeEl.textContent = totalExtra + ' з ' + totalExtra;
     } else {
       if (textEl) {
-        textEl.textContent = 'Інші послуги (хірургія, коронки, брекети, імплантація)';
+        textEl.textContent = 'Інші послуги (хірургія, коронки, брекети, імплантація, дитяча)';
       }
       if (badgeEl) {
         badgeEl.textContent = '+' + unselectedExtra;
