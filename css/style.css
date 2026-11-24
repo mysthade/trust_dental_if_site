@@ -7407,7 +7407,7 @@ html.td-js .site-footer__logo-img:not(.is-loaded):not(.is-fallback) {
 @keyframes td-intro-fade {
   from {
     opacity: 0;
-    transform: translate3d(0, 7px, 0);
+    transform: translate3d(0, 10px, 0);
   }
 
   to {
@@ -7422,28 +7422,34 @@ html.td-js .site-footer__logo-img:not(.is-loaded):not(.is-fallback) {
   }
 }
 
+@keyframes td-intro-deco {
+  from {
+    opacity: 0.35;
+  }
+}
+
 html.td-js:not(.td-skip-intro):not(.td-intro-done) .hero__img {
-  animation: td-intro-opacity 240ms cubic-bezier(0.22, 1, 0.36, 1) 0ms backwards;
+  animation: td-intro-opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
 }
 
 html.td-js:not(.td-skip-intro):not(.td-intro-done) .hero__title {
-  animation: td-intro-fade 280ms cubic-bezier(0.22, 1, 0.36, 1) 0ms backwards;
+  animation: td-intro-fade 680ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
 }
 
 html.td-js:not(.td-skip-intro):not(.td-intro-done) .hero__subtitle {
-  animation: td-intro-fade 280ms cubic-bezier(0.22, 1, 0.36, 1) 50ms backwards;
+  animation: td-intro-fade 740ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
 }
 
 html.td-js:not(.td-skip-intro):not(.td-intro-done) .hero__cta>.btn {
-  animation: td-intro-fade 280ms cubic-bezier(0.22, 1, 0.36, 1) 90ms backwards;
+  animation: td-intro-fade 740ms cubic-bezier(0.22, 1, 0.36, 1) 230ms both;
 }
 
 html.td-js:not(.td-skip-intro):not(.td-intro-done) .hero__cta>.btn:nth-child(2) {
-  animation-delay: 120ms;
+  animation-delay: 280ms;
 }
 
 html.td-js:not(.td-skip-intro):not(.td-intro-done) .hero__badge {
-  animation: td-intro-fade 260ms cubic-bezier(0.22, 1, 0.36, 1) 140ms backwards;
+  animation: td-intro-fade 700ms cubic-bezier(0.22, 1, 0.36, 1) 340ms both;
 }
 
 html.td-js:not(.td-skip-intro):not(.td-intro-done) .hero__bg-tooth,
@@ -7451,29 +7457,33 @@ html.td-js:not(.td-skip-intro):not(.td-intro-done) .hero__wave-outline,
 html.td-js:not(.td-skip-intro):not(.td-intro-done) .hero__bg-waves,
 html.td-js:not(.td-skip-intro):not(.td-intro-done) .deco--hero-arc,
 html.td-js:not(.td-skip-intro):not(.td-intro-done) .deco--stats-wave {
-  animation: td-intro-opacity 520ms cubic-bezier(0.22, 1, 0.36, 1) 60ms backwards;
+  animation: td-intro-deco 960ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
 }
 
 html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-card {
-  animation: td-intro-fade 300ms cubic-bezier(0.22, 1, 0.36, 1) 100ms backwards;
+  animation: td-intro-fade 740ms cubic-bezier(0.22, 1, 0.36, 1) 420ms both;
 }
 
-html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-section .stat-item:not(.td-reveal-pending) {
-  animation: td-intro-fade 280ms cubic-bezier(0.22, 1, 0.36, 1) 120ms backwards;
+html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-section .stat-item:not(.td-reveal-pending):not([data-reveal-scroll]) {
+  animation: td-intro-fade 680ms cubic-bezier(0.22, 1, 0.36, 1) 480ms both;
 }
 
-html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-section .stat-item:not(.td-reveal-pending):nth-child(n+2) {
-  animation-delay: 140ms;
+html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-section .stat-item:not(.td-reveal-pending):not([data-reveal-scroll]):nth-child(2) {
+  animation-delay: 560ms;
+}
+
+html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-section .stat-item:not(.td-reveal-pending):not([data-reveal-scroll]):nth-child(n+3) {
+  animation-delay: 640ms;
 }
 
 .section__eyebrow::before {
   transform-origin: left center;
-  transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1) 60ms;
+  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1) 80ms;
 }
 
 [data-reveal="head"].td-reveal-pending {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(12px);
 }
 
 [data-reveal="head"].td-reveal-pending .section__eyebrow::before {
@@ -7482,7 +7492,7 @@ html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-section .stat-item:not
 
 [data-reveal="card"].td-reveal-pending {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(12px);
 }
 
 [data-reveal="deco"].td-reveal-pending {
@@ -7491,13 +7501,13 @@ html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-section .stat-item:not
 
 [data-reveal="head"].is-revealing,
 [data-reveal="card"].is-revealing {
-  transition: opacity 380ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
-    transform 380ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
+  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
     box-shadow 220ms ease, border-color 200ms ease, background-color 200ms ease;
 }
 
 [data-reveal="deco"].is-revealing {
-  transition: opacity 540ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 920ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 :where([data-reveal]:not(.td-reveal-pending), [data-reveal].is-visible, [data-reveal].is-revealed) {
@@ -7510,8 +7520,8 @@ html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-section .stat-item:not
 }
 
 @media (max-width: 719px) {
-  html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-section .stat-item:not(.td-reveal-pending):nth-child(n) {
-    animation-delay: 120ms;
+  html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-section .stat-item:not(.td-reveal-pending):not([data-reveal-scroll]):nth-child(n) {
+    animation-delay: 480ms;
   }
 
   [data-reveal="head"].td-reveal-pending,
@@ -7521,8 +7531,8 @@ html.td-js:not(.td-skip-intro):not(.td-intro-done) .stats-section .stat-item:not
 
   [data-reveal="head"].is-revealing,
   [data-reveal="card"].is-revealing {
-    transition: opacity 340ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
-      transform 340ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
+    transition: opacity 660ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
+      transform 660ms cubic-bezier(0.22, 1, 0.36, 1) var(--td-reveal-delay, 0ms),
       box-shadow 220ms ease, border-color 200ms ease, background-color 200ms ease;
   }
 }

@@ -116,8 +116,8 @@
     if (kind !== 'card' || cardCount > 4) return 0;
     var vw = window.innerWidth || document.documentElement.clientWidth || 1280;
     if (vw < 640) return 0;
-    if (vw < 980) return Math.min(batchIndex, 2) * 25;
-    return Math.min(batchIndex, 2) * 45;
+    if (vw < 980) return Math.min(batchIndex, 2) * 45;
+    return Math.min(batchIndex, 2) * 75;
   }
 
   function markRevealed(el, delayMs, instant) {
@@ -137,7 +137,7 @@
     el.classList.add('is-visible', 'is-revealed');
 
     var kind = el.getAttribute('data-reveal');
-    var maxCleanupMs = (kind === 'deco' ? 620 : 480) + (delayMs || 0);
+    var maxCleanupMs = (kind === 'deco' ? 980 : 780) + (delayMs || 0);
 
     var onEnd = function (ev) {
       if (ev.target !== el) return;
@@ -516,6 +516,7 @@
       if (candidate.isImmediate) {
         applyVisibleClasses(candidate.el);
       } else {
+        candidate.el.setAttribute('data-reveal-scroll', '1');
         candidate.el.classList.add('td-reveal-pending');
         pendingRevealNodes.push(candidate.el);
         toObserve.push(candidate.el);
@@ -535,6 +536,23 @@
     }
   }
 
+  function revealViewportOnScrollRestore() {
+    if (!pendingRevealNodes.length) return;
+    var vh = window.innerHeight || document.documentElement.clientHeight || 900;
+    var thresholdTop = vh + 4;
+    for (var i = pendingRevealNodes.length - 1; i >= 0; i--) {
+      var el = pendingRevealNodes[i];
+      if (!el || !el.isConnected || el.hasAttribute('hidden')) {
+        removePendingNode(el);
+        continue;
+      }
+      if (el.getBoundingClientRect().top < thresholdTop) {
+        markRevealed(el, 0, true);
+        removePendingNode(el);
+      }
+    }
+  }
+
   function initReveal() {
     if (isRevealInitialized) return;
     isRevealInitialized = true;
@@ -546,7 +564,7 @@
       introDoneTimer = window.setTimeout(function () {
         introDoneTimer = null;
         root.classList.add('td-intro-done');
-      }, 650);
+      }, 1380);
     }
 
     observeTargets(false);
@@ -555,6 +573,7 @@
       function () {
         if ((window.scrollY || window.pageYOffset || 0) > 80) {
           root.classList.add('td-skip-intro');
+          revealViewportOnScrollRestore();
         }
         onImmediateCheck();
       }, {
