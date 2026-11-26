@@ -626,6 +626,67 @@
     var servicesSection = document.getElementById('services');
     var bindRoot = servicesSection || container;
 
+    function clearIncludesPanelAnimation(panelEl) {
+      if (!panelEl) return;
+      if (panelEl._tdIncludesTimer) {
+        window.clearTimeout(panelEl._tdIncludesTimer);
+        panelEl._tdIncludesTimer = null;
+      }
+      if (panelEl._tdIncludesOnEnd) {
+        panelEl.removeEventListener('transitionend', panelEl._tdIncludesOnEnd);
+        panelEl._tdIncludesOnEnd = null;
+      }
+    }
+
+    function setServiceIncludesState(wrapEl, toggleBtn, panelEl, nextOpen) {
+      var durationMs = nextOpen ? 380 : 300;
+      clearIncludesPanelAnimation(panelEl);
+
+      if (!panelEl || prefersReducedMotion()) {
+        wrapEl.classList.toggle('is-open', nextOpen);
+        toggleBtn.setAttribute('aria-expanded', nextOpen ? 'true' : 'false');
+        if (panelEl) {
+          panelEl.setAttribute('aria-hidden', nextOpen ? 'false' : 'true');
+          panelEl.style.height = '';
+        }
+        return;
+      }
+
+      var innerEl = panelEl.firstElementChild;
+      var startHeight = panelEl.getBoundingClientRect().height;
+      panelEl.style.height = startHeight + 'px';
+      void panelEl.offsetHeight;
+
+      wrapEl.classList.toggle('is-open', nextOpen);
+      toggleBtn.setAttribute('aria-expanded', nextOpen ? 'true' : 'false');
+      panelEl.setAttribute('aria-hidden', nextOpen ? 'false' : 'true');
+
+      var targetHeight = nextOpen ?
+        Math.ceil(innerEl ? innerEl.offsetHeight : panelEl.scrollHeight) :
+        0;
+
+      if (Math.abs(targetHeight - startHeight) < 1) {
+        panelEl.style.height = '';
+        return;
+      }
+
+      var finish = function () {
+        clearIncludesPanelAnimation(panelEl);
+        if (wrapEl.classList.contains('is-open') === nextOpen) {
+          panelEl.style.height = '';
+        }
+      };
+
+      panelEl._tdIncludesOnEnd = function (ev) {
+        if (ev && ev.target === panelEl && ev.propertyName === 'height') {
+          finish();
+        }
+      };
+      panelEl.addEventListener('transitionend', panelEl._tdIncludesOnEnd);
+      panelEl._tdIncludesTimer = window.setTimeout(finish, durationMs + 80);
+      panelEl.style.height = targetHeight + 'px';
+    }
+
     if (!bindRoot.dataset.serviceCalcBound) {
       bindRoot.dataset.serviceCalcBound = '1';
       bindRoot.addEventListener('click', function (e) {
@@ -639,11 +700,7 @@
           if (toggleSvcId && wrapEl) {
             var nextOpen = !wrapEl.classList.contains('is-open');
             expandedServiceIds[toggleSvcId] = nextOpen;
-            wrapEl.classList.toggle('is-open', nextOpen);
-            includesToggle.setAttribute('aria-expanded', nextOpen ? 'true' : 'false');
-            if (panelEl) {
-              panelEl.setAttribute('aria-hidden', nextOpen ? 'false' : 'true');
-            }
+            setServiceIncludesState(wrapEl, includesToggle, panelEl, nextOpen);
           }
           return;
         }
